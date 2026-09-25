@@ -1,0 +1,89 @@
+state,sector,scheduled_employment_name,skill_level,zone,basic_wage_daily,vda_daily,total_wage_daily,total_wage_monthly,effective_date,notification_reference
+Delhi,Construction,Building Operations and Road Construction,Unskilled,All,695.0,0.0,695.0,18066.0,2024-04-01,Order F.No.12(142)/02/MW/VII/Partfile/5623
+Delhi,Retail & Commercial,Shops and Commercial Establishments,Unskilled,All,695.0,0.0,695.0,18066.0,2024-04-01,Order F.No.12(142)/02/MW/VII/Partfile/5623
+Delhi,Manufacturing & Factories,Engineering and Metal Works,Unskilled,All,695.0,0.0,695.0,18066.0,2024-04-01,Order F.No.12(142)/02/MW/VII/Partfile/5623
+Delhi,Security & Facility,Watch and Ward Services,Unskilled,All,695.0,0.0,695.0,18066.0,2024-04-01,Order F.No.12(142)/02/MW/VII/Partfile/5623
+Delhi,Hospitality & Food Services,Hotels and Restaurants,Unskilled,All,695.0,0.0,695.0,18066.0,2024-04-01,Order F.No.12(142)/02/MW/VII/Partfile/5623
+Delhi,Domestic Work,Domestic Workers and Cleaners,Unskilled,All,695.0,0.0,695.0,18066.0,2024-04-01,Order F.No.12(142)/02/MW/VII/Partfile/5623
+Delhi,Agriculture & Allied,Agricultural Operations,Unskilled,All,695.0,0.0,695.0,18066.0,2024-04-01,Order F.No.12(142)/02/MW/VII/Partfile/5623
+Delhi,Transport & Logistics,Loading and Unloading Goods,Unskilled,All,695.0,0.0,695.0,18066.0,2024-04-01,Order F.No.12(142)/02/MW/VII/Partfile/5623
+Maharashtra,Construction,Building Operations and Construction,Unskilled,Zone I,440.0,92.0,532.0,13832.0,2024-01-01,Notification CL/MWA/15/2023/MW/Zone-I
+Maharashtra,Retail & Commercial,Shops and Commercial Establishments,Unskilled,Zone I,425.0,92.0,517.0,13442.0,2024-01-01,Notification CL/MWA/15/2023/MW/Zone-I
+Maharashtra,Manufacturing & Factories,Textiles and Engineering Industries,Unskilled,Zone I,430.0,92.0,522.0,13572.0,2024-01-01,Notification CL/MWA/15/2023/MW/Zone-I
+Maharashtra,Security & Facility,Security Guards and Watchmen,Unskilled,Zone I,460.0,92.0,552.0,14352.0,2024-01-01,Notification CL/MWA/15/2023/MW/Zone-I
+Maharashtra,Hospitality & Food Services,Hotels Restaurants and Eating Houses,Unskilled,Zone I,415.0,92.0,507.0,13182.0,2024-01-01,Notification CL/MWA/15/2023/MW/Zone-I
+Maharashtra,Domestic Work,Domestic Workers,Unskilled,Zone I,390.0,92.0,482.0,12532.0,2024-01-01,Notification CL/MWA/15/2023/MW/Zone-I
+Maharashtra,Agriculture & Allied,Agriculture Operations,Unskilled,Zone I,350.0,92.0,442.0,11492.0,2024-01-01,Notification CL/MWA/15/2023/MW/Zone-I
+Maharashtra,Transport & Logistics,Motor Transport and Goods Loading,Unskilled,Zone I,435.0,92.0,527.0,13702.0,2024-01-01,Notification CL/MWA/15/2023/MW/Zone-I
+Karnataka,Construction,Building Construction and Maintenance,Unskilled,Zone I,485.0,125.0,610.0,15860.0,2024-04-01,Notification KLR/MW/Notif/2024-25/Zone-1
+Karnataka,Retail & Commercial,Shops and Commercial Establishments,Unskilled,Zone I,470.0,125.0,595.0,15470.0,2024-04-01,Notification KLR/MW/Notif/2024-25/Zone-1
+Karnataka,Manufacturing & Factories,Garment and Engineering Industries,Unskilled,Zone I,465.0,125.0,590.0,15340.0,2024-04-01,Notification KLR/MW/Notif/2024-25/Zone-1
+Karnataka,Security & Facility,Security Agency and Watch and Ward,Unskilled,Zone I,510.0,125.0,635.0,16510.0,2024-04-01,Notification KLR/MW/Notif/2024-25/Zone-1
+Karnataka,Hospitality & Food Services,Hotels and Eateries,Unskilled,Zone I,450.0,125.0,575.0,14950.0,2024-04-01,Notification KLR/MW/Notif/2024-25/Zone-1
+Karnataka,Domestic Work,Domestic Workers,Unskilled,Zone I,430.0,125.0,555.0,14430.0,2024-04-01,Notification KLR/MW/Notif/2024-25/Zone-1
+Karnataka,Agriculture & Allied,Agricultural Employment,Unskilled,Zone I,390.0,125.0,515.0,13390.0,2024-04-01,Notification KLR/MW/Notif/2024-25/Zone-1
+Karnataka,Transport & Logistics,Public Motor Transport,Unskilled,Zone I,475.0,125.0,600.0,15600.0,2024-04-01,Notification KLR/MW/Notif/2024-25/Zone-1
+Tamil Nadu,Construction,Building and Construction Industry,Unskilled,Zone A,410.0,105.0,515.0,13390.0,2024-04-01,G.O.(2D) No. 44 Labour Welfare and Skill Dev
+Tamil Nadu,Retail & Commercial,Shops and Commercial Establishments,Unskilled,Zone A,400.0,105.0,505.0,13130.0,2024-04-01,G.O.(2D) No. 44 Labour Welfare and Skill Dev
+Tamil Nadu,Manufacturing & Factories,Textiles and General Engineering,Unskilled,Zone A,395.0,105.0,500.0,13000.0,2024-04-01,G.O.(2D) No. 44 Labour Welfare and Skill Dev
+Tamil Nadu,Security & Facility,Security Services and Watch Ward,Unskilled,Zone A,430.0,105.0,535.0,13910.0,2024-04-01,G.O.(2D) No. 44 Labour Welfare and Skill Dev
+Tamil Nadu,Hospitality & Food Services,Hotels and Restaurants,Unskilled,Zone A,385.0,105.0,490.0,12740.0,2024-04-01,G.O.(2D) No. 44 Labour Welfare and Skill Dev
+Tamil Nadu,Domestic Work,Domestic Workers,Unskilled,Zone A,370.0,105.0,475.0,12350.0,2024-04-01,G.O.(2D) No. 44 Labour Welfare and Skill Dev
+Tamil Nadu,Agriculture & Allied,Agricultural Labour,Unskilled,Zone A,340.0,105.0,445.0,11570.0,2024-04-01,G.O.(2D) No. 44 Labour Welfare and Skill Dev
+Tamil Nadu,Transport & Logistics,Loading and Unloading Goods,Unskilled,Zone A,405.0,105.0,510.0,13260.0,2024-04-01,G.O.(2D) No. 44 Labour Welfare and Skill Dev
+Kerala,Construction,Building and Road Construction,Unskilled,All,480.0,90.0,570.0,14820.0,2024-01-01,S.R.O. No. 112/2024 Labour and Skills Dept
+Kerala,Retail & Commercial,Shops and Commercial Establishments,Unskilled,All,450.0,90.0,540.0,14040.0,2024-01-01,S.R.O. No. 112/2024 Labour and Skills Dept
+Kerala,Manufacturing & Factories,Coir Cashew and General Engineering,Unskilled,All,460.0,90.0,550.0,14300.0,2024-01-01,S.R.O. No. 112/2024 Labour and Skills Dept
+Kerala,Security & Facility,Security Guard Personnel,Unskilled,All,500.0,90.0,590.0,15340.0,2024-01-01,S.R.O. No. 112/2024 Labour and Skills Dept
+Kerala,Hospitality & Food Services,Hotels and Restaurants,Unskilled,All,440.0,90.0,530.0,13780.0,2024-01-01,S.R.O. No. 112/2024 Labour and Skills Dept
+Kerala,Domestic Work,Domestic Workers,Unskilled,All,430.0,90.0,520.0,13520.0,2024-01-01,S.R.O. No. 112/2024 Labour and Skills Dept
+Kerala,Agriculture & Allied,Plantations and Agriculture,Unskilled,All,420.0,90.0,510.0,13260.0,2024-01-01,S.R.O. No. 112/2024 Labour and Skills Dept
+Kerala,Transport & Logistics,Headload and Transport Workers,Unskilled,All,490.0,90.0,580.0,15080.0,2024-01-01,S.R.O. No. 112/2024 Labour and Skills Dept
+Gujarat,Construction,Building Operations and Construction,Unskilled,Zone I,380.0,65.0,445.0,11570.0,2024-04-01,Notification No.KHR/2024/28/L.B.
+Gujarat,Retail & Commercial,Shops and Commercial Establishments,Unskilled,Zone I,370.0,65.0,435.0,11310.0,2024-04-01,Notification No.KHR/2024/28/L.B.
+Gujarat,Manufacturing & Factories,Chemical Plastics and Engineering,Unskilled,Zone I,375.0,65.0,440.0,11440.0,2024-04-01,Notification No.KHR/2024/28/L.B.
+Gujarat,Security & Facility,Security Guards and Watchmen,Unskilled,Zone I,390.0,65.0,455.0,11830.0,2024-04-01,Notification No.KHR/2024/28/L.B.
+Gujarat,Hospitality & Food Services,Hotels and Restaurants,Unskilled,Zone I,365.0,65.0,430.0,11180.0,2024-04-01,Notification No.KHR/2024/28/L.B.
+Gujarat,Domestic Work,Domestic Workers,Unskilled,Zone I,350.0,65.0,415.0,10790.0,2024-04-01,Notification No.KHR/2024/28/L.B.
+Gujarat,Agriculture & Allied,Agriculture,Unskilled,Zone I,340.0,65.0,405.0,10530.0,2024-04-01,Notification No.KHR/2024/28/L.B.
+Gujarat,Transport & Logistics,Public Motor Transport,Unskilled,Zone I,380.0,65.0,445.0,11570.0,2024-04-01,Notification No.KHR/2024/28/L.B.
+Uttar Pradesh,Construction,Construction and Maintenance of Roads and Buildings,Unskilled,All,340.0,68.0,408.0,10608.0,2024-04-01,Notification No. 248/MW/15(1)
+Uttar Pradesh,Retail & Commercial,Shops and Commercial Establishments,Unskilled,All,335.0,68.0,403.0,10478.0,2024-04-01,Notification No. 248/MW/15(1)
+Uttar Pradesh,Manufacturing & Factories,Engineering and Metal Works,Unskilled,All,338.0,68.0,406.0,10556.0,2024-04-01,Notification No. 248/MW/15(1)
+Uttar Pradesh,Security & Facility,Private Security Agency,Unskilled,All,350.0,68.0,418.0,10868.0,2024-04-01,Notification No. 248/MW/15(1)
+Uttar Pradesh,Hospitality & Food Services,Hotels and Restaurants,Unskilled,All,330.0,68.0,398.0,10348.0,2024-04-01,Notification No. 248/MW/15(1)
+Uttar Pradesh,Domestic Work,Domestic Workers,Unskilled,All,320.0,68.0,388.0,10088.0,2024-04-01,Notification No. 248/MW/15(1)
+Uttar Pradesh,Agriculture & Allied,Agriculture and Farming,Unskilled,All,315.0,68.0,383.0,9958.0,2024-04-01,Notification No. 248/MW/15(1)
+Uttar Pradesh,Transport & Logistics,Loading and Unloading,Unskilled,All,340.0,68.0,408.0,10608.0,2024-04-01,Notification No. 248/MW/15(1)
+West Bengal,Construction,Construction and Maintenance of Roads and Buildings,Unskilled,Zone A,355.0,63.0,418.0,10868.0,2024-01-01,Order No. 12/Stat/2RW/29/16/LCS/JLC
+West Bengal,Retail & Commercial,Shops and Commercial Establishments,Unskilled,Zone A,350.0,63.0,413.0,10738.0,2024-01-01,Order No. 12/Stat/2RW/29/16/LCS/JLC
+West Bengal,Manufacturing & Factories,Engineering and Jute Industries,Unskilled,Zone A,352.0,63.0,415.0,10790.0,2024-01-01,Order No. 12/Stat/2RW/29/16/LCS/JLC
+West Bengal,Security & Facility,Security Services,Unskilled,Zone A,365.0,63.0,428.0,11128.0,2024-01-01,Order No. 12/Stat/2RW/29/16/LCS/JLC
+West Bengal,Hospitality & Food Services,Hotels and Restaurants,Unskilled,Zone A,345.0,63.0,408.0,10608.0,2024-01-01,Order No. 12/Stat/2RW/29/16/LCS/JLC
+West Bengal,Domestic Work,Domestic Workers,Unskilled,Zone A,335.0,63.0,398.0,10348.0,2024-01-01,Order No. 12/Stat/2RW/29/16/LCS/JLC
+West Bengal,Agriculture & Allied,Agricultural Operations,Unskilled,Zone A,325.0,63.0,388.0,10088.0,2024-01-01,Order No. 12/Stat/2RW/29/16/LCS/JLC
+West Bengal,Transport & Logistics,Public Motor Transport,Unskilled,Zone A,355.0,63.0,418.0,10868.0,2024-01-01,Order No. 12/Stat/2RW/29/16/LCS/JLC
+Rajasthan,Construction,Building and Road Construction,Unskilled,All,320.0,65.0,385.0,10010.0,2024-01-01,Notification No. F.8(5)(6)DOP/A-II/88
+Rajasthan,Retail & Commercial,Shops and Commercial Establishments,Unskilled,All,315.0,65.0,380.0,9880.0,2024-01-01,Notification No. F.8(5)(6)DOP/A-II/88
+Rajasthan,Manufacturing & Factories,Textiles and Engineering,Unskilled,All,318.0,65.0,383.0,9958.0,2024-01-01,Notification No. F.8(5)(6)DOP/A-II/88
+Rajasthan,Security & Facility,Watch and Ward,Unskilled,All,330.0,65.0,395.0,10270.0,2024-01-01,Notification No. F.8(5)(6)DOP/A-II/88
+Rajasthan,Hospitality & Food Services,Hotels and Restaurants,Unskilled,All,310.0,65.0,375.0,9750.0,2024-01-01,Notification No. F.8(5)(6)DOP/A-II/88
+Rajasthan,Domestic Work,Domestic Workers,Unskilled,All,305.0,65.0,370.0,9620.0,2024-01-01,Notification No. F.8(5)(6)DOP/A-II/88
+Rajasthan,Agriculture & Allied,Agriculture,Unskilled,All,300.0,65.0,365.0,9490.0,2024-01-01,Notification No. F.8(5)(6)DOP/A-II/88
+Rajasthan,Transport & Logistics,Motor Transport,Unskilled,All,320.0,65.0,385.0,10010.0,2024-01-01,Notification No. F.8(5)(6)DOP/A-II/88
+Bihar,Construction,Building and Construction,Unskilled,All,330.0,64.0,394.0,10244.0,2024-04-01,Notification 5/MW-2023-389
+Bihar,Retail & Commercial,Shops and Establishments,Unskilled,All,325.0,64.0,389.0,10114.0,2024-04-01,Notification 5/MW-2023-389
+Bihar,Manufacturing & Factories,Engineering and Small Industries,Unskilled,All,328.0,64.0,392.0,10192.0,2024-04-01,Notification 5/MW-2023-389
+Bihar,Security & Facility,Security Guards,Unskilled,All,340.0,64.0,404.0,10504.0,2024-04-01,Notification 5/MW-2023-389
+Bihar,Hospitality & Food Services,Hotels and Restaurants,Unskilled,All,320.0,64.0,384.0,9984.0,2024-04-01,Notification 5/MW-2023-389
+Bihar,Domestic Work,Domestic Workers,Unskilled,All,310.0,64.0,374.0,9724.0,2024-04-01,Notification 5/MW-2023-389
+Bihar,Agriculture & Allied,Agriculture,Unskilled,All,305.0,64.0,369.0,9594.0,2024-04-01,Notification 5/MW-2023-389
+Bihar,Transport & Logistics,Loading and Unloading,Unskilled,All,330.0,64.0,394.0,10244.0,2024-04-01,Notification 5/MW-2023-389
+Central Sphere,Construction,Building Construction and Highway Maintenance,Unskilled,Area A,523.0,228.0,751.0,19526.0,2024-04-01,Order No. 1/4(3)/2024-LS-II CLC(C)
+Central Sphere,Retail & Commercial,Non-Coal Mines and Central Commercial,Unskilled,Area A,500.0,228.0,728.0,18928.0,2024-04-01,Order No. 1/4(3)/2024-LS-II CLC(C)
+Central Sphere,Manufacturing & Factories,Central Engineering and Heavy Industrial,Unskilled,Area A,515.0,228.0,743.0,19318.0,2024-04-01,Order No. 1/4(3)/2024-LS-II CLC(C)
+Central Sphere,Security & Facility,Watch and Ward (Without Arms),Unskilled,Area A,579.0,253.0,832.0,21632.0,2024-04-01,Order No. 1/4(6)/2024-LS-II CLC(C)
+Central Sphere,Hospitality & Food Services,Catering and Central Canteen Services,Unskilled,Area A,505.0,228.0,733.0,19058.0,2024-04-01,Order No. 1/4(3)/2024-LS-II CLC(C)
+Central Sphere,Domestic Work,Sweeping and Cleaning (Central Sphere),Unskilled,Area A,523.0,228.0,751.0,19526.0,2024-04-01,Order No. 1/4(5)/2024-LS-II CLC(C)
+Central Sphere,Agriculture & Allied,Agriculture (Central Research & Seed Farms),Unskilled,Area A,438.0,191.0,629.0,16354.0,2024-04-01,Order No. 1/4(1)/2024-LS-II CLC(C)
+Central Sphere,Transport & Logistics,Loading and Unloading (Goods Sheds & Docks),Unskilled,Area A,523.0,228.0,751.0,19526.0,2024-04-01,Order No. 1/4(4)/2024-LS-II CLC(C)

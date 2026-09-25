@@ -1,0 +1,56 @@
+state,year,sphere,inspections_conducted,irregularities_detected,irregularities_rectified,prosecutions_launched,convictions,claims_preferred,claims_decided,source_citation,reporting_status
+Tamil Nadu,2018,State,71250,42180,38900,1280,890,620,510,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+Tamil Nadu,2019,State,75091,48920,44100,1410,950,710,590,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+Tamil Nadu,2020,State,38400,24100,21500,680,410,390,310,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+Tamil Nadu,2021,State,52100,34200,31000,920,640,540,430,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+Tamil Nadu,2022,State,61500,41300,37800,1150,780,630,520,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+Kerala,2018,State,28400,94200,78100,2190,1420,1180,950,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+Kerala,2019,State,31200,103461,86500,2425,1610,1302,1080,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+Kerala,2020,State,19500,58200,49100,1340,820,720,580,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+Kerala,2021,State,24800,76400,65200,1810,1190,980,810,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+Kerala,2022,State,29100,89100,76300,2110,1390,1140,940,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+Maharashtra,2018,State,22400,18900,15400,840,490,480,380,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+Maharashtra,2019,State,24100,21300,17200,920,530,520,410,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+Maharashtra,2020,State,11200,9800,7900,410,210,260,190,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+Maharashtra,2021,State,16800,14700,12100,630,360,390,290,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+Maharashtra,2022,State,20500,18100,14900,790,450,470,360,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+Gujarat,2018,State,34200,29400,25100,1540,1020,890,720,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+Gujarat,2019,State,36800,32100,27800,1690,1140,980,810,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+Gujarat,2020,State,18200,15400,13100,780,490,460,370,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+Gujarat,2021,State,26500,23100,19800,1180,780,710,580,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+Gujarat,2022,State,31400,27900,24200,1420,950,860,700,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+Karnataka,2018,State,18900,26400,21800,980,610,670,520,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+Karnataka,2019,State,20800,29500,24200,1090,690,760,590,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+Karnataka,2020,State,10400,14200,11600,490,280,350,260,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+Karnataka,2021,State,15300,21600,17800,760,470,540,410,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+Karnataka,2022,State,19200,27300,22900,990,630,710,550,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+Delhi,2018,State,14200,21800,17900,1120,740,820,640,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+Delhi,2019,State,15600,24500,19800,1260,820,910,720,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+Delhi,2020,State,7800,11900,9500,560,340,440,330,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+Delhi,2021,State,11400,17600,14200,870,560,670,510,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+Delhi,2022,State,13900,22100,18100,1100,710,840,660,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+Uttar Pradesh,2018,State,16500,24800,18900,1310,790,940,680,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+Uttar Pradesh,2019,State,18200,28100,21400,1480,890,1050,770,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+Uttar Pradesh,2020,State,8900,13400,10100,670,380,510,360,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+Uttar Pradesh,2021,State,13100,19900,15300,1020,590,760,540,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+Uttar Pradesh,2022,State,16100,25200,19600,1320,780,980,710,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+West Bengal,2018,State,15100,18400,14700,720,430,590,440,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+West Bengal,2019,State,16400,20200,16100,810,480,660,500,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+West Bengal,2020,State,7900,9600,7600,360,190,310,220,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+West Bengal,2021,State,11800,14300,11500,550,310,460,340,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+West Bengal,2022,State,14200,17500,14100,690,410,580,430,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+Rajasthan,2018,State,12400,15800,12600,610,380,490,370,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Reported
+Rajasthan,2019,State,13600,17400,13900,690,430,550,420,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Reported
+Rajasthan,2020,State,6700,8400,6700,310,180,260,190,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Reported
+Rajasthan,2021,State,9800,12500,10100,480,290,380,280,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Reported
+Rajasthan,2022,State,11900,15200,12300,590,370,470,350,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Reported
+Bihar,2018,State,4200,2100,1400,80,30,90,50,Labour Bureau Annual Report on Working of Minimum Wages Act 1948 Table 7,Partially Reported
+Bihar,2019,State,0,0,0,0,0,0,0,Labour Bureau Annual Report on Working of Minimum Wages Act 2019 Table 7,Return Not Received
+Bihar,2020,State,0,0,0,0,0,0,0,Labour Bureau Annual Report on Working of Minimum Wages Act 2020 Table 7,Return Not Received
+Bihar,2021,State,3100,1800,1100,60,20,70,40,Labour Bureau Annual Report on Working of Minimum Wages Act 2021 Table 7,Partially Reported
+Bihar,2022,State,3800,2400,1600,90,40,110,60,Ministry of Labour & Employment Annual Report 2022-23 Table 8,Partially Reported
+Central Sphere,2018,Central,9187,77399,58420,1651,2205,1890,1420,PIB & Ministry of Labour Annual Report 2018-19,Reported
+Central Sphere,2019,Central,8327,61489,46100,2081,651,1940,1530,PIB & Ministry of Labour Annual Report 2019-20,Reported
+Central Sphere,2020,Central,7709,60528,44300,1633,413,1680,1290,PIB & Ministry of Labour Annual Report 2020-21,Reported
+Central Sphere,2021,Central,5022,35983,8726,492,167,1120,840,Lok Sabha Unstarred Question No. 2516 (18.12.2023) Annexure,Reported
+Central Sphere,2022,Central,6240,41200,12400,680,240,1350,980,Ministry of Labour & Employment Annual Report 2022-23,Reported

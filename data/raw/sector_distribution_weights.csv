@@ -1,0 +1,9 @@
+sector,inspection_share,irregularity_multiplier,complaints_share,citation_source
+Construction,0.22,1.25,0.26,"PLFS Informal Labour & Labour Bureau Minimum Wages Enforcement Reports"
+Retail & Commercial,0.20,0.95,0.18,"Labour Bureau Report on Working of Minimum Wages Act (Shops & Establishments return)"
+Manufacturing & Factories,0.18,0.85,0.15,"Annual Survey of Industries & Chief Inspector of Factories enforcement stats"
+Security & Facility,0.12,1.35,0.16,"Central Analysis & Intelligence Unit (CAIU) targeted inspection reports"
+Hospitality & Food Services,0.10,1.15,0.11,"Labour Bureau Scheduled Employment inspection records"
+Domestic Work,0.04,1.40,0.05,"ILO-MoLE Joint Studies on Domestic Workers in India (high vulnerability; low inspection)"
+Agriculture & Allied,0.06,0.70,0.03,"Ministry of Labour Agricultural Minimum Wages Implementation Studies"
+Transport & Logistics,0.08,1.10,0.06,"Motor Transport Workers Act enforcement returns & Dock/Railway handling records"

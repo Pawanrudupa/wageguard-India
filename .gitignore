@@ -1,0 +1,22 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
+
+# Env / secrets
+.env
+*.local
+
+# Data (raw source PDFs can be large / re-fetchable — keep processed CSV tracked)
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/*.csv
+
+# Model + index artifacts (large binaries — regenerate via workflows, don't commit)
+models/*.pkl
+rag_store/index/*
+!rag_store/index/.gitkeep

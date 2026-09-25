@@ -1,0 +1,11 @@
+/* Mirrors docs/DESIGN_SYSTEM.md — keep these two files in sync when either changes. */
+:root {
+  --bg: #F5F1E8;
+  --ink: #111111;
+  --accent: #FFD400;
+  --accent-ink: #111111;
+  --risk-low: #2E7D32;
+  --risk-medium: #E8A400;
+  --risk-high: #D7263D;
+  --surface: #FFFFFF;
+}

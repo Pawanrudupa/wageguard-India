@@ -1,0 +1,441 @@
+state,sector,year,inspections_conducted,irregularities_detected,prosecutions,convictions,complaints_received,claims_awarded,current_min_wage_rate,irregularity_rate,risk_label
+Bihar,Agriculture & Allied,2018,252,88,3,1,3,2,369.0,0.3492,Low
+Bihar,Agriculture & Allied,2019,0,0,0,0,0,0,369.0,0.0,Low
+Bihar,Agriculture & Allied,2020,0,0,0,0,0,0,369.0,0.0,Low
+Bihar,Agriculture & Allied,2021,186,76,3,1,2,1,369.0,0.4086,Low
+Bihar,Agriculture & Allied,2022,228,101,4,2,3,2,369.0,0.443,Low
+Bihar,Construction,2018,924,578,22,8,23,13,394.0,0.6255,Low
+Bihar,Construction,2019,0,0,0,0,0,0,394.0,0.0,Low
+Bihar,Construction,2020,0,0,0,0,0,0,394.0,0.0,Low
+Bihar,Construction,2021,682,495,16,6,18,10,394.0,0.7258,Low
+Bihar,Construction,2022,836,660,25,11,29,16,394.0,0.7895,Low
+Bihar,Domestic Work,2018,168,118,4,2,4,2,374.0,0.7024,Low
+Bihar,Domestic Work,2019,0,0,0,0,0,0,374.0,0.0,Low
+Bihar,Domestic Work,2020,0,0,0,0,0,0,374.0,0.0,Low
+Bihar,Domestic Work,2021,124,101,3,1,4,2,374.0,0.8145,Low
+Bihar,Domestic Work,2022,152,134,5,2,6,3,374.0,0.8816,Low
+Bihar,Hospitality & Food Services,2018,420,241,9,3,10,6,384.0,0.5738,Low
+Bihar,Hospitality & Food Services,2019,0,0,0,0,0,0,384.0,0.0,Low
+Bihar,Hospitality & Food Services,2020,0,0,0,0,0,0,384.0,0.0,Low
+Bihar,Hospitality & Food Services,2021,310,207,7,2,8,4,384.0,0.6677,Low
+Bihar,Hospitality & Food Services,2022,380,276,10,5,12,7,384.0,0.7263,Low
+Bihar,Manufacturing & Factories,2018,756,321,12,5,14,8,392.0,0.4246,Low
+Bihar,Manufacturing & Factories,2019,0,0,0,0,0,0,392.0,0.0,Low
+Bihar,Manufacturing & Factories,2020,0,0,0,0,0,0,392.0,0.0,Low
+Bihar,Manufacturing & Factories,2021,558,275,9,3,10,6,392.0,0.4928,Low
+Bihar,Manufacturing & Factories,2022,684,367,14,6,16,9,392.0,0.5365,Low
+Bihar,Retail & Commercial,2018,840,399,15,6,16,9,389.0,0.475,Low
+Bihar,Retail & Commercial,2019,0,0,0,0,0,0,389.0,0.0,Low
+Bihar,Retail & Commercial,2020,0,0,0,0,0,0,389.0,0.0,Low
+Bihar,Retail & Commercial,2021,620,342,11,4,13,7,389.0,0.5516,Low
+Bihar,Retail & Commercial,2022,760,456,17,8,20,11,389.0,0.6,Low
+Bihar,Security & Facility,2018,504,340,13,5,14,8,404.0,0.6746,Low
+Bihar,Security & Facility,2019,0,0,0,0,0,0,404.0,0.0,Low
+Bihar,Security & Facility,2020,0,0,0,0,0,0,404.0,0.0,Low
+Bihar,Security & Facility,2021,372,292,10,3,11,6,404.0,0.7849,Low
+Bihar,Security & Facility,2022,456,389,15,6,18,10,404.0,0.8531,Low
+Bihar,Transport & Logistics,2018,336,185,7,3,5,3,394.0,0.5506,Low
+Bihar,Transport & Logistics,2019,0,0,0,0,0,0,394.0,0.0,Low
+Bihar,Transport & Logistics,2020,0,0,0,0,0,0,394.0,0.0,Low
+Bihar,Transport & Logistics,2021,248,158,5,2,4,2,394.0,0.6371,Low
+Bihar,Transport & Logistics,2022,304,211,8,4,7,4,394.0,0.6941,Low
+Central Sphere,Agriculture & Allied,2018,551,3251,69,93,57,43,629.0,5.9002,High
+Central Sphere,Agriculture & Allied,2019,500,2583,87,27,58,46,629.0,5.166,High
+Central Sphere,Agriculture & Allied,2020,463,2542,69,17,50,39,629.0,5.4903,High
+Central Sphere,Agriculture & Allied,2021,301,1511,21,7,34,25,629.0,5.0199,High
+Central Sphere,Agriculture & Allied,2022,374,1730,29,10,40,29,629.0,4.6257,High
+Central Sphere,Construction,2018,2021,21285,454,606,491,369,751.0,10.5319,High
+Central Sphere,Construction,2019,1832,16909,572,179,504,398,751.0,9.2298,High
+Central Sphere,Construction,2020,1696,16645,449,114,437,335,751.0,9.8143,High
+Central Sphere,Construction,2021,1105,9895,135,46,291,218,751.0,8.9548,High
+Central Sphere,Construction,2022,1373,11330,187,66,351,255,751.0,8.252,High
+Central Sphere,Domestic Work,2018,367,4334,92,123,94,71,751.0,11.8093,High
+Central Sphere,Domestic Work,2019,333,3443,117,36,97,76,751.0,10.3393,High
+Central Sphere,Domestic Work,2020,308,3390,91,23,84,64,751.0,11.0065,High
+Central Sphere,Domestic Work,2021,201,2015,28,9,56,42,751.0,10.0249,High
+Central Sphere,Domestic Work,2022,250,2307,38,13,68,49,751.0,9.228,High
+Central Sphere,Hospitality & Food Services,2018,919,8901,190,254,208,156,733.0,9.6855,High
+Central Sphere,Hospitality & Food Services,2019,833,7071,239,75,213,168,733.0,8.4886,High
+Central Sphere,Hospitality & Food Services,2020,771,6961,188,47,185,142,733.0,9.0285,High
+Central Sphere,Hospitality & Food Services,2021,502,4138,57,19,123,92,733.0,8.243,High
+Central Sphere,Hospitality & Food Services,2022,624,4738,78,28,148,108,733.0,7.5929,High
+Central Sphere,Manufacturing & Factories,2018,1654,11842,253,337,284,213,743.0,7.1596,High
+Central Sphere,Manufacturing & Factories,2019,1499,9408,318,100,291,230,743.0,6.2762,High
+Central Sphere,Manufacturing & Factories,2020,1388,9261,250,63,252,194,743.0,6.6722,High
+Central Sphere,Manufacturing & Factories,2021,904,5505,75,26,168,126,743.0,6.0896,High
+Central Sphere,Manufacturing & Factories,2022,1123,6304,104,37,202,147,743.0,5.6135,High
+Central Sphere,Retail & Commercial,2018,1837,14706,314,419,340,256,728.0,8.0054,High
+Central Sphere,Retail & Commercial,2019,1665,11683,395,124,349,275,728.0,7.0168,High
+Central Sphere,Retail & Commercial,2020,1542,11500,310,78,302,232,728.0,7.4578,High
+Central Sphere,Retail & Commercial,2021,1004,6837,93,32,202,151,728.0,6.8098,High
+Central Sphere,Retail & Commercial,2022,1248,7828,129,46,243,176,728.0,6.2724,High
+Central Sphere,Security & Facility,2018,1102,12539,267,357,302,227,832.0,11.3784,High
+Central Sphere,Security & Facility,2019,999,9961,337,105,310,245,832.0,9.971,High
+Central Sphere,Security & Facility,2020,925,9806,265,67,269,206,832.0,10.6011,High
+Central Sphere,Security & Facility,2021,603,5829,80,27,179,134,832.0,9.6667,High
+Central Sphere,Security & Facility,2022,749,6674,110,39,216,157,832.0,8.9105,High
+Central Sphere,Transport & Logistics,2018,735,6811,145,194,113,85,751.0,9.2667,High
+Central Sphere,Transport & Logistics,2019,666,5411,183,57,116,92,751.0,8.1246,High
+Central Sphere,Transport & Logistics,2020,617,5326,144,36,101,77,751.0,8.6321,High
+Central Sphere,Transport & Logistics,2021,402,3167,43,15,67,50,751.0,7.8781,High
+Central Sphere,Transport & Logistics,2022,499,3626,60,21,81,59,751.0,7.2665,High
+Delhi,Agriculture & Allied,2018,852,916,47,31,25,19,695.0,1.0751,Medium
+Delhi,Agriculture & Allied,2019,936,1029,53,34,27,22,695.0,1.0994,Medium
+Delhi,Agriculture & Allied,2020,468,500,24,14,13,10,695.0,1.0684,Medium
+Delhi,Agriculture & Allied,2021,684,739,37,24,20,15,695.0,1.0804,Medium
+Delhi,Agriculture & Allied,2022,834,928,46,30,25,20,695.0,1.1127,Medium
+Delhi,Construction,2018,3124,5995,308,204,213,166,695.0,1.919,High
+Delhi,Construction,2019,3432,6738,346,226,237,187,695.0,1.9633,High
+Delhi,Construction,2020,1716,3272,154,94,114,86,695.0,1.9068,High
+Delhi,Construction,2021,2508,4840,239,154,174,133,695.0,1.9298,High
+Delhi,Construction,2022,3058,6078,302,195,218,172,695.0,1.9876,High
+Delhi,Domestic Work,2018,568,1221,63,41,41,32,695.0,2.1496,High
+Delhi,Domestic Work,2019,624,1372,71,46,46,36,695.0,2.1987,High
+Delhi,Domestic Work,2020,312,666,31,19,22,16,695.0,2.1346,High
+Delhi,Domestic Work,2021,456,986,49,31,34,26,695.0,2.1623,High
+Delhi,Domestic Work,2022,556,1238,62,40,42,33,695.0,2.2266,High
+Delhi,Hospitality & Food Services,2018,1420,2507,129,85,90,70,695.0,1.7655,High
+Delhi,Hospitality & Food Services,2019,1560,2818,145,94,100,79,695.0,1.8064,High
+Delhi,Hospitality & Food Services,2020,780,1368,64,39,48,36,695.0,1.7538,High
+Delhi,Hospitality & Food Services,2021,1140,2024,100,64,74,56,695.0,1.7754,High
+Delhi,Hospitality & Food Services,2022,1390,2542,126,82,92,73,695.0,1.8288,High
+Delhi,Manufacturing & Factories,2018,2556,3335,171,113,123,96,695.0,1.3048,Medium
+Delhi,Manufacturing & Factories,2019,2808,3748,193,125,136,108,695.0,1.3348,Medium
+Delhi,Manufacturing & Factories,2020,1404,1821,86,52,66,50,695.0,1.297,Medium
+Delhi,Manufacturing & Factories,2021,2052,2693,133,86,100,76,695.0,1.3124,Medium
+Delhi,Manufacturing & Factories,2022,2502,3381,168,109,126,99,695.0,1.3513,Medium
+Delhi,Retail & Commercial,2018,2840,4142,213,141,148,115,695.0,1.4585,Medium
+Delhi,Retail & Commercial,2019,3120,4655,239,156,164,130,695.0,1.492,Medium
+Delhi,Retail & Commercial,2020,1560,2261,106,65,79,59,695.0,1.4494,Medium
+Delhi,Retail & Commercial,2021,2280,3344,165,106,121,92,695.0,1.4667,Medium
+Delhi,Retail & Commercial,2022,2780,4199,209,135,151,119,695.0,1.5104,Medium
+Delhi,Security & Facility,2018,1704,3532,181,120,131,102,695.0,2.0728,High
+Delhi,Security & Facility,2019,1872,3969,204,133,146,115,695.0,2.1202,High
+Delhi,Security & Facility,2020,936,1928,91,55,70,53,695.0,2.0598,High
+Delhi,Security & Facility,2021,1368,2851,141,91,107,82,695.0,2.0841,High
+Delhi,Security & Facility,2022,1668,3580,178,115,134,106,695.0,2.1463,High
+Delhi,Transport & Logistics,2018,1136,1918,99,65,49,38,695.0,1.6884,Medium
+Delhi,Transport & Logistics,2019,1248,2156,111,72,55,43,695.0,1.7276,High
+Delhi,Transport & Logistics,2020,624,1047,49,30,26,20,695.0,1.6779,Medium
+Delhi,Transport & Logistics,2021,912,1549,77,49,40,31,695.0,1.6985,Medium
+Delhi,Transport & Logistics,2022,1112,1945,97,62,50,40,695.0,1.7491,High
+Gujarat,Agriculture & Allied,2018,2052,1235,65,43,27,22,405.0,0.6019,Low
+Gujarat,Agriculture & Allied,2019,2208,1348,71,48,29,24,405.0,0.6105,Low
+Gujarat,Agriculture & Allied,2020,1092,647,33,21,14,11,405.0,0.5925,Low
+Gujarat,Agriculture & Allied,2021,1590,970,50,33,21,17,405.0,0.6101,Low
+Gujarat,Agriculture & Allied,2022,1884,1172,60,40,26,21,405.0,0.6221,Low
+Gujarat,Construction,2018,7524,8085,424,280,231,187,445.0,1.0746,Medium
+Gujarat,Construction,2019,8096,8828,465,314,255,211,445.0,1.0904,Medium
+Gujarat,Construction,2020,4004,4235,214,135,120,96,445.0,1.0577,Medium
+Gujarat,Construction,2021,5830,6352,324,214,185,151,445.0,1.0895,Medium
+Gujarat,Construction,2022,6908,7672,390,261,224,182,445.0,1.1106,Medium
+Gujarat,Domestic Work,2018,1368,1646,86,57,44,36,415.0,1.2032,Medium
+Gujarat,Domestic Work,2019,1472,1798,95,64,49,40,415.0,1.2215,Medium
+Gujarat,Domestic Work,2020,728,862,44,27,23,18,415.0,1.1841,Medium
+Gujarat,Domestic Work,2021,1060,1294,66,44,36,29,415.0,1.2208,Medium
+Gujarat,Domestic Work,2022,1256,1562,80,53,43,35,415.0,1.2436,Medium
+Gujarat,Hospitality & Food Services,2018,3420,3381,177,117,98,79,430.0,0.9886,Low
+Gujarat,Hospitality & Food Services,2019,3680,3691,194,131,108,89,430.0,1.003,Low
+Gujarat,Hospitality & Food Services,2020,1820,1771,90,56,51,41,430.0,0.9731,Low
+Gujarat,Hospitality & Food Services,2021,2650,2656,136,90,78,64,430.0,1.0023,Low
+Gujarat,Hospitality & Food Services,2022,3140,3208,163,109,95,77,430.0,1.0217,Low
+Gujarat,Manufacturing & Factories,2018,6156,4498,236,156,134,108,440.0,0.7307,Low
+Gujarat,Manufacturing & Factories,2019,6624,4911,259,174,147,122,440.0,0.7414,Low
+Gujarat,Manufacturing & Factories,2020,3276,2356,119,75,69,56,440.0,0.7192,Low
+Gujarat,Manufacturing & Factories,2021,4770,3534,181,119,106,87,440.0,0.7409,Low
+Gujarat,Manufacturing & Factories,2022,5652,4269,217,145,129,105,440.0,0.7553,Low
+Gujarat,Retail & Commercial,2018,6840,5586,293,194,160,130,435.0,0.8167,Low
+Gujarat,Retail & Commercial,2019,7360,6099,321,217,176,146,435.0,0.8287,Low
+Gujarat,Retail & Commercial,2020,3640,2926,148,93,83,67,435.0,0.8038,Low
+Gujarat,Retail & Commercial,2021,5300,4389,224,148,128,104,435.0,0.8281,Low
+Gujarat,Retail & Commercial,2022,6280,5301,270,180,155,126,435.0,0.8441,Low
+Gujarat,Security & Facility,2018,4104,4763,249,165,142,115,455.0,1.1606,Medium
+Gujarat,Security & Facility,2019,4416,5200,274,185,157,130,455.0,1.1775,Medium
+Gujarat,Security & Facility,2020,2184,2495,126,79,74,59,455.0,1.1424,Medium
+Gujarat,Security & Facility,2021,3180,3742,191,126,114,93,455.0,1.1767,Medium
+Gujarat,Security & Facility,2022,3768,4520,230,154,138,112,455.0,1.1996,Medium
+Gujarat,Transport & Logistics,2018,2736,2587,136,90,53,43,445.0,0.9455,Low
+Gujarat,Transport & Logistics,2019,2944,2825,149,100,59,49,445.0,0.9596,Low
+Gujarat,Transport & Logistics,2020,1456,1355,69,43,28,22,445.0,0.9306,Low
+Gujarat,Transport & Logistics,2021,2120,2033,104,69,43,35,445.0,0.959,Low
+Gujarat,Transport & Logistics,2022,2512,2455,125,84,52,42,445.0,0.9773,Low
+Karnataka,Agriculture & Allied,2018,1134,1109,41,26,20,16,515.0,0.978,Low
+Karnataka,Agriculture & Allied,2019,1248,1239,46,29,23,18,515.0,0.9928,Low
+Karnataka,Agriculture & Allied,2020,624,596,21,12,10,8,515.0,0.9551,Low
+Karnataka,Agriculture & Allied,2021,918,907,32,20,16,12,515.0,0.988,Low
+Karnataka,Agriculture & Allied,2022,1152,1147,42,26,21,16,515.0,0.9957,Low
+Karnataka,Construction,2018,4158,7260,270,168,174,135,610.0,1.746,High
+Karnataka,Construction,2019,4576,8112,300,190,198,153,610.0,1.7727,High
+Karnataka,Construction,2020,2288,3905,135,77,91,68,610.0,1.7067,Medium
+Karnataka,Construction,2021,3366,5940,209,129,140,107,610.0,1.7647,High
+Karnataka,Construction,2022,4224,7508,272,173,185,143,610.0,1.7775,High
+Karnataka,Domestic Work,2018,756,1478,55,34,34,26,555.0,1.955,High
+Karnataka,Domestic Work,2019,832,1652,61,39,38,30,555.0,1.9856,High
+Karnataka,Domestic Work,2020,416,795,27,16,18,13,555.0,1.9111,High
+Karnataka,Domestic Work,2021,612,1210,43,26,27,20,555.0,1.9771,High
+Karnataka,Domestic Work,2022,768,1529,55,35,36,28,555.0,1.9909,High
+Karnataka,Hospitality & Food Services,2018,1890,3036,113,70,74,57,575.0,1.6063,Medium
+Karnataka,Hospitality & Food Services,2019,2080,3392,125,79,84,65,575.0,1.6308,Medium
+Karnataka,Hospitality & Food Services,2020,1040,1633,56,32,38,29,575.0,1.5702,Medium
+Karnataka,Hospitality & Food Services,2021,1530,2484,87,54,59,45,575.0,1.6235,Medium
+Karnataka,Hospitality & Food Services,2022,1920,3139,114,72,78,60,575.0,1.6349,Medium
+Karnataka,Manufacturing & Factories,2018,3402,4039,150,93,100,78,590.0,1.1872,Medium
+Karnataka,Manufacturing & Factories,2019,3744,4514,167,106,114,88,590.0,1.2057,Medium
+Karnataka,Manufacturing & Factories,2020,1872,2173,75,43,52,39,590.0,1.1608,Medium
+Karnataka,Manufacturing & Factories,2021,2754,3305,116,72,81,62,590.0,1.2001,Medium
+Karnataka,Manufacturing & Factories,2022,3456,4177,151,96,106,82,590.0,1.2086,Medium
+Karnataka,Retail & Commercial,2018,3780,5016,186,116,121,94,595.0,1.327,Medium
+Karnataka,Retail & Commercial,2019,4160,5605,207,131,137,106,595.0,1.3474,Medium
+Karnataka,Retail & Commercial,2020,2080,2698,93,53,63,47,595.0,1.2971,Medium
+Karnataka,Retail & Commercial,2021,3060,4104,144,89,97,74,595.0,1.3412,Medium
+Karnataka,Retail & Commercial,2022,3840,5187,188,120,128,99,595.0,1.3508,Medium
+Karnataka,Security & Facility,2018,2268,4277,159,99,107,83,635.0,1.8858,High
+Karnataka,Security & Facility,2019,2496,4779,177,112,122,94,635.0,1.9147,High
+Karnataka,Security & Facility,2020,1248,2300,79,45,56,42,635.0,1.8429,High
+Karnataka,Security & Facility,2021,1836,3499,123,76,86,66,635.0,1.9058,High
+Karnataka,Security & Facility,2022,2304,4423,160,102,114,88,635.0,1.9197,High
+Karnataka,Transport & Logistics,2018,1512,2323,86,54,40,31,600.0,1.5364,Medium
+Karnataka,Transport & Logistics,2019,1664,2596,96,61,46,35,600.0,1.5601,Medium
+Karnataka,Transport & Logistics,2020,832,1250,43,25,21,16,600.0,1.5024,Medium
+Karnataka,Transport & Logistics,2021,1224,1901,67,41,32,25,600.0,1.5531,Medium
+Karnataka,Transport & Logistics,2022,1536,2402,87,55,43,33,600.0,1.5638,Medium
+Kerala,Agriculture & Allied,2018,1704,3956,92,60,35,28,510.0,2.3216,High
+Kerala,Agriculture & Allied,2019,1872,4345,102,68,39,32,510.0,2.321,High
+Kerala,Agriculture & Allied,2020,1170,2444,56,34,22,17,510.0,2.0889,High
+Kerala,Agriculture & Allied,2021,1488,3209,76,50,29,24,510.0,2.1566,High
+Kerala,Agriculture & Allied,2022,1746,3742,89,58,34,28,510.0,2.1432,High
+Kerala,Construction,2018,6248,25905,602,390,307,247,570.0,4.1461,High
+Kerala,Construction,2019,6864,28452,667,443,339,281,570.0,4.1451,High
+Kerala,Construction,2020,4290,16005,368,226,187,151,570.0,3.7308,High
+Kerala,Construction,2021,5456,21010,498,327,255,211,570.0,3.8508,High
+Kerala,Construction,2022,6402,24502,580,382,296,244,570.0,3.8272,High
+Kerala,Domestic Work,2018,1136,5275,123,80,59,48,520.0,4.6435,High
+Kerala,Domestic Work,2019,1248,5794,136,90,65,54,520.0,4.6426,High
+Kerala,Domestic Work,2020,780,3259,75,46,36,29,520.0,4.1782,High
+Kerala,Domestic Work,2021,992,4278,101,67,49,40,520.0,4.3125,High
+Kerala,Domestic Work,2022,1164,4990,118,78,57,47,520.0,4.2869,High
+Kerala,Hospitality & Food Services,2018,2840,10833,252,163,130,104,530.0,3.8144,High
+Kerala,Hospitality & Food Services,2019,3120,11898,279,185,143,119,530.0,3.8135,High
+Kerala,Hospitality & Food Services,2020,1950,6693,154,94,79,64,530.0,3.4323,High
+Kerala,Hospitality & Food Services,2021,2480,8786,208,137,108,89,530.0,3.5427,High
+Kerala,Hospitality & Food Services,2022,2910,10246,243,160,125,103,530.0,3.521,High
+Kerala,Manufacturing & Factories,2018,5112,14413,335,217,177,142,550.0,2.8194,High
+Kerala,Manufacturing & Factories,2019,5616,15830,371,246,195,162,550.0,2.8187,High
+Kerala,Manufacturing & Factories,2020,3510,8905,205,125,108,87,550.0,2.537,High
+Kerala,Manufacturing & Factories,2021,4464,11689,277,182,147,122,550.0,2.6185,High
+Kerala,Manufacturing & Factories,2022,5238,13632,323,213,171,141,550.0,2.6025,High
+Kerala,Retail & Commercial,2018,5680,17898,416,270,212,171,540.0,3.1511,High
+Kerala,Retail & Commercial,2019,6240,19658,461,306,234,194,540.0,3.1503,High
+Kerala,Retail & Commercial,2020,3900,11058,255,156,130,104,540.0,2.8354,High
+Kerala,Retail & Commercial,2021,4960,14516,344,226,176,146,540.0,2.9266,High
+Kerala,Retail & Commercial,2022,5820,16929,401,264,205,169,540.0,2.9088,High
+Kerala,Security & Facility,2018,3408,15260,355,230,189,152,590.0,4.4777,High
+Kerala,Security & Facility,2019,3744,16761,393,261,208,173,590.0,4.4768,High
+Kerala,Security & Facility,2020,2340,9428,217,133,115,93,590.0,4.0291,High
+Kerala,Security & Facility,2021,2976,12377,293,193,157,130,590.0,4.1589,High
+Kerala,Security & Facility,2022,3492,14434,342,225,182,150,590.0,4.1334,High
+Kerala,Transport & Logistics,2018,2272,8290,193,125,71,57,580.0,3.6488,High
+Kerala,Transport & Logistics,2019,2496,9105,213,142,78,65,580.0,3.6478,High
+Kerala,Transport & Logistics,2020,1560,5122,118,72,43,35,580.0,3.2833,High
+Kerala,Transport & Logistics,2021,1984,6723,159,105,59,49,580.0,3.3886,High
+Kerala,Transport & Logistics,2022,2328,7841,186,122,68,56,580.0,3.3681,High
+Maharashtra,Agriculture & Allied,2018,1344,794,35,21,14,11,442.0,0.5908,Low
+Maharashtra,Agriculture & Allied,2019,1446,895,39,22,16,12,442.0,0.6189,Low
+Maharashtra,Agriculture & Allied,2020,672,412,17,9,8,6,442.0,0.6131,Low
+Maharashtra,Agriculture & Allied,2021,1008,617,26,15,12,9,442.0,0.6121,Low
+Maharashtra,Agriculture & Allied,2022,1230,760,33,19,14,11,442.0,0.6179,Low
+Maharashtra,Construction,2018,4928,5198,231,135,125,99,532.0,1.0548,Medium
+Maharashtra,Construction,2019,5302,5858,253,146,135,107,532.0,1.1049,Medium
+Maharashtra,Construction,2020,2464,2695,113,58,68,49,532.0,1.0938,Medium
+Maharashtra,Construction,2021,3696,4042,173,99,101,75,532.0,1.0936,Medium
+Maharashtra,Construction,2022,4510,4978,217,124,122,94,532.0,1.1038,Medium
+Maharashtra,Domestic Work,2018,896,1058,47,27,24,19,482.0,1.1808,Medium
+Maharashtra,Domestic Work,2019,964,1193,52,30,26,20,482.0,1.2376,Medium
+Maharashtra,Domestic Work,2020,448,549,23,12,13,10,482.0,1.2254,Medium
+Maharashtra,Domestic Work,2021,672,823,35,20,20,14,482.0,1.2247,Medium
+Maharashtra,Domestic Work,2022,820,1014,44,25,24,18,482.0,1.2366,Medium
+Maharashtra,Hospitality & Food Services,2018,2240,2174,97,56,53,42,507.0,0.9705,Low
+Maharashtra,Hospitality & Food Services,2019,2410,2450,106,61,57,45,507.0,1.0166,Low
+Maharashtra,Hospitality & Food Services,2020,1120,1127,47,24,29,21,507.0,1.0063,Low
+Maharashtra,Hospitality & Food Services,2021,1680,1690,72,41,43,32,507.0,1.006,Low
+Maharashtra,Hospitality & Food Services,2022,2050,2082,91,52,52,40,507.0,1.0156,Low
+Maharashtra,Manufacturing & Factories,2018,4032,2892,129,75,72,57,522.0,0.7173,Low
+Maharashtra,Manufacturing & Factories,2019,4338,3259,141,81,78,62,522.0,0.7513,Low
+Maharashtra,Manufacturing & Factories,2020,2016,1499,63,32,39,28,522.0,0.7436,Low
+Maharashtra,Manufacturing & Factories,2021,3024,2249,96,55,58,44,522.0,0.7437,Low
+Maharashtra,Manufacturing & Factories,2022,3690,2769,121,69,70,54,522.0,0.7504,Low
+Maharashtra,Retail & Commercial,2018,4480,3591,160,93,86,68,517.0,0.8016,Low
+Maharashtra,Retail & Commercial,2019,4820,4047,175,101,94,74,517.0,0.8396,Low
+Maharashtra,Retail & Commercial,2020,2240,1862,78,40,47,34,517.0,0.8313,Low
+Maharashtra,Retail & Commercial,2021,3360,2793,120,68,70,52,517.0,0.8313,Low
+Maharashtra,Retail & Commercial,2022,4100,3439,150,86,85,65,517.0,0.8388,Low
+Maharashtra,Security & Facility,2018,2688,3062,136,79,77,61,552.0,1.1391,Medium
+Maharashtra,Security & Facility,2019,2892,3451,149,86,83,66,552.0,1.1933,Medium
+Maharashtra,Security & Facility,2020,1344,1588,66,34,42,30,552.0,1.1815,Medium
+Maharashtra,Security & Facility,2021,2016,2381,102,58,62,46,552.0,1.1811,Medium
+Maharashtra,Security & Facility,2022,2460,2932,128,73,75,58,552.0,1.1919,Medium
+Maharashtra,Transport & Logistics,2018,1792,1663,74,43,29,23,527.0,0.928,Low
+Maharashtra,Transport & Logistics,2019,1928,1874,81,47,31,25,527.0,0.972,Low
+Maharashtra,Transport & Logistics,2020,896,862,36,18,16,11,527.0,0.9621,Low
+Maharashtra,Transport & Logistics,2021,1344,1294,55,32,23,17,527.0,0.9628,Low
+Maharashtra,Transport & Logistics,2022,1640,1593,70,40,28,22,527.0,0.9713,Low
+Rajasthan,Agriculture & Allied,2018,744,664,26,16,15,11,365.0,0.8925,Low
+Rajasthan,Agriculture & Allied,2019,816,731,29,18,16,13,365.0,0.8958,Low
+Rajasthan,Agriculture & Allied,2020,402,353,13,8,8,6,365.0,0.8781,Low
+Rajasthan,Agriculture & Allied,2021,588,525,20,12,11,8,365.0,0.8929,Low
+Rajasthan,Agriculture & Allied,2022,714,638,25,16,14,10,365.0,0.8936,Low
+Rajasthan,Construction,2018,2728,4345,168,104,127,96,385.0,1.5927,Medium
+Rajasthan,Construction,2019,2992,4785,190,118,143,109,385.0,1.5993,Medium
+Rajasthan,Construction,2020,1474,2310,85,50,68,49,385.0,1.5672,Medium
+Rajasthan,Construction,2021,2156,3438,132,80,99,73,385.0,1.5946,Medium
+Rajasthan,Construction,2022,2618,4180,162,102,122,91,385.0,1.5966,Medium
+Rajasthan,Domestic Work,2018,496,885,34,21,24,18,370.0,1.7843,High
+Rajasthan,Domestic Work,2019,544,974,39,24,28,21,370.0,1.7904,High
+Rajasthan,Domestic Work,2020,268,470,17,10,13,10,370.0,1.7537,High
+Rajasthan,Domestic Work,2021,392,700,27,16,19,14,370.0,1.7857,High
+Rajasthan,Domestic Work,2022,476,851,33,21,24,18,370.0,1.7878,High
+Rajasthan,Hospitality & Food Services,2018,1240,1817,70,44,54,41,375.0,1.4653,Medium
+Rajasthan,Hospitality & Food Services,2019,1360,2001,79,49,60,46,375.0,1.4713,Medium
+Rajasthan,Hospitality & Food Services,2020,670,966,36,21,29,21,375.0,1.4418,Medium
+Rajasthan,Hospitality & Food Services,2021,980,1438,55,33,42,31,375.0,1.4673,Medium
+Rajasthan,Hospitality & Food Services,2022,1190,1748,68,43,52,38,375.0,1.4689,Medium
+Rajasthan,Manufacturing & Factories,2018,2232,2417,93,58,74,56,383.0,1.0829,Medium
+Rajasthan,Manufacturing & Factories,2019,2448,2662,106,66,82,63,383.0,1.0874,Medium
+Rajasthan,Manufacturing & Factories,2020,1206,1285,47,28,39,28,383.0,1.0655,Medium
+Rajasthan,Manufacturing & Factories,2021,1764,1912,73,44,57,42,383.0,1.0839,Medium
+Rajasthan,Manufacturing & Factories,2022,2142,2326,90,57,70,52,383.0,1.0859,Medium
+Rajasthan,Retail & Commercial,2018,2480,3002,116,72,88,67,380.0,1.2105,Medium
+Rajasthan,Retail & Commercial,2019,2720,3306,131,82,99,76,380.0,1.2154,Medium
+Rajasthan,Retail & Commercial,2020,1340,1596,59,34,47,34,380.0,1.191,Medium
+Rajasthan,Retail & Commercial,2021,1960,2375,91,55,68,50,380.0,1.2117,Medium
+Rajasthan,Retail & Commercial,2022,2380,2888,112,70,85,63,380.0,1.2134,Medium
+Rajasthan,Security & Facility,2018,1488,2560,99,62,78,59,395.0,1.7204,Medium
+Rajasthan,Security & Facility,2019,1632,2819,112,70,88,67,395.0,1.7273,High
+Rajasthan,Security & Facility,2020,804,1361,50,29,42,30,395.0,1.6928,Medium
+Rajasthan,Security & Facility,2021,1176,2025,78,47,61,45,395.0,1.7219,High
+Rajasthan,Security & Facility,2022,1428,2462,96,60,75,56,395.0,1.7241,High
+Rajasthan,Transport & Logistics,2018,992,1390,54,33,29,22,385.0,1.4012,Medium
+Rajasthan,Transport & Logistics,2019,1088,1531,61,38,33,25,385.0,1.4072,Medium
+Rajasthan,Transport & Logistics,2020,536,739,27,16,16,11,385.0,1.3787,Medium
+Rajasthan,Transport & Logistics,2021,784,1100,42,26,23,17,385.0,1.4031,Medium
+Rajasthan,Transport & Logistics,2022,952,1338,52,33,28,21,385.0,1.4055,Medium
+Tamil Nadu,Agriculture & Allied,2018,4275,1772,54,37,19,15,445.0,0.4145,Low
+Tamil Nadu,Agriculture & Allied,2019,4505,2055,59,40,21,18,445.0,0.4562,Low
+Tamil Nadu,Agriculture & Allied,2020,2304,1012,29,17,12,9,445.0,0.4392,Low
+Tamil Nadu,Agriculture & Allied,2021,3126,1436,39,27,16,13,445.0,0.4594,Low
+Tamil Nadu,Agriculture & Allied,2022,3690,1735,48,33,19,16,445.0,0.4702,Low
+Tamil Nadu,Construction,2018,15675,11600,352,245,161,133,515.0,0.74,Low
+Tamil Nadu,Construction,2019,16520,13453,388,261,185,153,515.0,0.8143,Low
+Tamil Nadu,Construction,2020,8448,6628,187,113,101,81,515.0,0.7846,Low
+Tamil Nadu,Construction,2021,11462,9405,253,176,140,112,515.0,0.8205,Low
+Tamil Nadu,Construction,2022,13530,11358,316,214,164,135,515.0,0.8395,Low
+Tamil Nadu,Domestic Work,2018,2850,2362,72,50,31,26,475.0,0.8288,Low
+Tamil Nadu,Domestic Work,2019,3004,2740,79,53,36,30,475.0,0.9121,Low
+Tamil Nadu,Domestic Work,2020,1536,1350,38,23,20,16,475.0,0.8789,Low
+Tamil Nadu,Domestic Work,2021,2084,1915,52,36,27,22,475.0,0.9189,Low
+Tamil Nadu,Domestic Work,2022,2460,2313,64,44,32,26,475.0,0.9402,Low
+Tamil Nadu,Hospitality & Food Services,2018,7125,4851,147,102,68,56,490.0,0.6808,Low
+Tamil Nadu,Hospitality & Food Services,2019,7509,5626,162,109,78,65,490.0,0.7492,Low
+Tamil Nadu,Hospitality & Food Services,2020,3840,2772,78,47,43,34,490.0,0.7219,Low
+Tamil Nadu,Hospitality & Food Services,2021,5210,3933,106,74,59,47,490.0,0.7549,Low
+Tamil Nadu,Hospitality & Food Services,2022,6150,4750,132,90,69,57,490.0,0.7724,Low
+Tamil Nadu,Manufacturing & Factories,2018,12825,6454,196,136,93,76,500.0,0.5032,Low
+Tamil Nadu,Manufacturing & Factories,2019,13516,7485,216,145,106,88,500.0,0.5538,Low
+Tamil Nadu,Manufacturing & Factories,2020,6912,3687,104,63,58,46,500.0,0.5334,Low
+Tamil Nadu,Manufacturing & Factories,2021,9378,5233,141,98,81,64,500.0,0.558,Low
+Tamil Nadu,Manufacturing & Factories,2022,11070,6319,176,119,94,78,500.0,0.5708,Low
+Tamil Nadu,Retail & Commercial,2018,14250,8014,243,169,112,92,505.0,0.5624,Low
+Tamil Nadu,Retail & Commercial,2019,15018,9295,268,180,128,106,505.0,0.6189,Low
+Tamil Nadu,Retail & Commercial,2020,7680,4579,129,78,70,56,505.0,0.5962,Low
+Tamil Nadu,Retail & Commercial,2021,10420,6498,175,122,97,77,505.0,0.6236,Low
+Tamil Nadu,Retail & Commercial,2022,12300,7847,218,148,113,94,505.0,0.638,Low
+Tamil Nadu,Security & Facility,2018,8550,6833,207,144,99,82,535.0,0.7992,Low
+Tamil Nadu,Security & Facility,2019,9011,7925,228,154,114,94,535.0,0.8795,Low
+Tamil Nadu,Security & Facility,2020,4608,3904,110,66,62,50,535.0,0.8472,Low
+Tamil Nadu,Security & Facility,2021,6252,5540,149,104,86,69,535.0,0.8861,Low
+Tamil Nadu,Security & Facility,2022,7380,6691,186,126,101,83,535.0,0.9066,Low
+Tamil Nadu,Transport & Logistics,2018,5700,3712,113,78,37,31,510.0,0.6512,Low
+Tamil Nadu,Transport & Logistics,2019,6007,4305,124,84,43,35,510.0,0.7167,Low
+Tamil Nadu,Transport & Logistics,2020,3072,2121,60,36,23,19,510.0,0.6904,Low
+Tamil Nadu,Transport & Logistics,2021,4168,3010,81,56,32,26,510.0,0.7222,Low
+Tamil Nadu,Transport & Logistics,2022,4920,3634,101,69,38,31,510.0,0.7386,Low
+Uttar Pradesh,Agriculture & Allied,2018,990,1042,55,33,28,20,383.0,1.0525,Medium
+Uttar Pradesh,Agriculture & Allied,2019,1092,1180,62,37,32,23,383.0,1.0806,Medium
+Uttar Pradesh,Agriculture & Allied,2020,534,563,28,16,15,11,383.0,1.0543,Medium
+Uttar Pradesh,Agriculture & Allied,2021,786,836,43,25,23,16,383.0,1.0636,Medium
+Uttar Pradesh,Agriculture & Allied,2022,966,1058,55,33,29,21,383.0,1.0952,Medium
+Uttar Pradesh,Construction,2018,3630,6820,360,217,244,177,408.0,1.8788,High
+Uttar Pradesh,Construction,2019,4004,7728,407,245,273,200,408.0,1.9301,High
+Uttar Pradesh,Construction,2020,1958,3685,184,104,133,94,408.0,1.882,High
+Uttar Pradesh,Construction,2021,2882,5472,280,162,198,140,408.0,1.8987,High
+Uttar Pradesh,Construction,2022,3542,6930,363,214,255,185,408.0,1.9565,High
+Uttar Pradesh,Domestic Work,2018,660,1389,73,44,47,34,388.0,2.1045,High
+Uttar Pradesh,Domestic Work,2019,728,1574,83,50,52,38,388.0,2.1621,High
+Uttar Pradesh,Domestic Work,2020,356,750,38,21,26,18,388.0,2.1067,High
+Uttar Pradesh,Domestic Work,2021,524,1114,57,33,38,27,388.0,2.126,High
+Uttar Pradesh,Domestic Work,2022,644,1411,74,44,49,36,388.0,2.191,High
+Uttar Pradesh,Hospitality & Food Services,2018,1650,2852,151,91,103,75,398.0,1.7285,High
+Uttar Pradesh,Hospitality & Food Services,2019,1820,3231,170,102,116,85,398.0,1.7753,High
+Uttar Pradesh,Hospitality & Food Services,2020,890,1541,77,44,56,40,398.0,1.7315,High
+Uttar Pradesh,Hospitality & Food Services,2021,1310,2288,117,68,84,59,398.0,1.7466,High
+Uttar Pradesh,Hospitality & Food Services,2022,1610,2898,152,90,108,78,398.0,1.8,High
+Uttar Pradesh,Manufacturing & Factories,2018,2970,3794,200,121,141,102,406.0,1.2774,Medium
+Uttar Pradesh,Manufacturing & Factories,2019,3276,4299,226,136,158,116,406.0,1.3123,Medium
+Uttar Pradesh,Manufacturing & Factories,2020,1602,2050,103,58,76,54,406.0,1.2797,Medium
+Uttar Pradesh,Manufacturing & Factories,2021,2358,3045,156,90,114,81,406.0,1.2913,Medium
+Uttar Pradesh,Manufacturing & Factories,2022,2898,3856,202,119,147,106,406.0,1.3306,Medium
+Uttar Pradesh,Retail & Commercial,2018,3300,4712,249,150,169,122,403.0,1.4279,Medium
+Uttar Pradesh,Retail & Commercial,2019,3640,5339,281,169,189,139,403.0,1.4668,Medium
+Uttar Pradesh,Retail & Commercial,2020,1780,2546,127,72,92,65,403.0,1.4303,Medium
+Uttar Pradesh,Retail & Commercial,2021,2620,3781,194,112,137,97,403.0,1.4431,Medium
+Uttar Pradesh,Retail & Commercial,2022,3220,4788,251,148,176,128,403.0,1.487,Medium
+Uttar Pradesh,Security & Facility,2018,1980,4018,212,128,150,109,418.0,2.0293,High
+Uttar Pradesh,Security & Facility,2019,2184,4552,240,144,168,123,418.0,2.0842,High
+Uttar Pradesh,Security & Facility,2020,1068,2171,109,62,82,58,418.0,2.0328,High
+Uttar Pradesh,Security & Facility,2021,1572,3224,165,96,122,86,418.0,2.0509,High
+Uttar Pradesh,Security & Facility,2022,1932,4082,214,126,157,114,418.0,2.1128,High
+Uttar Pradesh,Transport & Logistics,2018,1320,2182,115,70,56,41,408.0,1.653,Medium
+Uttar Pradesh,Transport & Logistics,2019,1456,2473,130,78,63,46,408.0,1.6985,Medium
+Uttar Pradesh,Transport & Logistics,2020,712,1179,59,33,31,22,408.0,1.6559,Medium
+Uttar Pradesh,Transport & Logistics,2021,1048,1751,90,52,46,32,408.0,1.6708,Medium
+Uttar Pradesh,Transport & Logistics,2022,1288,2218,116,69,59,43,408.0,1.722,High
+West Bengal,Agriculture & Allied,2018,906,773,30,18,18,13,388.0,0.8532,Low
+West Bengal,Agriculture & Allied,2019,984,848,34,20,20,15,388.0,0.8618,Low
+West Bengal,Agriculture & Allied,2020,474,403,15,8,9,7,388.0,0.8502,Low
+West Bengal,Agriculture & Allied,2021,708,601,23,13,14,10,388.0,0.8489,Low
+West Bengal,Agriculture & Allied,2022,852,735,29,17,17,13,388.0,0.8627,Low
+West Bengal,Construction,2018,3322,5060,198,118,153,114,418.0,1.5232,Medium
+West Bengal,Construction,2019,3608,5555,223,132,172,130,418.0,1.5396,Medium
+West Bengal,Construction,2020,1738,2640,99,52,81,57,418.0,1.519,Medium
+West Bengal,Construction,2021,2596,3932,151,85,120,88,418.0,1.5146,Medium
+West Bengal,Construction,2022,3124,4812,190,113,151,112,418.0,1.5403,Medium
+West Bengal,Domestic Work,2018,604,1030,40,24,30,22,398.0,1.7053,Medium
+West Bengal,Domestic Work,2019,656,1131,45,27,33,25,398.0,1.7241,High
+West Bengal,Domestic Work,2020,316,538,20,11,16,11,398.0,1.7025,Medium
+West Bengal,Domestic Work,2021,472,801,31,17,23,17,398.0,1.697,Medium
+West Bengal,Domestic Work,2022,568,980,39,23,29,22,398.0,1.7254,High
+West Bengal,Hospitality & Food Services,2018,1510,2116,83,49,65,48,408.0,1.4013,Medium
+West Bengal,Hospitality & Food Services,2019,1640,2323,93,55,73,55,408.0,1.4165,Medium
+West Bengal,Hospitality & Food Services,2020,790,1104,41,22,34,24,408.0,1.3975,Medium
+West Bengal,Hospitality & Food Services,2021,1180,1644,63,36,51,37,408.0,1.3932,Medium
+West Bengal,Hospitality & Food Services,2022,1420,2012,79,47,64,47,408.0,1.4169,Medium
+West Bengal,Manufacturing & Factories,2018,2718,2815,110,66,88,66,415.0,1.0357,Medium
+West Bengal,Manufacturing & Factories,2019,2952,3091,124,73,99,75,415.0,1.0471,Medium
+West Bengal,Manufacturing & Factories,2020,1422,1469,55,29,46,33,415.0,1.0331,Low
+West Bengal,Manufacturing & Factories,2021,2124,2188,84,47,69,51,415.0,1.0301,Low
+West Bengal,Manufacturing & Factories,2022,2556,2678,106,63,87,64,415.0,1.0477,Medium
+West Bengal,Retail & Commercial,2018,3020,3496,137,82,106,79,413.0,1.1576,Medium
+West Bengal,Retail & Commercial,2019,3280,3838,154,91,119,90,413.0,1.1701,Medium
+West Bengal,Retail & Commercial,2020,1580,1824,68,36,56,40,413.0,1.1544,Medium
+West Bengal,Retail & Commercial,2021,2360,2717,104,59,83,61,413.0,1.1513,Medium
+West Bengal,Retail & Commercial,2022,2840,3325,131,78,104,77,413.0,1.1708,Medium
+West Bengal,Security & Facility,2018,1812,2981,117,70,94,70,428.0,1.6451,Medium
+West Bengal,Security & Facility,2019,1968,3272,131,78,106,80,428.0,1.6626,Medium
+West Bengal,Security & Facility,2020,948,1555,58,31,50,35,428.0,1.6403,Medium
+West Bengal,Security & Facility,2021,1416,2317,89,50,74,54,428.0,1.6363,Medium
+West Bengal,Security & Facility,2022,1704,2835,112,66,93,69,428.0,1.6637,Medium
+West Bengal,Transport & Logistics,2018,1208,1619,63,38,35,26,418.0,1.3402,Medium
+West Bengal,Transport & Logistics,2019,1312,1778,71,42,40,30,418.0,1.3552,Medium
+West Bengal,Transport & Logistics,2020,632,845,32,17,19,13,418.0,1.337,Medium
+West Bengal,Transport & Logistics,2021,944,1258,48,27,28,20,418.0,1.3326,Medium
+West Bengal,Transport & Logistics,2022,1136,1540,61,36,35,26,418.0,1.3556,Medium

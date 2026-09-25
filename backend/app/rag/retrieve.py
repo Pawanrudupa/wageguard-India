@@ -1,0 +1,3 @@
+"""Given a query, return top-k chunks + metadata from the Chroma index."""
+
+# TODO: def retrieve(query: str, state: str | None, language: str, k: int = 5): ...
