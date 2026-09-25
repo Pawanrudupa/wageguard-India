@@ -82,6 +82,7 @@ export interface TranslationStrings {
     sample1: string;
     sample2: string;
     sample3: string;
+    sample4: string;
     answerTitle: string;
     groundedBadge: string;
     ungroundedBadge: string;
@@ -99,6 +100,10 @@ export interface TranslationStrings {
     shramSuvidhaContact: string;
     callNalsaCta: string;
     shramSuvidhaCta: string;
+    scannerStep1: string;
+    scannerStep2: string;
+    scannerStep3: string;
+    scannerComplete: string;
   };
   resources: {
     title: string;
@@ -209,6 +214,7 @@ export const translations: Record<Language, TranslationStrings> = {
       sample1: "Can employer delay final settlement after resignation?",
       sample2: "Is my employer allowed to deduct 50% of my salary?",
       sample3: "What is the notified daily minimum wage in Delhi?",
+      sample4: "Can boss deduct pay for accidental tool damage?",
       answerTitle: "Grounded Statutory Explanation",
       groundedBadge: "✓ Statutory Grounded",
       ungroundedBadge: "⚠️ Human Counsel Routing",
@@ -226,6 +232,10 @@ export const translations: Record<Language, TranslationStrings> = {
       shramSuvidhaContact: "Ministry of Labour Grievance Portal: shramsuvidha.gov.in",
       callNalsaCta: "📞 Call NALSA 15100 (Free)",
       shramSuvidhaCta: "🔗 Shram Suvidha Portal ↗",
+      scannerStep1: "Scanning Code on Wages 2019 & Central Acts...",
+      scannerStep2: "Analyzing State Gazette Wage Notifications...",
+      scannerStep3: "Verifying Grievance Redressal & Legal Aid Procedures...",
+      scannerComplete: "Statutory Sources Grounded & Verified",
     },
     resources: {
       title: "Government Grievance Channels & Legal Aid",
@@ -334,6 +344,7 @@ export const translations: Record<Language, TranslationStrings> = {
       sample1: "क्या इस्तीफे के बाद नियोक्ता अंतिम वेतन रोक सकता है?",
       sample2: "क्या नियोक्ता 50% से अधिक वेतन काट सकता है?",
       sample3: "दिल्ली में दैनिक न्यूनतम मजदूरी क्या है?",
+      sample4: "क्या औजार टूटने पर मालिक मजदूरी काट सकता है?",
       answerTitle: "प्रमाणित कानूनी उत्तर",
       groundedBadge: "✓ प्रमाणित कानूनी धाराएं",
       ungroundedBadge: "⚠️ कानूनी सहायता हेतु निर्देशित",
@@ -351,6 +362,10 @@ export const translations: Record<Language, TranslationStrings> = {
       shramSuvidhaContact: "श्रम मंत्रालय शिकायत पोर्टल: shramsuvidha.gov.in",
       callNalsaCta: "📞 नालसा 15100 पर कॉल करें (निःशुल्क)",
       shramSuvidhaCta: "🔗 श्रम सुविधा पोर्टल ↗",
+      scannerStep1: "वेतन संहिता 2019 एवं केंद्रीय कानूनों की जांच हो रही है...",
+      scannerStep2: "राज्य राजपत्र अधिसूचनाओं एवं दरों का मिलान हो रहा है...",
+      scannerStep3: "नालसा एवं आधिकारिक शिकायत प्रक्रियाओं का सत्यापन जारी है...",
+      scannerComplete: "कानूनी स्रोत सत्यापित एवं पुष्ट",
     },
     resources: {
       title: "सरकारी शिकायत निवारण और कानूनी सहायता",

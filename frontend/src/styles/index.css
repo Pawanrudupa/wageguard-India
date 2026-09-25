@@ -32,11 +32,51 @@
   transform: translateY(0);
 }
 
+/* Physical highlighter tape effect sweeping across legal citations */
+.highlighter-tape {
+  background-image: linear-gradient(to right, rgba(217, 164, 4, 0.35), rgba(217, 164, 4, 0.35));
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  animation: highlightSweep 260ms ease-out forwards;
+  padding: 1px 4px;
+}
+
+@keyframes highlightSweep {
+  from {
+    background-size: 0% 100%;
+  }
+  to {
+    background-size: 100% 100%;
+  }
+}
+
+
+/* Terminal typing cursor */
+.ticker-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background-color: #111111;
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+  .highlighter-tape {
+    animation: none !important;
+    background-size: 100% 100% !important;
   }
   .btn-press:active,
   .btn-press-sm:active {

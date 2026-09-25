@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useI18n } from "../lib/i18n";
 import { fetchStats, StatsResponse } from "../lib/api";
 import { ScrollReveal } from "../components/ScrollReveal";
+import { OdometerCount } from "../components/OdometerCount";
 
 export const Home: React.FC = () => {
   const { t } = useI18n();
@@ -79,7 +80,7 @@ export const Home: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <div className="border-2 border-ink bg-bg p-3.5 shadow-brutal-sm">
               <div className="font-mono font-black text-2xl sm:text-3xl text-ink">
-                {stats ? stats.states_count : "18"}
+                <OdometerCount target={stats ? stats.states_count : 18} durationMs={600} />
               </div>
               <div className="text-xs font-heading font-bold text-ink/80 mt-1">
                 {t.home.statStates}
@@ -88,7 +89,7 @@ export const Home: React.FC = () => {
 
             <div className="border-2 border-ink bg-bg p-3.5 shadow-brutal-sm">
               <div className="font-mono font-black text-2xl sm:text-3xl text-ink">
-                {stats ? stats.sectors_count : "8"}
+                <OdometerCount target={stats ? stats.sectors_count : 8} durationMs={600} />
               </div>
               <div className="text-xs font-heading font-bold text-ink/80 mt-1">
                 {t.home.statSectors}
@@ -97,7 +98,7 @@ export const Home: React.FC = () => {
 
             <div className="border-2 border-ink bg-bg p-3.5 shadow-brutal-sm">
               <div className="font-mono font-black text-2xl sm:text-3xl text-ink">
-                {stats ? stats.citations_count : "61"}
+                <OdometerCount target={stats ? stats.citations_count : 61} durationMs={700} />
               </div>
               <div className="text-xs font-heading font-bold text-ink/80 mt-1">
                 {t.home.statCitations}
@@ -106,7 +107,7 @@ export const Home: React.FC = () => {
 
             <div className="border-2 border-ink bg-bg p-3.5 shadow-brutal-sm">
               <div className="font-mono font-black text-2xl sm:text-3xl text-ink">
-                {stats ? stats.inspections_analyzed.toLocaleString("en-IN") : "105,600"}
+                <OdometerCount target={stats ? stats.inspections_analyzed : 105600} durationMs={900} formatIndian={true} />
               </div>
               <div className="text-xs font-heading font-bold text-ink/80 mt-1">
                 {t.home.statInspections}
