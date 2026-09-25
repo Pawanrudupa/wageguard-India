@@ -10,6 +10,7 @@ from app.ml.data_pipeline import (
     calculate_prosecution_rate,
     calculate_conviction_rate,
     assign_risk_labels,
+    evaluate_data_confidence,
 )
 
 
@@ -24,6 +25,8 @@ def test_normalize_state_name():
     assert normalize_state_name("TN") == "Tamil Nadu"
     assert normalize_state_name("mh") == "Maharashtra"
     assert normalize_state_name("wb") == "West Bengal"
+    assert normalize_state_name("telangana") == "Telangana"
+    assert normalize_state_name("ts") == "Telangana"
     assert normalize_state_name("central sphere") == "Central Sphere"
     assert normalize_state_name("cirm") == "Central Sphere"
     assert normalize_state_name("karnataka") == "Karnataka"
@@ -55,6 +58,23 @@ def test_calculate_prosecution_and_conviction_rates():
 
     conv_rate = calculate_conviction_rate(convictions=8, prosecutions=10)
     assert conv_rate == 0.8
+
+
+def test_evaluate_data_confidence():
+    """Test data confidence evaluation based on state transparency and reporting completeness."""
+    # Priority launch state with complete returns
+    assert evaluate_data_confidence("Delhi", "Reported", 10000) == "High"
+    assert evaluate_data_confidence("Telangana", "Reported", 4000) == "High"
+    assert evaluate_data_confidence("Tamil Nadu", "Reported", 70000) == "High"
+
+    # Moderate transparency states
+    assert evaluate_data_confidence("West Bengal", "Reported", 12000) == "Medium"
+    assert evaluate_data_confidence("Gujarat", "Reported", 30000) == "Medium"
+
+    # Missing returns / unreceived data -> strictly Low confidence
+    assert evaluate_data_confidence("Bihar", "Return Not Received", 0) == "Low"
+    assert evaluate_data_confidence("Bihar", "Partially Reported", 3000) == "Low"
+    assert evaluate_data_confidence("AnyState", "Reported", 0) == "Low"
 
 
 def test_assign_risk_labels_synthetic():
@@ -99,6 +119,7 @@ def test_processed_dataset_invariants():
         "claims_awarded",
         "current_min_wage_rate",
         "irregularity_rate",
+        "data_confidence",
         "risk_label",
     ]
 
@@ -115,8 +136,9 @@ def test_processed_dataset_invariants():
     duplicate_count = df.duplicated(subset=["state", "sector", "year"]).sum()
     assert duplicate_count == 0, f"Found {duplicate_count} duplicate (state, sector, year) rows!"
 
-    # Verify valid categories for risk_label
+    # Verify valid categories for risk_label and data_confidence
     assert set(df["risk_label"].unique()) == {"Low", "Medium", "High"}
+    assert set(df["data_confidence"].unique()) == {"High", "Medium", "Low"}
 
     # Verify rates and wages are non-negative
     assert (df["current_min_wage_rate"] > 0).all()

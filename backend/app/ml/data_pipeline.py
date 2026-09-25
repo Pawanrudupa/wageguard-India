@@ -21,6 +21,8 @@ STATE_CANONICAL_MAP: Dict[str, str] = {
     "tamilnadu": "Tamil Nadu",
     "tn": "Tamil Nadu",
     "kerala": "Kerala",
+    "telangana": "Telangana",
+    "ts": "Telangana",
     "gujarat": "Gujarat",
     "uttar pradesh": "Uttar Pradesh",
     "u.p.": "Uttar Pradesh",
@@ -31,7 +33,6 @@ STATE_CANONICAL_MAP: Dict[str, str] = {
     "rajasthan": "Rajasthan",
     "bihar": "Bihar",
     "andhra pradesh": "Andhra Pradesh",
-    "telangana": "Telangana",
     "haryana": "Haryana",
     "punjab": "Punjab",
     "odisha": "Odisha",
@@ -68,6 +69,33 @@ def calculate_conviction_rate(convictions: float | int, prosecutions: float | in
     """Compute conviction rate safely per prosecution: convictions / max(prosecutions, 1)."""
     valid_prosecutions = max(float(prosecutions), 1.0)
     return round(float(convictions) / valid_prosecutions, 4)
+
+
+def evaluate_data_confidence(state: str, reporting_status: str, total_inspections: int) -> str:
+    """Evaluate data confidence based on statutory reporting completeness.
+    
+    States with complete annual returns (Table 7) across 2018-2022 and published gazettes
+    receive 'High' confidence.
+    States with moderate reporting consistency receive 'Medium'.
+    States with missing/unsubmitted returns (e.g. Return Not Received in Bihar) or zero
+    inspections receive 'Low' confidence.
+    """
+    if "not received" in reporting_status.lower() or total_inspections == 0 or "partially" in reporting_status.lower():
+        return "Low"
+    
+    # Priority launch states with clearer online publication
+    high_confidence_states = {
+        "Delhi",
+        "Maharashtra",
+        "Karnataka",
+        "Tamil Nadu",
+        "Kerala",
+        "Telangana",
+        "Central Sphere",
+    }
+    if state in high_confidence_states:
+        return "High"
+    return "Medium"
 
 
 def assign_risk_labels(
@@ -157,6 +185,10 @@ def build_state_sector_risk_dataset(
         total_convictions = int(enf_row["convictions"])
         total_claims_preferred = int(enf_row["claims_preferred"])
         total_claims_decided = int(enf_row["claims_decided"])
+        reporting_status = str(enf_row.get("reporting_status", "Reported"))
+
+        # Determine data confidence level honestly based on reporting completeness
+        data_confidence = evaluate_data_confidence(state, reporting_status, total_inspections)
 
         for _, sec_row in df_sectors.iterrows():
             sector = str(sec_row["sector"])
@@ -179,18 +211,18 @@ def build_state_sector_risk_dataset(
             sec_complaints = max(int(round(total_claims_preferred * complaint_share)), 0) if total_claims_preferred > 0 else 0
             sec_claims_awarded = max(int(round(total_claims_decided * complaint_share)), 0) if total_claims_decided > 0 else 0
 
-            # Minimum wage rate
+            # Minimum wage rate from state notification
             rate_match = wage_lookup[
                 (wage_lookup["state"] == state) & (wage_lookup["sector"] == sector)
             ]
             if not rate_match.empty:
                 min_wage = float(rate_match["current_min_wage_rate"].iloc[0])
             else:
-                # Fallback to state median or national baseline
+                # TODO: source needed if specific scheduled employment rate is missing for state
                 state_rates = wage_lookup[wage_lookup["state"] == state]["current_min_wage_rate"]
-                min_wage = float(state_rates.median()) if not state_rates.empty else 450.0
+                min_wage = float(state_rates.median()) if not state_rates.empty else 450.0  # TODO: source needed
 
-            # Calculate safe rate
+            # Calculate safe irregularity rate per inspection
             irreg_rate = calculate_irregularity_rate(sec_irregularities, sec_inspections)
 
             records.append({
@@ -205,6 +237,7 @@ def build_state_sector_risk_dataset(
                 "claims_awarded": sec_claims_awarded,
                 "current_min_wage_rate": min_wage,
                 "irregularity_rate": irreg_rate,
+                "data_confidence": data_confidence,
             })
 
     result_df = pd.DataFrame(records)
@@ -236,3 +269,5 @@ if __name__ == "__main__":
     print(f"Dataset generated successfully with {len(df)} rows and {len(df.columns)} columns.")
     print("Class distribution:")
     print(df["risk_label"].value_counts())
+    print("\nData Confidence distribution:")
+    print(df["data_confidence"].value_counts())

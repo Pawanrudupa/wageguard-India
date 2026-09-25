@@ -27,8 +27,13 @@ state/sector-aggregated statistics instead:
 
 5. **State minimum wage notifications** — each state labour department publishes
    current rates per "scheduled employment" category, revised roughly twice yearly.
-   Launch with 5-8 states with clearer online publication (e.g. Delhi, Maharashtra,
-   Karnataka, Tamil Nadu, Kerala) rather than attempting all 28 states + UTs in the MVP.
+   Focus on launch states with clearer online publication of labour data:
+   **Delhi, Maharashtra, Karnataka, Tamil Nadu, Kerala, Telangana, and West Bengal**
+   (plus Central Sphere CIRM) rather than attempting all 28 states + UTs in the MVP.
+   - Any missing value, unsubmitted return, or pending gazette must be explicitly
+     marked `# TODO: source needed` per AGENTS.md, never silently guessed.
+   - Data gaps (e.g., states with unsubmitted returns in specific years like Bihar)
+     must be documented in `data/processed/DATA_NOTES.md` and flagged with lower confidence.
 
 ## RAG corpus (legal text)
 1. **India Code portal** (indiacode.nic.in) — authoritative full text of central Acts:
