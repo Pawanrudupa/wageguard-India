@@ -84,6 +84,18 @@ def _extract_next_steps(state: str | None = None, language: str = "en") -> str:
     return steps
 
 
+def _is_resignation_query(query: str) -> bool:
+    """Detect whether the user's query is about voluntary resignation (vs employer termination)."""
+    resignation_signals = [
+        "resign", "resignation", "quit", "quitting", "i quit", "i resigned",
+        "after i resign", "after resigning", "voluntary", "leaving job",
+        "notice period", "final settlement after resign",
+        "इस्तीफा", "त्यागपत्र", "नौकरी छोड़",
+    ]
+    q_lower = query.lower()
+    return any(signal in q_lower for signal in resignation_signals)
+
+
 def _deterministic_grounded_answer(
     query: str,
     chunks: list[dict[str, Any]],
@@ -106,21 +118,63 @@ def _deterministic_grounded_answer(
     summary_lines = lines[:4]
     summary_body = " ".join(summary_lines)
 
-    if language == "hi":
-        answer = (
-            f"कानूनी प्रावधानों के अनुसार ({act_name}, {section}):\n"
-            f"यह पैटर्न इंगित करता है कि कानून के तहत श्रमिकों को वैधानिक संरक्षण प्राप्त है। "
-            f"प्रासंगिक प्रावधान के अनुसार:\n\n{summary_body}\n\n"
-            f"यदि नियोक्ता वैधानिक नियमों का पालन नहीं कर रहा है, तो वास्तविक निर्धारण के लिए आधिकारिक शिकायत चैनल का उपयोग करें।"
-        )
+    # Check if this is a resignation-specific query — requires special legal framing
+    is_resignation = _is_resignation_query(query)
+
+    if is_resignation:
+        if language == "hi":
+            answer = (
+                f"कानूनी प्रावधानों के अनुसार ({act_name}, {section}):\n\n"
+                f"महत्वपूर्ण कानूनी भेद: वर्तमान में लागू भुगतान वेतन अधिनियम, 1936 की धारा 5(2) के तहत "
+                f"दो कार्य दिवसों की समय सीमा केवल नियोक्ता द्वारा बर्खास्तगी/समाप्ति पर लागू होती है — "
+                f"स्वैच्छिक इस्तीफे पर नहीं। 1936 के अधिनियम में इस्तीफे के बाद अंतिम निपटान के लिए "
+                f"कोई स्पष्ट वैधानिक समय सीमा नहीं है।\n\n"
+                f"इस्तीफा देने वाले कर्मचारियों की वर्तमान सुरक्षा:\n"
+                f"(अ) कुछ राज्यों के दुकान एवं वाणिज्यिक प्रतिष्ठान अधिनियम में विशिष्ट समय सीमा निर्धारित है — "
+                f"अपने राज्य के नियम जांचें;\n"
+                f"(ब) भुगतान वेतन अधिनियम 1936 की धारा 15 के तहत अनुचित विलंब को चुनौती दी जा सकती है;\n"
+                f"(स) वेतन संहिता 2019, धारा 17(2) इस्तीफे पर भी 2 कार्य दिवसों की समय सीमा लागू करेगी, "
+                f"लेकिन यह संहिता अभी तक लागू नहीं की गई है (2024 तक)।\n\n"
+                f"प्रासंगिक प्रावधान:\n{summary_body}"
+            )
+        else:
+            answer = (
+                f"Based on {act_name} ({section}):\n\n"
+                f"IMPORTANT LEGAL DISTINCTION: Under the currently-enforced Payment of Wages Act, 1936, "
+                f"Section 5(2), the two-working-day deadline for paying final wages applies ONLY to "
+                f"employer-initiated termination/dismissal — NOT to voluntary resignation. The 1936 Act "
+                f"does not contain an explicit statutory deadline for resignation settlements. This is a "
+                f"genuine gap in the currently-enforced law.\n\n"
+                f"What protects resigning workers today:\n"
+                f"(a) Some State Shops & Establishment Acts prescribe specific final settlement timelines "
+                f"— check your state's rules (e.g. via grievance_channels or state labour portal);\n"
+                f"(b) Section 15 of the Payment of Wages Act, 1936 allows you to file a claim for "
+                f"\"delay in payment of wages\" before the Payment of Wages Authority even in resignation "
+                f"cases — courts have held that unreasonable delay is actionable;\n"
+                f"(c) The Code on Wages, 2019, Section 17(2) would extend the two-working-day deadline "
+                f"to cover resignation as well, but this Code has NOT been brought into force as of 2024 "
+                f"(the Central Government has not notified the appointed date under Section 1(3)). "
+                f"It should not be cited as current enforceable law.\n\n"
+                f"Relevant statutory provisions from the retrieved sources:\n{summary_body}\n\n"
+                f"If your employer is unreasonably withholding your earned wages after resignation, "
+                f"route your complaint to the official grievance channel for formal determination."
+            )
     else:
-        answer = (
-            f"Based on {act_name} ({section}):\n"
-            f"This pattern indicates statutory protection under applicable labour law. "
-            f"According to the relevant statutory section:\n\n{summary_body}\n\n"
-            f"Under Indian law, employers must adhere strictly to these timelines and deduction ceilings. "
-            f"If an employer deviates from this statutory standard, route your complaint to the official grievance channel for formal determination."
-        )
+        if language == "hi":
+            answer = (
+                f"कानूनी प्रावधानों के अनुसार ({act_name}, {section}):\n"
+                f"यह पैटर्न इंगित करता है कि कानून के तहत श्रमिकों को वैधानिक संरक्षण प्राप्त है। "
+                f"प्रासंगिक प्रावधान के अनुसार:\n\n{summary_body}\n\n"
+                f"यदि नियोक्ता वैधानिक नियमों का पालन नहीं कर रहा है, तो वास्तविक निर्धारण के लिए आधिकारिक शिकायत चैनल का उपयोग करें।"
+            )
+        else:
+            answer = (
+                f"Based on {act_name} ({section}):\n"
+                f"This pattern indicates statutory protection under applicable labour law. "
+                f"According to the relevant statutory section:\n\n{summary_body}\n\n"
+                f"Under Indian law, employers must adhere strictly to these timelines and deduction ceilings. "
+                f"If an employer deviates from this statutory standard, route your complaint to the official grievance channel for formal determination."
+            )
 
     return GroundedAnswer(
         answer=answer,
@@ -183,6 +237,12 @@ def generate_grounded_answer(
                 f"You are WageGuard India's rights navigator assistant.\n"
                 f"Answer the user's question ONLY using the facts from the legal sources below.\n"
                 f"Never accuse a named employer of guilt; use 'based on [Act/Section], this pattern may indicate...'.\n"
+                f"CRITICAL LEGAL ACCURACY RULE: Payment of Wages Act 1936, Section 5(2) two-working-day deadline "
+                f"applies ONLY to employer-initiated termination/dismissal, NOT voluntary resignation. If the user "
+                f"asks about resignation, clearly state that the 1936 Act has no explicit deadline for resignation "
+                f"settlements, mention that State Shops & Establishment Acts may set one, and that the Code on "
+                f"Wages 2019 Section 17(2) would cover resignation but is NOT yet in force. Never present the "
+                f"two-working-day rule as applying to resignation under current law.\n"
                 f"If the answer cannot be strictly found in the text, say: 'I don't have a grounded answer for this — here's where to ask a human'.\n"
                 f"Language required: {'Hindi' if language == 'hi' else 'English'}.\n\n"
                 f"LEGAL CONTEXT:\n{context_str}\n\n"

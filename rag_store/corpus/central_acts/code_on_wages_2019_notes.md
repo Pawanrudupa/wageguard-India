@@ -29,9 +29,10 @@ Key consolidations:
 - Statutory Floor Wage (Section 9): The Central Government is empowered to fix a National Floor Wage taking into account the minimum living standards of a worker. State Governments cannot fix minimum wage rates lower than the National Floor Wage.
 - Universal Coverage (Section 6): Unlike the Minimum Wages Act 1948 which applied only to "scheduled employments", the Code on Wages removes the scheduled employment restriction and applies minimum wage mandates to all workers across organized and unorganized sectors throughout India.
 
-## Section 17: Time Limit for Payment of Wages
+## Section 17: Time Limit for Payment of Wages (NOT YET UNIFORMLY IN FORCE)
 - In monthly wage periods, wages must be paid before the expiry of the 7th day of the succeeding month.
 - Section 17(2) Final Settlement: In case of removal, dismissal, retrenchment, resignation, or termination of employment, wages earned must be paid within two working days (2 working days) of the removal, dismissal, resignation, or termination.
+CRITICAL IMPLEMENTATION STATUS CAVEAT: Section 17(2) significantly expands the scope of the existing Payment of Wages Act 1936, Section 5(2), which only prescribes a two-working-day deadline for employer-initiated termination/dismissal — NOT for voluntary resignation. The Code on Wages 2019 would extend this deadline to cover resignation as well. HOWEVER, the Code on Wages 2019 has NOT been brought into force as of 2024: the Central Government has not yet notified the appointed date under Section 1(3) of the Code, and the predecessor Acts (Payment of Wages Act 1936, Minimum Wages Act 1948) remain the operative statutes. Therefore, Section 17(2)'s two-working-day deadline for resignation settlements should NOT be cited as current enforceable law. Workers resigning today should rely on: (a) any applicable State Shops & Establishment Act timeline, (b) Section 15 of the Payment of Wages Act 1936 for challenging unreasonable delay, and (c) judicial precedent that courts may order timely settlement even absent a specific statutory deadline for resignations.
 
 ## Section 18: Permissible Deductions Under the Code
 - Authorised deductions remain strictly controlled (fines, absence, house accommodation, provident fund, tax, advance recoveries).

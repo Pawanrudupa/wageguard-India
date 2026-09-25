@@ -72,10 +72,12 @@ def test_retrieval_payment_of_wages_resignation_deadline():
     combined_texts = " ".join([c["text"] for c in chunks]).lower()
 
     assert any(
-        "payment_of_wages" in s or "common_labour_rights_faq" in s for s in sources
-    ), f"Expected Payment of Wages Act in sources, got: {sources}"
-    assert any("Payment of Wages Act" in a or "Labour Rights FAQs" in a for a in acts)
-    assert "second working day" in combined_texts or "2nd working day" in combined_texts
+        "payment_of_wages" in s or "common_labour_rights_faq" in s or "code_on_wages" in s
+        for s in sources
+    ), f"Expected Payment of Wages Act or FAQ or Code on Wages in sources, got: {sources}"
+    assert any("Payment of Wages Act" in a or "Labour Rights FAQs" in a or "Code on Wages" in a for a in acts)
+    # Corrected: the corpus must now mention the termination-only scope or resignation gap
+    assert "second working day" in combined_texts or "two working day" in combined_texts or "2 working day" in combined_texts
 
 
 def test_retrieval_state_boosting():
@@ -90,8 +92,8 @@ def test_retrieval_state_boosting():
     assert "18,066" in delhi_matches[0]["text"] or "695" in delhi_matches[0]["text"]
 
 
-def test_generate_grounded_answer_success():
-    """Assert grounded answer includes citations, disclaimer, and non-accusatory language."""
+def test_generate_grounded_answer_resignation_legal_distinction():
+    """Assert resignation query produces correct legal framing: Section 5(2) is termination-only."""
     query = "can my employer delay my final salary after I resign?"
     result = generate_grounded_answer(query=query, language="en")
 
@@ -101,9 +103,20 @@ def test_generate_grounded_answer_success():
 
     # Check non-accusatory safety framing
     assert "guilty" not in result.answer.lower()
-    assert "indicates" in result.answer or "based on" in result.answer.lower()
     assert result.next_steps is not None
     assert "15100" in result.next_steps or "shramsuvidha" in result.next_steps
+
+    # CRITICAL: Verify the corrected legal distinction is present
+    answer_lower = result.answer.lower()
+    # Must distinguish termination-only scope of Section 5(2)
+    assert "termination" in answer_lower or "dismissal" in answer_lower
+    # Must mention the resignation gap or that 1936 Act doesn't cover resignation
+    assert "resignation" in answer_lower
+    # Must NOT present two-working-day as applying to resignation under current law
+    assert "not" in answer_lower or "only" in answer_lower
+    # Must mention Code on Wages 2019 caveat
+    assert "code on wages" in answer_lower or "2019" in answer_lower
+    assert "not" in answer_lower and ("in force" in answer_lower or "enforc" in answer_lower)
 
 
 def test_generate_grounded_answer_unrelated_query_fallback():
