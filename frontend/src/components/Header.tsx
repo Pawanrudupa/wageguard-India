@@ -44,11 +44,11 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => setLang("en")}
-              className={`min-h-[44px] min-w-[44px] px-2.5 py-1 text-xs font-mono font-bold transition-transform active:scale-95 ${
+              className={`min-h-[44px] min-w-[44px] px-2.5 py-1 text-xs font-mono font-black transition-all cursor-pointer ${
                 lang === "en"
-                  ? "bg-accent text-ink border-2 border-ink shadow-brutal-sm"
-                  : "text-ink/80 hover:text-ink"
-              }`}
+                  ? "bg-accent text-ink border-2 border-ink shadow-brutal-sm -translate-x-0.5 -translate-y-0.5"
+                  : "text-ink/80 hover:text-ink hover:bg-surface/60"
+              } active:translate-x-0 active:translate-y-0 active:shadow-none`}
               aria-label="Switch to English"
             >
               EN
@@ -56,11 +56,11 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => setLang("hi")}
-              className={`min-h-[44px] min-w-[44px] px-2.5 py-1 text-xs font-mono font-bold transition-transform active:scale-95 ${
+              className={`min-h-[44px] min-w-[44px] px-2.5 py-1 text-xs font-mono font-black transition-all cursor-pointer ${
                 lang === "hi"
-                  ? "bg-accent text-ink border-2 border-ink shadow-brutal-sm"
-                  : "text-ink/80 hover:text-ink"
-              }`}
+                  ? "bg-accent text-ink border-2 border-ink shadow-brutal-sm -translate-x-0.5 -translate-y-0.5"
+                  : "text-ink/80 hover:text-ink hover:bg-surface/60"
+              } active:translate-x-0 active:translate-y-0 active:shadow-none`}
               aria-label="हिंदी में बदलें"
             >
               हिन्दी

@@ -7,6 +7,7 @@ import { useI18n } from "../lib/i18n";
 import { fetchRisk, RiskResponse } from "../lib/api";
 import { Combobox } from "../components/Combobox";
 import { ScrollReveal } from "../components/ScrollReveal";
+import { WageTheftCalculator } from "../components/WageTheftCalculator";
 
 const STATES = [
   "Delhi",
@@ -199,6 +200,74 @@ export const RiskLookup: React.FC = () => {
               </div>
             )}
 
+            {/* 3-Tier Physical Risk Stamp / Gauge */}
+            <div className="space-y-2">
+              <div className="text-xs font-mono font-bold text-ink/70 uppercase tracking-wider">
+                Risk Tier Distribution & Verification
+              </div>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                {/* Low Tier */}
+                <div
+                  className={`border-3 p-3 text-center transition-all ${
+                    result.risk_label === "Low"
+                      ? "border-ink bg-risk-low text-surface shadow-brutal risk-stamp-enter ring-2 ring-ink"
+                      : "border-ink/30 bg-bg/50 text-ink/40"
+                  }`}
+                >
+                  <div className="font-heading font-black text-xs sm:text-sm uppercase tracking-wide">
+                    {t.risk.gaugeLow}
+                  </div>
+                  {result.risk_label === "Low" ? (
+                    <div className="mt-1 font-mono text-[10px] sm:text-xs bg-ink text-surface px-1.5 py-0.5 inline-block uppercase font-black">
+                      [✓ ML TIER]
+                    </div>
+                  ) : (
+                    <div className="mt-1 font-mono text-[10px] text-ink/40">Tier 1</div>
+                  )}
+                </div>
+
+                {/* Medium Tier */}
+                <div
+                  className={`border-3 p-3 text-center transition-all ${
+                    result.risk_label === "Medium"
+                      ? "border-ink bg-risk-medium text-ink shadow-brutal risk-stamp-enter ring-2 ring-ink"
+                      : "border-ink/30 bg-bg/50 text-ink/40"
+                  }`}
+                >
+                  <div className="font-heading font-black text-xs sm:text-sm uppercase tracking-wide">
+                    {t.risk.gaugeMedium}
+                  </div>
+                  {result.risk_label === "Medium" ? (
+                    <div className="mt-1 font-mono text-[10px] sm:text-xs bg-ink text-surface px-1.5 py-0.5 inline-block uppercase font-black">
+                      [✓ ML TIER]
+                    </div>
+                  ) : (
+                    <div className="mt-1 font-mono text-[10px] text-ink/40">Tier 2</div>
+                  )}
+                </div>
+
+                {/* High Tier */}
+                <div
+                  className={`border-3 p-3 text-center transition-all ${
+                    result.risk_label === "High"
+                      ? "border-ink bg-risk-high text-surface shadow-brutal risk-stamp-enter ring-2 ring-ink"
+                      : "border-ink/30 bg-bg/50 text-ink/40"
+                  }`}
+                >
+                  <div className="font-heading font-black text-xs sm:text-sm uppercase tracking-wide">
+                    {t.risk.gaugeHigh}
+                  </div>
+                  {result.risk_label === "High" ? (
+                    <div className="mt-1 font-mono text-[10px] sm:text-xs bg-ink text-surface px-1.5 py-0.5 inline-block uppercase font-black">
+                      [✓ ML TIER]
+                    </div>
+                  ) : (
+                    <div className="mt-1 font-mono text-[10px] text-ink/40">Tier 3</div>
+                  )}
+                </div>
+              </div>
+            </div>
+
             {/* Key Empirical Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="border-2 border-ink bg-bg p-3 shadow-brutal-sm">
@@ -239,6 +308,13 @@ export const RiskLookup: React.FC = () => {
                 {result.explanation}
               </p>
             </div>
+
+            {/* Interactive Wage Theft / Underpayment Calculator */}
+            <WageTheftCalculator
+              state={result.state}
+              sector={result.sector}
+              statutoryDailyRate={result.current_min_wage_rate}
+            />
 
             {/* Contextual Action Links */}
             <div className="pt-2 border-t-2 border-ink/20 flex flex-col sm:flex-row gap-3">

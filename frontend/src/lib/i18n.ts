@@ -66,6 +66,19 @@ export interface TranslationStrings {
     viewStateResources: string;
     selectStatePrompt: string;
     selectSectorPrompt: string;
+    gaugeLow: string;
+    gaugeMedium: string;
+    gaugeHigh: string;
+    calculatorTitle: string;
+    calculatorSubtitle: string;
+    actualDailyWage: string;
+    daysWorked: string;
+    statutoryMinWage: string;
+    underpaidTitle: string;
+    compliantTitle: string;
+    underpaidPerMonth: string;
+    compliantDesc: string;
+    claimArrearsCta: string;
   };
   rights: {
     title: string;
@@ -198,6 +211,19 @@ export const translations: Record<Language, TranslationStrings> = {
       viewStateResources: "View State Grievance Portals",
       selectStatePrompt: "-- Choose State --",
       selectSectorPrompt: "-- Choose Sector --",
+      gaugeLow: "LOW RISK TIER",
+      gaugeMedium: "MEDIUM RISK TIER",
+      gaugeHigh: "HIGH RISK TIER",
+      calculatorTitle: "Wage Theft & Underpayment Calculator",
+      calculatorSubtitle: "Check how much statutory pay you are owed if your employer pays below the legal minimum wage rate.",
+      actualDailyWage: "Your Actual Daily Pay (₹)",
+      daysWorked: "Days Worked This Month",
+      statutoryMinWage: "Statutory Minimum Daily Wage (₹)",
+      underpaidTitle: "Estimated Statutory Wage Arrears Owed to You",
+      compliantTitle: "Compliant: Pay meets or exceeds statutory daily minimum",
+      underpaidPerMonth: "monthly underpayment owed",
+      compliantDesc: "Your reported wage meets or exceeds the notified statutory rate for this category.",
+      claimArrearsCta: "How to Recover These Arrears",
     },
     rights: {
       title: "Grounded Labour Rights Navigator",
@@ -328,6 +354,19 @@ export const translations: Record<Language, TranslationStrings> = {
       viewStateResources: "राज्य के शिकायत पोर्टल देखें",
       selectStatePrompt: "-- राज्य चुनें --",
       selectSectorPrompt: "-- उद्योग क्षेत्र चुनें --",
+      gaugeLow: "कम जोखिम स्तर",
+      gaugeMedium: "मध्यम जोखिम स्तर",
+      gaugeHigh: "उच्च जोखिम स्तर",
+      calculatorTitle: "वेतन चोरी एवं बकाया वेतन कैलकुलेटर",
+      calculatorSubtitle: "यदि आपका नियोक्ता कानूनी न्यूनतम वेतन से कम मजदूरी देता है, तो अपनी बकाया वैधानिक राशि जांचें।",
+      actualDailyWage: "आपका वास्तविक दैनिक वेतन (₹)",
+      daysWorked: "महीने में किए गए कार्य दिवस",
+      statutoryMinWage: "कानूनी न्यूनतम दैनिक वेतन (₹)",
+      underpaidTitle: "अनुमानित बकाया वेतन जो नियोक्ता पर निकलता है",
+      compliantTitle: "वैधानिक अनुरूप: वेतन न्यूनतम मजदूरी दर के बराबर या अधिक है",
+      underpaidPerMonth: "मासिक वेतन चोरी",
+      compliantDesc: "आपका सूचित वेतन इस श्रेणी के लिए अधिसूचित वैधानिक दर के बराबर या उससे अधिक है।",
+      claimArrearsCta: "बकाया वेतन वसूलने के उपाय जानें",
     },
     rights: {
       title: "कानूनी अधिकार मार्गदर्शक",
