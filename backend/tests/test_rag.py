@@ -93,7 +93,7 @@ def test_retrieval_state_boosting():
 
 
 def test_generate_grounded_answer_resignation_legal_distinction():
-    """Assert resignation query produces correct legal framing: Section 5(2) is termination-only."""
+    """Assert resignation query presents Code on Wages Section 17 2-day rule as in force since 21 Nov 2025."""
     query = "can my employer delay my final salary after I resign?"
     result = generate_grounded_answer(query=query, language="en")
 
@@ -106,17 +106,17 @@ def test_generate_grounded_answer_resignation_legal_distinction():
     assert result.next_steps is not None
     assert "15100" in result.next_steps or "shramsuvidha" in result.next_steps
 
-    # CRITICAL: Verify the corrected legal distinction is present
+    # CRITICAL: Verify the updated 21 Nov 2025 legal framing is present
     answer_lower = result.answer.lower()
-    # Must distinguish termination-only scope of Section 5(2)
-    assert "termination" in answer_lower or "dismissal" in answer_lower
-    # Must mention the resignation gap or that 1936 Act doesn't cover resignation
-    assert "resignation" in answer_lower
-    # Must NOT present two-working-day as applying to resignation under current law
-    assert "not" in answer_lower or "only" in answer_lower
-    # Must mention Code on Wages 2019 caveat
+    # Must present Code on Wages 2019 Section 17 as in force
     assert "code on wages" in answer_lower or "2019" in answer_lower
-    assert "not" in answer_lower and ("in force" in answer_lower or "enforc" in answer_lower)
+    assert "in force" in answer_lower or "21 november 2025" in answer_lower
+    # Must specify two working days
+    assert "two working days" in answer_lower or "2 working days" in answer_lower
+    # Must note resignation coverage and historical 1936 Act context
+    assert "resignation" in answer_lower
+    # Must note transitional state rules or operational nuance
+    assert "transition" in answer_lower or "state" in answer_lower
 
 
 def test_generate_grounded_answer_unrelated_query_fallback():

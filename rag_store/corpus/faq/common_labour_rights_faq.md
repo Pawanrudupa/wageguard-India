@@ -2,20 +2,20 @@
 act_name: "Plain-Language Labour Rights FAQs"
 source_file: "rag_store/corpus/faq/common_labour_rights_faq.md"
 authority: "Indian Labour Law Statutory Summary"
-valid_as_of_date: "2024-01-01"
+valid_as_of_date: "2026-01-01"
 jurisdiction: "All States / Central Sphere"
 ---
 
 # Frequently Asked Questions on Indian Labour Rights & Wage Law
 
 ## FAQ 1: Can my employer delay or withhold my final salary after I resign?
-- **Short Answer**: An employer should not unreasonably delay your final salary after resignation, but the legal position is more nuanced than commonly stated.
-- **Statutory Authority**: Payment of Wages Act, 1936, Section 5(2) (for employer-initiated termination); Code on Wages, 2019, Section 17(2) (for resignation — but NOT YET IN FORCE); applicable State Shops & Establishment Act (varies by state).
-- **Key Legal Distinction**: Section 5(2) of the Payment of Wages Act, 1936 prescribes a mandatory two-working-day deadline for paying final wages ONLY when the employer terminates, dismisses, or retrenches the employee. The 1936 Act does NOT contain an explicit statutory deadline for payment of final wages in cases of voluntary resignation by the employee. This is a genuine gap in the currently-enforced law.
-- **Code on Wages 2019 (Future Law)**: The Code on Wages, 2019, Section 17(2) would extend the two-working-day deadline to cover resignation, removal, dismissal, retrenchment, and all forms of separation. However, this Code has NOT been brought into force as of 2024 — the Central Government has not notified the appointed date under Section 1(3). It should NOT be cited as current enforceable law.
-- **What Actually Protects Resigning Workers Today**: (a) Some State Shops and Establishment Acts prescribe specific final settlement timelines (check your state's rules); (b) Section 15 of the Payment of Wages Act, 1936 allows workers to file a claim for "delay in payment of wages" before the Payment of Wages Authority even in resignation cases — courts have held that unreasonable delay is actionable; (c) Company policies requiring "45 to 90 days for full and final settlement" may be challengeable if they result in unreasonable withholding of earned wages.
-- **Permissible Deductions**: Under Section 7(2) and Section 7(3), the employer can only make authorized deductions (such as statutory PF/tax or documented unreturned company equipment with prior notice), and total deductions cannot exceed 50% of the wage.
-- **Where to Complain**: Payment of Wages Authority / Labour Court under Section 15 of the Payment of Wages Act, 1936, or file an online grievance on the Shram Suvidha portal.
+- **Short Answer**: No. Under Indian labour law (Code on Wages, 2019, Section 17(2), brought into force on 21 November 2025), an employer cannot legally delay or withhold your final salary after you resign.
+- **Statutory Authority**: Code on Wages, 2019, Section 17(2) (in force effective 21 November 2025); Payment of Wages Act, 1936, Section 5(2) (historical predecessor) and Section 15 (claims); applicable State Shops & Establishment Acts.
+- **Current Legal Mandate**: Section 17(2) of the Code on Wages, 2019 explicitly mandates that where an employee resigns from service, or is removed, dismissed, or terminated, the wages earned by the employee must be paid within **two working days (2 working days)** of such resignation or separation. This substantive rule is now the law of the land across India following the 21 November 2025 gazette notification.
+- **Transitional & State-Rule Context**: While the substantive right to 2-day settlement is in force under Section 17(2), Central and State procedural rules under the Code were still being finalized across jurisdictions as of early 2026 (draft Central Rules were published for comment ~30 Dec 2025). Depending on whether your state has fully notified its Code rules, local enforcement officers may still operate through transitional procedures under State Shops & Establishment Acts or Section 15 of the Payment of Wages Act 1936.
+- **Company 45-90 Day Policies**: Internal employer policies asserting a 45-to-90-day waiting period for "full and final settlement" are contrary to statutory mandates under Section 17(2). An employer cannot contract out of this statutory timeline.
+- **Permissible Deductions**: Under Section 18 of the Code (and Section 7 of the 1936 Act), employers may only deduct statutory dues (PF, tax) or documented losses caused by gross neglect with prior show-cause notice, and total deductions can never exceed 50% of earned wages.
+- **Where to Complain**: Payment of Wages Authority / Labour Court under Section 15 of the 1936 Act or the designated adjudicative officer under the Code on Wages, or file an online grievance on the Shram Suvidha portal (https://shramsuvidha.gov.in).
 
 ## FAQ 2: Is my employer allowed to make deductions from my salary without my consent?
 - **Short Answer**: No. Unauthorized deductions are strictly illegal under Indian labour law.
