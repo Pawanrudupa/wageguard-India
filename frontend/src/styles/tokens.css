@@ -2,10 +2,12 @@
 :root {
   --bg: #F5F1E8;
   --ink: #111111;
-  --accent: #FFD400;
-  --accent-ink: #111111;
-  --risk-low: #2E7D32;
-  --risk-medium: #E8A400;
-  --risk-high: #D7263D;
+  --accent: #D9A404;      /* Turmeric gold */
+  --accent-ink: #111111;  /* High contrast text on turmeric gold */
+  --trust: #22304A;       /* Deep indigo for legal authority & informational elements */
+  --trust-surface: #FFFFFF;
+  --risk-low: #2E7D32;    /* Green */
+  --risk-medium: #E8A400; /* Amber */
+  --risk-high: #D7263D;   /* Red */
   --surface: #FFFFFF;
 }

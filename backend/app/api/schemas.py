@@ -1,6 +1,6 @@
 """Pydantic request and response models for the WageGuard India API layer."""
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -44,6 +44,7 @@ class RightsRequest(BaseModel):
                 "query": "Can my employer delay my final salary after I resign?",
                 "state": "Delhi",
                 "language": "en",
+                "stream": True,
             }
         }
     )
@@ -66,6 +67,11 @@ class RightsRequest(BaseModel):
         max_length=10,
         description="Response language preference ('en' for English, 'hi' for Hindi)",
         examples=["en"],
+    )
+    stream: bool = Field(
+        False,
+        description="Whether to stream the response as Server-Sent Events (SSE)",
+        examples=[False],
     )
 
 
@@ -191,3 +197,31 @@ class HealthResponse(BaseModel):
     version: str = Field("0.1.0", examples=["0.1.0"])
     model_loaded: bool = Field(True, examples=[True])
     vector_store_ready: bool = Field(True, examples=[True])
+
+
+class StatsResponse(BaseModel):
+    """Aggregate statistics pulled from actual enforcement dataset and legal corpus."""
+
+    model_config: ClassVar[ConfigDict] = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "states_count": 18,
+                "sectors_count": 8,
+                "citations_count": 61,
+                "inspections_analyzed": 105600,
+            }
+        }
+    )
+
+    states_count: int = Field(..., description="Number of Indian States and UTs covered in empirical risk model", examples=[18])
+    sectors_count: int = Field(..., description="Number of vulnerable economic sectors analyzed", examples=[8])
+    citations_count: int = Field(..., description="Total verified statutory clauses and chunks in RAG corpus", examples=[61])
+    inspections_analyzed: int = Field(..., description="Cumulative historical labour inspections evaluated", examples=[105600])
+
+
+class AnalyticsResponse(BaseModel):
+    """Anonymous aggregate-only analytics counter overview."""
+
+    total_risk_inquiries: int = Field(..., description="Total anonymous risk checks performed", examples=[42])
+    total_rights_inquiries: int = Field(..., description="Total anonymous rights inquiries performed", examples=[19])
+    aggregate_counters: dict[str, int] = Field(default_factory=dict, description="State+sector combination counts only")

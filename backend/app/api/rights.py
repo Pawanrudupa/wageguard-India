@@ -1,19 +1,40 @@
-"""FastAPI router for grounded legal rights retrieval and educational guidance."""
+"""FastAPI router for grounded legal rights retrieval and educational guidance with SSE streaming."""
 
+import asyncio
+import json
 import logging
+from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import StreamingResponse
 
+from backend.app.api.analytics import record_rights_call
+from backend.app.api.limiter import RateLimiter
 from backend.app.api.schemas import CitationSchema, RightsRequest, RightsResponse
-from backend.app.rag.generate import generate_grounded_answer
+from backend.app.rag.generate import generate_grounded_answer, stream_grounded_answer
 
 logger = logging.getLogger("wageguard.rights")
 router = APIRouter(prefix="/api/rights", tags=["Rights Assistant"])
 
+# Rate limit: 20 requests per minute per IP for rights queries
+rights_limiter = RateLimiter(times=20, seconds=60)
 
-@router.post("", response_model=RightsResponse, summary="Query Legal Rights Assistant")
-def ask_rights_assistant(request: RightsRequest) -> RightsResponse:
+
+@router.post(
+    "",
+    response_model=RightsResponse,
+    dependencies=[Depends(rights_limiter)],
+    summary="Query Legal Rights Assistant (Supports JSON & SSE Streaming)",
+)
+async def ask_rights_assistant(
+    request: RightsRequest,
+    raw_request: Request,
+) -> Any:
     """Retrieve grounded statutory legal citations and answer labour law inquiries.
+
+    Supports dual modes:
+    - Standard JSON response (default or when Accept: application/json)
+    - Server-Sent Events (SSE) streaming (when request.stream=True or Accept: text/event-stream)
 
     Privacy Notice (AGENTS.md):
     - User query text is never persisted server-side beyond the request lifecycle.
@@ -32,6 +53,43 @@ def ask_rights_assistant(request: RightsRequest) -> RightsResponse:
         len(clean_query),
     )
 
+    # Anonymous aggregate-only tally (AGENTS.md: state tally only, no query text or user tracking)
+    record_rights_call(request.state)
+
+    accept_header = raw_request.headers.get("accept", "")
+    wants_streaming = request.stream or "text/event-stream" in accept_header
+
+    if wants_streaming:
+        async def event_generator():
+            try:
+                events = stream_grounded_answer(
+                    query=clean_query,
+                    state=request.state,
+                    language=request.language,
+                )
+                for item in events:
+                    event_type = item.get("event", "message")
+                    data_str = json.dumps(item)
+                    yield f"event: {event_type}\ndata: {data_str}\n\n"
+                    if event_type == "token":
+                        # 12ms pacing for crisp, smooth typing rhythm
+                        await asyncio.sleep(0.012)
+            except Exception as exc:
+                logger.error("SSE streaming error: %s", exc)
+                error_payload = json.dumps({"event": "error", "detail": "Generation failed."})
+                yield f"event: error\ndata: {error_payload}\n\n"
+
+        return StreamingResponse(
+            event_generator(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
+
+    # Standard JSON return mode
     try:
         grounded_result = generate_grounded_answer(
             query=clean_query,

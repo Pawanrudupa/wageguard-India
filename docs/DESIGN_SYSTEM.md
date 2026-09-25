@@ -10,8 +10,9 @@ on budget phones, sometimes in a second language.
 :root {
   --bg: #F5F1E8;           /* warm off-white, not pure white — softer on low-end screens */
   --ink: #111111;          /* near-black text/borders */
-  --accent: #FFD400;       /* electric yellow — primary CTA / brand accent */
-  --accent-ink: #111111;   /* text on accent */
+  --accent: #D9A404;       /* turmeric gold — primary CTA / brand accent */
+  --accent-ink: #111111;   /* high-contrast dark text on turmeric gold */
+  --trust: #22304A;        /* deep indigo — secondary trust color for statutory & informational elements */
   --risk-low: #2E7D32;     /* green */
   --risk-medium: #E8A400;  /* amber */
   --risk-high: #D7263D;    /* red */
@@ -19,7 +20,8 @@ on budget phones, sometimes in a second language.
 }
 ```
 Contrast-check every pairing against WCAG AA (4.5:1 body text) before shipping — the
-accent yellow especially needs dark text, never white text on it.
+accent turmeric gold especially needs dark text, never white text on it. Deep indigo
+(#22304A) provides a high-contrast anchor for legal citation and trust badges.
 
 ## Typography
 - Headings: bold grotesque sans (e.g. "Space Grotesk" or "Archivo Black"), large scale,

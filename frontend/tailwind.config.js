@@ -6,7 +6,8 @@ export default {
       colors: {
         bg: "#F5F1E8",
         ink: "#111111",
-        accent: "#FFD400",
+        accent: "#D9A404", // Turmeric gold
+        trust: "#22304A",  // Deep indigo for legal authority & informational elements
         surface: "#FFFFFF",
         risk: {
           low: "#2E7D32",
@@ -23,6 +24,7 @@ export default {
         brutal: "4px 4px 0 #111111",
         "brutal-sm": "2px 2px 0 #111111",
         "brutal-pressed": "1px 1px 0 #111111",
+        "brutal-active": "2px 2px 0 #111111",
       },
       borderWidth: {
         3: "3px",

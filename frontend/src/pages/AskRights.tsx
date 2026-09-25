@@ -1,13 +1,14 @@
 /**
- * Grounded labour rights RAG assistant page wired to POST /api/rights with expandable citations and permanent disclaimer.
+ * Grounded labour rights RAG assistant page wired to POST /api/rights with SSE streaming, expandable citations, and permanent disclaimer.
  */
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useI18n } from "../lib/i18n";
-import { fetchRights, RightsResponse, CitationSchema } from "../lib/api";
+import { streamRights, RightsResponse, CitationSchema } from "../lib/api";
+import { Combobox } from "../components/Combobox";
+import { ScrollReveal } from "../components/ScrollReveal";
 
 const STATES = [
-  "",
   "Delhi",
   "Maharashtra",
   "Karnataka",
@@ -31,6 +32,8 @@ export const AskRights: React.FC = () => {
   const [query, setQuery] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [isStreaming, setIsStreaming] = useState<boolean>(false);
+  const [streamingAnswer, setStreamingAnswer] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<RightsResponse | null>(null);
   const [expandedCitationIndex, setExpandedCitationIndex] = useState<number | null>(null);
@@ -48,15 +51,35 @@ export const AskRights: React.FC = () => {
     if (!textToSubmit.trim() || textToSubmit.trim().length < 3) return;
 
     setLoading(true);
+    setIsStreaming(true);
+    setStreamingAnswer("");
     setError(null);
+    setResult(null);
     setExpandedCitationIndex(null);
 
     try {
-      const data = await fetchRights(textToSubmit.trim(), state, lang);
-      setResult(data);
+      await streamRights(
+        textToSubmit.trim(),
+        state || undefined,
+        lang,
+        (token) => {
+          setStreamingAnswer((prev) => prev + token);
+        },
+        (finalResult) => {
+          setResult(finalResult);
+          setStreamingAnswer("");
+          setIsStreaming(false);
+          setLoading(false);
+        },
+        (err) => {
+          setError(err.message || "Failed to retrieve legal guidance");
+          setIsStreaming(false);
+          setLoading(false);
+        }
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to retrieve legal guidance");
-    } finally {
+      setIsStreaming(false);
       setLoading(false);
     }
   };
@@ -69,6 +92,11 @@ export const AskRights: React.FC = () => {
   const toggleCitation = (index: number) => {
     setExpandedCitationIndex(expandedCitationIndex === index ? null : index);
   };
+
+  const stateOptions = [
+    { value: "", label: t.rights.allIndiaLabel },
+    ...STATES.map((s) => ({ value: s, label: s })),
+  ];
 
   return (
     <div className="space-y-8">
@@ -95,7 +123,7 @@ export const AskRights: React.FC = () => {
                 key={idx}
                 type="button"
                 onClick={() => handleSampleClick(sample)}
-                className="text-left min-h-[44px] px-3 py-1.5 bg-bg hover:bg-accent/40 border-2 border-ink text-xs font-body font-medium text-ink transition-transform active:translate-x-0.5 active:translate-y-0.5"
+                className="btn-press-sm text-left min-h-[44px] px-3 py-1.5 bg-bg hover:bg-accent/40 border-2 border-ink text-xs font-body font-medium text-ink cursor-pointer"
               >
                 💬 {sample}
               </button>
@@ -127,33 +155,22 @@ export const AskRights: React.FC = () => {
 
         {/* State optional dropdown & Ask button */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 pt-1">
-          <div className="flex-1 space-y-1">
-            <label
-              htmlFor="state-context"
-              className="block font-mono text-xs text-ink/80 font-bold"
-            >
-              {t.rights.stateOptionalLabel}
-            </label>
-            <select
-              id="state-context"
+          <div className="flex-1">
+            <Combobox
+              id="rights-state-combobox"
+              label={t.rights.stateOptionalLabel}
               value={state}
-              onChange={(e) => setState(e.target.value)}
-              className="w-full min-h-[44px] px-3 py-2 bg-bg border-3 border-ink font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-accent"
-            >
-              <option value="">{t.rights.allIndiaLabel}</option>
-              {STATES.filter(Boolean).map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
+              onChange={setState}
+              options={stateOptions}
+              placeholder={t.rights.allIndiaLabel}
+            />
           </div>
 
           <button
             type="button"
             onClick={() => handleAsk()}
             disabled={loading || query.trim().length < 3}
-            className="min-h-[44px] sm:min-h-[48px] px-6 py-2.5 border-3 border-ink bg-accent text-ink font-heading font-black text-base shadow-brutal transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-brutal-pressed disabled:opacity-40 cursor-pointer"
+            className="btn-press min-h-[44px] sm:min-h-[48px] px-6 py-2.5 border-3 border-ink bg-accent text-ink font-heading font-black text-base shadow-brutal disabled:opacity-40 cursor-pointer"
           >
             {loading ? t.rights.asking : t.rights.askButton}
           </button>
@@ -167,126 +184,148 @@ export const AskRights: React.FC = () => {
         </div>
       )}
 
-      {/* Answer Output */}
-      {result && (
-        <section className="border-3 border-ink bg-surface p-6 shadow-brutal space-y-6">
-          {/* Answer Header */}
+      {/* Live SSE Streaming Output (Typing Effect) */}
+      {isStreaming && (
+        <section className="border-3 border-ink bg-surface p-6 shadow-brutal space-y-4">
           <div className="border-b-2 border-ink/20 pb-3 flex items-center justify-between">
-            <h2 className="font-heading font-black text-xl text-ink">
-              {t.rights.answerTitle}
+            <h2 className="font-heading font-black text-xl text-ink flex items-center gap-2">
+              <span className="w-3 h-3 bg-accent border border-ink animate-pulse" />
+              {t.rights.streamingStatus}
             </h2>
-            <div className="text-xs font-mono px-2 py-0.5 border border-ink bg-bg">
-              {result.grounded ? t.rights.groundedBadge : t.rights.ungroundedBadge}
+            <div className="text-xs font-mono px-2 py-0.5 border border-trust bg-trust text-surface font-bold">
+              SSE LIVE
             </div>
           </div>
 
-          {/* Answer Body: High legibility typography, clean spacing */}
-          <div className="font-body text-base text-ink leading-relaxed space-y-3 whitespace-pre-line">
-            {result.answer}
+          <div className="font-body text-base text-ink leading-relaxed space-y-3 whitespace-pre-line min-h-[60px]">
+            {streamingAnswer}
+            <span className="inline-block w-2.5 h-4 bg-trust ml-1 animate-pulse" />
           </div>
-
-          {/* MANDATORY LEGAL DISCLAIMER: Always visible, never in a tooltip */}
-          <div className="border-3 border-ink bg-accent/30 p-4 shadow-brutal-sm space-y-1">
-            <div className="font-heading font-black text-xs uppercase tracking-wider text-ink">
-              ⚖️ {t.rights.disclaimerLabel}
-            </div>
-            <p className="font-body text-sm font-semibold text-ink leading-snug">
-              {result.disclaimer}
-            </p>
-          </div>
-
-          {/* Citations List: Expandable plain bordered list items */}
-          {result.citations && result.citations.length > 0 && (
-            <div className="space-y-3 pt-2 border-t-2 border-ink/20">
-              <div className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
-                <span>📚</span>
-                <span>{t.rights.citationsTitle} ({result.citations.length})</span>
-              </div>
-
-              <div className="space-y-2">
-                {result.citations.map((c: CitationSchema, idx: number) => {
-                  const isExpanded = expandedCitationIndex === idx;
-                  return (
-                    <div
-                      key={idx}
-                      className="border-2 border-ink bg-bg shadow-brutal-sm transition-colors"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => toggleCitation(idx)}
-                        className="w-full min-h-[44px] p-3 text-left flex items-start justify-between gap-2 hover:bg-surface focus:outline-none"
-                        aria-expanded={isExpanded}
-                      >
-                        <div>
-                          <div className="font-heading font-bold text-sm text-ink">
-                            {c.act_name}
-                          </div>
-                          <div className="text-xs font-mono text-ink/80">
-                            {c.section_or_clause}
-                            {c.state ? ` • ${c.state}` : ""}
-                          </div>
-                        </div>
-                        <span className="font-mono text-xs font-bold text-ink/70 px-2 py-1 bg-surface border border-ink">
-                          {isExpanded ? "▲" : "▼"}
-                        </span>
-                      </button>
-
-                      {/* Expandable Excerpt / Details */}
-                      {isExpanded && (
-                        <div className="p-3 border-t-2 border-ink/20 bg-surface text-xs font-mono space-y-1.5 text-ink/90">
-                          {c.section_title && (
-                            <div>
-                              <span className="font-bold text-ink">{t.rights.section}: </span>
-                              {c.section_title}
-                            </div>
-                          )}
-                          <div>
-                            <span className="font-bold text-ink">{t.rights.source}: </span>
-                            {c.source_file}
-                          </div>
-                          {c.valid_as_of_date && (
-                            <div>
-                              <span className="font-bold text-ink">{t.rights.validAsOf}: </span>
-                              {c.valid_as_of_date}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Recommended Next Steps */}
-          {result.next_steps && (
-            <div className="border-2 border-ink bg-bg p-4 shadow-brutal-sm space-y-2">
-              <div className="font-heading font-bold text-sm text-ink">
-                🚀 {t.rights.nextStepsTitle}
-              </div>
-              <div className="font-body text-sm text-ink/90 whitespace-pre-line leading-relaxed">
-                {result.next_steps}
-              </div>
-              <div className="pt-2 flex flex-wrap gap-2">
-                <a
-                  href="tel:15100"
-                  className="min-h-[44px] inline-flex items-center px-3 py-1.5 border-2 border-ink bg-accent text-ink font-heading font-bold text-xs shadow-brutal-sm active:translate-x-0.5 active:translate-y-0.5"
-                >
-                  {t.rights.callNalsaCta}
-                </a>
-                <a
-                  href="https://shramsuvidha.gov.in"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-h-[44px] inline-flex items-center px-3 py-1.5 border-2 border-ink bg-surface text-ink font-heading font-bold text-xs shadow-brutal-sm active:translate-x-0.5 active:translate-y-0.5"
-                >
-                  {t.rights.shramSuvidhaCta}
-                </a>
-              </div>
-            </div>
-          )}
         </section>
+      )}
+
+      {/* Grounded Completed Answer Output */}
+      {result && !isStreaming && (
+        <ScrollReveal>
+          <section className="border-3 border-ink bg-surface p-6 shadow-brutal space-y-6">
+            {/* Answer Header with Deep Indigo Trust Identity */}
+            <div className="border-b-2 border-ink/20 pb-3 flex items-center justify-between">
+              <h2 className="font-heading font-black text-xl text-ink">
+                {t.rights.answerTitle}
+              </h2>
+              <div className="text-xs font-mono px-2.5 py-1 border-2 border-ink bg-trust text-surface font-bold shadow-brutal-sm">
+                {result.grounded ? t.rights.groundedBadge : t.rights.ungroundedBadge}
+              </div>
+            </div>
+
+            {/* Answer Body: High legibility typography, clean spacing */}
+            <div className="font-body text-base text-ink leading-relaxed space-y-3 whitespace-pre-line">
+              {result.answer}
+            </div>
+
+            {/* MANDATORY LEGAL DISCLAIMER: Always visible, never in a tooltip */}
+            <div className="border-3 border-ink bg-accent/30 p-4 shadow-brutal-sm space-y-1">
+              <div className="font-heading font-black text-xs uppercase tracking-wider text-ink">
+                ⚖️ {t.rights.disclaimerLabel}
+              </div>
+              <p className="font-body text-sm font-semibold text-ink leading-snug">
+                {result.disclaimer}
+              </p>
+            </div>
+
+            {/* Citations List: Expandable plain bordered list items with Deep Indigo accents */}
+            {result.citations && result.citations.length > 0 && (
+              <div className="space-y-3 pt-2 border-t-2 border-ink/20">
+                <div className="font-heading font-bold text-sm text-ink flex items-center gap-1.5">
+                  <span>📚</span>
+                  <span>{t.rights.citationsTitle} ({result.citations.length})</span>
+                </div>
+
+                <div className="space-y-2">
+                  {result.citations.map((c: CitationSchema, idx: number) => {
+                    const isExpanded = expandedCitationIndex === idx;
+                    return (
+                      <div
+                        key={idx}
+                        className="border-2 border-ink bg-bg shadow-brutal-sm transition-colors border-l-4 border-l-trust"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => toggleCitation(idx)}
+                          className="w-full min-h-[44px] p-3 text-left flex items-start justify-between gap-2 hover:bg-surface focus:outline-none cursor-pointer"
+                          aria-expanded={isExpanded}
+                        >
+                          <div>
+                            <div className="font-heading font-bold text-sm text-ink">
+                              {c.act_name}
+                            </div>
+                            <div className="text-xs font-mono text-ink/80">
+                              {c.section_or_clause}
+                              {c.state ? ` • ${c.state}` : ""}
+                            </div>
+                          </div>
+                          <span className="font-mono text-xs font-bold text-ink/70 px-2 py-1 bg-surface border border-ink">
+                            {isExpanded ? "▲" : "▼"}
+                          </span>
+                        </button>
+
+                        {/* Expandable Excerpt / Details */}
+                        {isExpanded && (
+                          <div className="p-3 border-t-2 border-ink/20 bg-surface text-xs font-mono space-y-1.5 text-ink/90">
+                            {c.section_title && (
+                              <div>
+                                <span className="font-bold text-ink">{t.rights.section}: </span>
+                                {c.section_title}
+                              </div>
+                            )}
+                            <div>
+                              <span className="font-bold text-ink">{t.rights.source}: </span>
+                              {c.source_file}
+                            </div>
+                            {c.valid_as_of_date && (
+                              <div>
+                                <span className="font-bold text-ink">{t.rights.validAsOf}: </span>
+                                {c.valid_as_of_date}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Recommended Next Steps */}
+            {result.next_steps && (
+              <div className="border-2 border-ink bg-bg p-4 shadow-brutal-sm space-y-2">
+                <div className="font-heading font-bold text-sm text-ink">
+                  🚀 {t.rights.nextStepsTitle}
+                </div>
+                <div className="font-body text-sm text-ink/90 whitespace-pre-line leading-relaxed">
+                  {result.next_steps}
+                </div>
+                <div className="pt-2 flex flex-wrap gap-2">
+                  <a
+                    href="tel:15100"
+                    className="btn-press-sm min-h-[44px] inline-flex items-center px-3.5 py-2 border-2 border-ink bg-accent text-ink font-heading font-bold text-xs shadow-brutal-sm"
+                  >
+                    {t.rights.callNalsaCta}
+                  </a>
+                  <a
+                    href="https://shramsuvidha.gov.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-press-sm min-h-[44px] inline-flex items-center px-3.5 py-2 border-2 border-ink bg-surface text-ink font-heading font-bold text-xs shadow-brutal-sm"
+                  >
+                    {t.rights.shramSuvidhaCta}
+                  </a>
+                </div>
+              </div>
+            )}
+          </section>
+        </ScrollReveal>
       )}
     </div>
   );

@@ -1,14 +1,24 @@
 """FastAPI router for state and sector wage-law irregularity risk predictions."""
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
+from backend.app.api.analytics import record_risk_call
+from backend.app.api.limiter import RateLimiter
 from backend.app.api.schemas import RiskResponse
 from backend.app.ml.infer import predict_risk
 
 router = APIRouter(prefix="/api/risk", tags=["Risk Assessment"])
 
+# Rate limit: 60 requests per minute per IP for risk calculation
+risk_limiter = RateLimiter(times=60, seconds=60)
 
-@router.get("", response_model=RiskResponse, summary="Get Wage Irregularity Risk Context")
+
+@router.get(
+    "",
+    response_model=RiskResponse,
+    dependencies=[Depends(risk_limiter)],
+    summary="Get Wage Irregularity Risk Context",
+)
 def get_risk_assessment(
     state: str = Query(
         ...,
@@ -24,7 +34,7 @@ def get_risk_assessment(
     ),
 ) -> RiskResponse:
     """Predict state-sector wage-theft irregularity risk level and data confidence.
-    
+
     Returns high/medium/low risk classification based on government enforcement records,
     along with data confidence reflecting inspection reporting density.
     """
@@ -36,6 +46,9 @@ def get_risk_assessment(
             status_code=400,
             detail="Both 'state' and 'sector' query parameters must be non-empty strings.",
         )
+
+    # Anonymous aggregate-only tally (AGENTS.md: state+sector combo count only, no user tracking)
+    record_risk_call(clean_state, clean_sector)
 
     try:
         result = predict_risk(state=clean_state, sector=clean_sector)

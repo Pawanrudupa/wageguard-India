@@ -315,6 +315,51 @@ def generate_grounded_answer(
     )
 
 
+def stream_grounded_answer(
+    query: str,
+    state: str | None = None,
+    language: str = "en",
+) -> list[dict[str, Any]]:
+    """Generate sequential token events and final grounded metadata for SSE streaming.
+
+    Each yielded event dictionary contains:
+    - {'event': 'token', 'token': '...'} for real-time typing display
+    - {'event': 'done', 'answer': '...', 'citations': [...], ...} at completion
+    """
+    grounded_res = generate_grounded_answer(query=query, state=state, language=language)
+    events: list[dict[str, Any]] = []
+
+    words = grounded_res.answer.split(" ")
+    for idx, word in enumerate(words):
+        token = word + (" " if idx < len(words) - 1 else "")
+        events.append({"event": "token", "token": token})
+
+    citation_dicts = [
+        {
+            "source_file": c.source_file,
+            "act_name": c.act_name,
+            "section_or_clause": c.section_or_clause,
+            "section_title": c.section_title,
+            "state": c.state or "",
+            "valid_as_of_date": c.valid_as_of_date,
+        }
+        for c in grounded_res.citations
+    ]
+
+    events.append(
+        {
+            "event": "done",
+            "answer": grounded_res.answer,
+            "citations": citation_dicts,
+            "disclaimer": grounded_res.disclaimer,
+            "language": grounded_res.language,
+            "grounded": grounded_res.grounded,
+            "next_steps": grounded_res.next_steps,
+        }
+    )
+    return events
+
+
 if __name__ == "__main__":
     test_query = "can my employer delay my final salary after I resign?"
     result = generate_grounded_answer(query=test_query, language="en")

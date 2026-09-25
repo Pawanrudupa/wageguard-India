@@ -18,11 +18,16 @@ export interface TranslationStrings {
   };
   home: {
     badge: string;
-    heroTitle: string;
+    heroHeadline: string;
+    heroTrustStatement: string;
     heroSubtitle: string;
     checkRiskCta: string;
     askRightsCta: string;
     viewResourcesCta: string;
+    statStates: string;
+    statSectors: string;
+    statCitations: string;
+    statInspections: string;
     howItWorksTitle: string;
     step1Title: string;
     step1Desc: string;
@@ -72,6 +77,7 @@ export interface TranslationStrings {
     allIndiaLabel: string;
     askButton: string;
     asking: string;
+    streamingStatus: string;
     sampleQueriesLabel: string;
     sample1: string;
     sample2: string;
@@ -139,16 +145,21 @@ export const translations: Record<Language, TranslationStrings> = {
     },
     home: {
       badge: "Labour Rights Navigator • India",
-      heroTitle: "Protect Your Hard-Earned Wages.",
+      heroHeadline: "Know your risk. Know your rights.",
+      heroTrustStatement: "Objective wage-theft risk context and grounded legal guidance based on published Ministry of Labour enforcement records.",
       heroSubtitle: "Wage theft affects millions of Indian workers. Check your sector's wage irregularity risk, get grounded answers citing Indian labour laws, and find free government legal aid.",
       checkRiskCta: "Check Sector Risk",
       askRightsCta: "Ask a Rights Question",
       viewResourcesCta: "Find Helpline Contacts",
+      statStates: "States & UTs Covered",
+      statSectors: "Informal Sectors",
+      statCitations: "Verified Legal Clauses",
+      statInspections: "Inspections Evaluated",
       howItWorksTitle: "How WageGuard India Protects You",
       step1Title: "1. Know Your Risk",
       step1Desc: "Transparent risk context based on Ministry of Labour inspection and prosecution records across states and sectors.",
       step2Title: "2. Know Your Rights",
-      step2Desc: "Grounded legal answers citing the Code on Wages 2019, Minimum Wages Act, and notified state wage rates. Zero hallucinations.",
+      step2Desc: "Grounded legal answers citing the Code on Wages 2019, Minimum Wages Act, and notified state wage rates. Every answer cites its source, or tells you it doesn't have one.",
       step3Title: "3. Take Action",
       step3Desc: "Direct helpline numbers and official complaint procedures for state labour offices, EPFO, and NALSA free legal aid.",
       dataTransparencyBadge: "Data Rigor & Transparency",
@@ -193,6 +204,7 @@ export const translations: Record<Language, TranslationStrings> = {
       allIndiaLabel: "Central / All India",
       askButton: "Ask Legal Assistant",
       asking: "Retrieving Verified Statutory Clauses...",
+      streamingStatus: "Streaming Grounded Legal Clauses...",
       sampleQueriesLabel: "Try common questions:",
       sample1: "Can employer delay final settlement after resignation?",
       sample2: "Is my employer allowed to deduct 50% of my salary?",
@@ -258,16 +270,21 @@ export const translations: Record<Language, TranslationStrings> = {
     },
     home: {
       badge: "श्रम अधिकार मार्गदर्शक • भारत",
-      heroTitle: "अपनी गाढ़ी कमाई और मजदूरी की रक्षा करें।",
+      heroHeadline: "अपना जोखिम जानें। अपने अधिकार जानें।",
+      heroTrustStatement: "श्रम मंत्रालय के प्रकाशित प्रवर्तन रिकॉर्ड और आधिकारिक कानूनों पर आधारित निष्पक्ष कानूनी मार्गदर्शन।",
       heroSubtitle: "वेतन चोरी से लाखों भारतीय श्रमिक प्रभावित होते हैं। अपने राज्य व क्षेत्र में वेतन अनियमितता का जोखिम जांचें, श्रम कानूनों पर आधारित जवाब पाएं, और मुफ्त सरकारी कानूनी सहायता प्राप्त करें।",
       checkRiskCta: "क्षेत्रीय जोखिम जांचें",
       askRightsCta: "अधिकारों पर सवाल पूछें",
       viewResourcesCta: "हेल्पलाइन नंबर देखें",
+      statStates: "राज्य एवं केंद्र शासित प्रदेश",
+      statSectors: "असंगठित उद्योग क्षेत्र",
+      statCitations: "सत्यापित कानूनी धाराएं",
+      statInspections: "विश्लेषित सरकारी निरीक्षण",
       howItWorksTitle: "वेतन रक्षक आपकी सुरक्षा कैसे करता है",
       step1Title: "1. अपना जोखिम समझें",
       step1Desc: "श्रम मंत्रालय के निरीक्षण और अभियोजन रिकॉर्ड के आधार पर पारदर्शी जोखिम विश्लेषण।",
       step2Title: "2. अपने अधिकार जानें",
-      step2Desc: "वेतन संहिता 2019, न्यूनतम मजदूरी अधिनियम और राज्य अधिसूचनाओं पर आधारित प्रमाणित कानूनी उत्तर।",
+      step2Desc: "वेतन संहिता 2019, न्यूनतम मजदूरी अधिनियम और राज्य अधिसूचनाओं पर आधारित प्रमाणित कानूनी उत्तर। प्रत्येक उत्तर अपने स्रोत का उल्लेख करता है, या बताता है कि इसके लिए स्रोत उपलब्ध नहीं है।",
       step3Title: "3. आधिकारिक कदम उठाएं",
       step3Desc: "राज्य श्रम आयुक्त, ईपीएफओ (EPFO), और नालसा (NALSA) मुफ्त कानूनी सहायता के सीधे हेल्पलाइन नंबर।",
       dataTransparencyBadge: "डेटा पारदर्शिता एवं सत्यता",
@@ -312,6 +329,7 @@ export const translations: Record<Language, TranslationStrings> = {
       allIndiaLabel: "केंद्रीय / संपूर्ण भारत",
       askButton: "कानूनी सहायक से पूछें",
       asking: "प्रमाणित कानूनी धाराओं की खोज हो रही है...",
+      streamingStatus: "प्रमाणित कानूनी धाराओं का लाइव प्रसारण...",
       sampleQueriesLabel: "अक्सर पूछे जाने वाले प्रश्न:",
       sample1: "क्या इस्तीफे के बाद नियोक्ता अंतिम वेतन रोक सकता है?",
       sample2: "क्या नियोक्ता 50% से अधिक वेतन काट सकता है?",

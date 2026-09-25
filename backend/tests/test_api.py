@@ -190,3 +190,81 @@ def test_openapi_docs_render_all_four_endpoints():
     assert "get" in paths["/api/risk"]
     assert "post" in paths["/api/rights"]
     assert "get" in paths["/api/resources"]
+    assert "get" in paths["/api/stats"]
+    assert "get" in paths["/api/analytics"]
+
+
+def test_stats_endpoint():
+    """Happy path: GET /api/stats returns real counts from dataset and corpus."""
+    response = client.get("/api/stats")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["states_count"] >= 12
+    assert data["sectors_count"] >= 8
+    assert data["citations_count"] >= 50
+    assert data["inspections_analyzed"] > 0
+
+
+def test_analytics_counter_privacy_compliance():
+    """Verify aggregate-only analytics increments and contains strictly combination counts."""
+    # Reset for test isolation
+    from backend.app.api.analytics import reset_analytics_for_testing
+    reset_analytics_for_testing()
+
+    # Perform risk and rights queries
+    client.get("/api/risk?state=Delhi&sector=Construction")
+    client.post("/api/rights", json={"query": "is delay of pay illegal?", "state": "Delhi"})
+
+    resp = client.get("/api/analytics")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["total_risk_inquiries"] >= 1
+    assert data["total_rights_inquiries"] >= 1
+    assert "risk:Delhi:Construction" in data["aggregate_counters"]
+    assert "rights:Delhi:General" in data["aggregate_counters"]
+
+    # Strict Privacy Assertion: no query text anywhere in analytics
+    serialized = str(data)
+    assert "is delay of pay illegal" not in serialized
+    assert "query" not in data["aggregate_counters"]
+
+
+def test_rights_endpoint_sse_streaming():
+    """POST /api/rights with stream=True or Accept: text/event-stream returns SSE stream."""
+    payload = {
+        "query": "can my employer delay my wages?",
+        "state": "Maharashtra",
+        "language": "en",
+        "stream": True,
+    }
+    response = client.post("/api/rights", json=payload, headers={"Accept": "text/event-stream"})
+    assert response.status_code == 200
+    assert "text/event-stream" in response.headers.get("content-type", "")
+
+    content = response.text
+    assert "event: token" in content
+    assert "event: done" in content
+    assert "This is educational information, not legal advice." in content
+
+
+def test_rate_limiter_enforcement():
+    """Custom RateLimiter triggers 429 when threshold exceeded."""
+    from fastapi import Request
+    from backend.app.api.limiter import RateLimiter
+    from fastapi import HTTPException
+    import pytest
+
+    limiter = RateLimiter(times=3, seconds=10)
+    mock_request = Request({"type": "http", "client": ("127.0.0.1", 12345), "headers": []})
+
+    # 3 allowed
+    limiter(mock_request)
+    limiter(mock_request)
+    limiter(mock_request)
+
+    # 4th must trigger 429
+    with pytest.raises(HTTPException) as exc_info:
+        limiter(mock_request)
+    assert exc_info.value.status_code == 429
+    assert "Rate limit exceeded" in exc_info.value.detail
+
