@@ -8,9 +8,10 @@ import { useI18n } from "../lib/i18n";
 import { fetchStats, StatsResponse } from "../lib/api";
 import { ScrollReveal } from "../components/ScrollReveal";
 import { OdometerCount } from "../components/OdometerCount";
+import { TypewriterText } from "../components/TypewriterText";
 
 export const Home: React.FC = () => {
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
   const [stats, setStats] = useState<StatsResponse | null>(null);
 
   useEffect(() => {
@@ -23,13 +24,23 @@ export const Home: React.FC = () => {
     <div className="space-y-10">
       {/* Real Home Hero Section */}
       <section className="border-3 border-ink bg-surface p-6 sm:p-10 shadow-brutal space-y-6">
-        <div className="inline-block bg-accent border-2 border-ink px-3 py-1 font-mono font-bold text-xs uppercase tracking-wider shadow-brutal-sm">
-          {t.home.badge}
+        <div className="inline-block bg-accent border-2 border-ink px-3 py-1 font-mono font-bold text-xs uppercase tracking-wider shadow-brutal-sm min-h-[26px]">
+          <TypewriterText
+            text={t.home.badge}
+            lang={lang}
+            speedMs={20}
+            delayMs={100}
+          />
         </div>
 
-        {/* Large bold headline using the tagline */}
-        <h1 className="font-heading font-black text-3xl sm:text-5xl lg:text-6xl leading-[1.08] tracking-tight text-ink">
-          {t.home.heroHeadline}
+        {/* Large bold headline using the tagline with continuous typewriter emergence */}
+        <h1 className="font-heading font-black text-3xl sm:text-5xl lg:text-6xl leading-[1.08] tracking-tight text-ink min-h-[1.2em]">
+          <TypewriterText
+            text={t.home.heroHeadline}
+            lang={lang}
+            speedMs={32}
+            delayMs={350}
+          />
         </h1>
 
         {/* One-line trust statement */}

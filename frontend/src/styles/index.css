@@ -83,6 +83,22 @@
   }
 }
 
+/* Letter-by-letter continuous emergence animation */
+.animate-letter-emerge {
+  animation: letterEmerge 140ms ease-out forwards;
+}
+
+@keyframes letterEmerge {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal {
     opacity: 1 !important;
@@ -95,6 +111,11 @@
   }
   .risk-stamp-enter {
     animation: none !important;
+  }
+  .animate-letter-emerge {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
   .btn-press:active,
   .btn-press-sm:active {
