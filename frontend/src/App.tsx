@@ -1,20 +1,34 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { I18nProvider } from "./lib/i18n";
+import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
+import { Home } from "./pages/Home";
+import { RiskLookup } from "./pages/RiskLookup";
+import { AskRights } from "./pages/AskRights";
+import { Resources } from "./pages/Resources";
+
 /**
- * App shell — routing lives here.
- * See .agents/workflows/05-build-frontend.md for the four pages to build:
- * Home, RiskLookup, AskRights, Resources.
+ * Main application shell wiring routing, bilingual i18n context,
+ * responsive layout, and neo-brutalist theme.
  */
 export default function App() {
   return (
-    <main className="min-h-screen flex items-center justify-center p-6">
-      <div className="border-3 border-ink bg-surface shadow-brutal p-8 max-w-md text-center">
-        <h1 className="font-heading text-2xl mb-2">WageGuard India</h1>
-        <p className="text-sm">
-          वेतन रक्षक — Know your risk. Know your rights.
-        </p>
-        <p className="text-xs mt-4 text-ink/70">
-          Scaffold ready. Build pages per .agents/workflows/05-build-frontend.md.
-        </p>
-      </div>
-    </main>
+    <BrowserRouter>
+      <I18nProvider>
+        <div className="min-h-screen flex flex-col bg-bg text-ink selection:bg-accent selection:text-ink font-body">
+          <Header />
+          <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-6 sm:py-8">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/risk" element={<RiskLookup />} />
+              <Route path="/rights" element={<AskRights />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </I18nProvider>
+    </BrowserRouter>
   );
 }
