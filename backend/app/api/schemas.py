@@ -51,17 +51,19 @@ class RightsRequest(BaseModel):
     query: str = Field(
         ...,
         min_length=3,
-        max_length=1000,
-        description="User question in English, Hindi, or Hinglish",
+        max_length=500,
+        description="User question in English, Hindi, or Hinglish (max 500 characters)",
         examples=["Can my employer delay my final salary after I resign?"],
     )
     state: str | None = Field(
         None,
+        max_length=50,
         description="Optional state to contextualize local minimum wages or rules",
         examples=["Delhi"],
     )
     language: str = Field(
         "en",
+        max_length=10,
         description="Response language preference ('en' for English, 'hi' for Hindi)",
         examples=["en"],
     )
