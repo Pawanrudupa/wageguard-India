@@ -1,19 +1,16 @@
 """Training pipeline for the state/sector wage-theft risk model."""
 
-import json
-import os
-from pathlib import Path
 import pickle
 import sys
-import time
+from pathlib import Path
 
 # Ensure backend directory is in python path
 backend_dir = Path(__file__).resolve().parents[2]
 if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
 
-from typing import Dict, Any, Tuple
-import numpy as np
+from typing import Any
+
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
@@ -25,7 +22,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from app.ml.data_pipeline import normalize_state_name
 
 
-def load_and_prepare_features(csv_path: Path) -> Tuple[pd.DataFrame, float]:
+def load_and_prepare_features(csv_path: Path) -> tuple[pd.DataFrame, float]:
     """Load processed dataset, compute lag indicators, and chronological median wages.
     
     Strict Featurization Ordering & Zero-Leakage Guarantee:
@@ -73,7 +70,7 @@ def load_and_prepare_features(csv_path: Path) -> Tuple[pd.DataFrame, float]:
 def train_and_evaluate_models(
     df: pd.DataFrame,
     val_year: int = 2022,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Perform time-based train/val split, train baseline and tree models, and evaluate."""
     # Chronological Split (Train: < val_year, Val: == val_year)
     train_df = df[df["year"] < val_year].copy()
@@ -191,9 +188,9 @@ def train_and_evaluate_models(
     }
 
 
-def generate_state_sector_lookup(df: pd.DataFrame) -> Dict[str, Dict[str, Any]]:
+def generate_state_sector_lookup(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
     """Build fast in-memory lookup table of latest metrics and confidence per state-sector."""
-    lookup: Dict[str, Dict[str, Any]] = {}
+    lookup: dict[str, dict[str, Any]] = {}
     # Sort so latest year comes last
     sorted_df = df.sort_values(by=["state", "sector", "year"])
 
@@ -213,13 +210,13 @@ def generate_state_sector_lookup(df: pd.DataFrame) -> Dict[str, Dict[str, Any]]:
             "complaints_received": int(latest["complaints_received"]),
             "prosecutions": int(latest["prosecutions"]),
             "convictions": int(latest["convictions"]),
-            "reporting_years_count": int(len(group[group["inspections_conducted"] > 0])),
+            "reporting_years_count": len(group[group["inspections_conducted"] > 0]),
         }
     return lookup
 
 
 def generate_model_card(
-    eval_data: Dict[str, Any],
+    eval_data: dict[str, Any],
     national_median_wage: float,
     output_path: Path,
 ) -> None:
@@ -392,8 +389,8 @@ def main():
             "persistence_baseline": persist_res,
         },
         "lookup": lookup,
-        "valid_states": sorted(list(df["state"].unique())),
-        "valid_sectors": sorted(list(df["sector"].unique())),
+        "valid_states": sorted(df["state"].unique()),
+        "valid_sectors": sorted(df["sector"].unique()),
         "updated_at": "2026-09-25",
     }
 

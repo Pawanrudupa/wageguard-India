@@ -1,14 +1,11 @@
 """Data pipeline for compiling, cleaning, and engineering state/sector wage risk features."""
 
-import os
 from pathlib import Path
-from typing import Dict, List, Optional
-import pandas as pd
-import numpy as np
 
+import pandas as pd
 
 # Canonical Indian State & UT name mapping
-STATE_CANONICAL_MAP: Dict[str, str] = {
+STATE_CANONICAL_MAP: dict[str, str] = {
     "nct of delhi": "Delhi",
     "nct delhi": "Delhi",
     "delhi": "Delhi",
@@ -53,19 +50,19 @@ def normalize_state_name(state: str) -> str:
     return STATE_CANONICAL_MAP.get(clean, state.strip().title())
 
 
-def calculate_irregularity_rate(irregularities: float | int, inspections: float | int) -> float:
+def calculate_irregularity_rate(irregularities: float, inspections: float) -> float:
     """Compute irregularity rate safely per inspection: irregularities / max(inspections, 1)."""
     valid_inspections = max(float(inspections), 1.0)
     return round(float(irregularities) / valid_inspections, 4)
 
 
-def calculate_prosecution_rate(prosecutions: float | int, irregularities: float | int) -> float:
+def calculate_prosecution_rate(prosecutions: float, irregularities: float) -> float:
     """Compute prosecution rate safely per irregularity: prosecutions / max(irregularities, 1)."""
     valid_irregularities = max(float(irregularities), 1.0)
     return round(float(prosecutions) / valid_irregularities, 4)
 
 
-def calculate_conviction_rate(convictions: float | int, prosecutions: float | int) -> float:
+def calculate_conviction_rate(convictions: float, prosecutions: float) -> float:
     """Compute conviction rate safely per prosecution: convictions / max(prosecutions, 1)."""
     valid_prosecutions = max(float(prosecutions), 1.0)
     return round(float(convictions) / valid_prosecutions, 4)
@@ -173,7 +170,7 @@ def build_state_sector_risk_dataset(
         .rename(columns={"total_wage_daily": "current_min_wage_rate"})
     )
 
-    records: List[Dict[str, object]] = []
+    records: list[dict[str, object]] = []
 
     # Iterate over each state-year row in the enforcement table
     for _, enf_row in df_enf.iterrows():
@@ -197,19 +194,19 @@ def build_state_sector_risk_dataset(
             complaint_share = float(sec_row["complaints_share"])
 
             # Disaggregate state totals to sector level
-            sec_inspections = max(int(round(total_inspections * insp_share)), 0) if total_inspections > 0 else 0
+            sec_inspections = max(round(total_inspections * insp_share), 0) if total_inspections > 0 else 0
             
             # Irregularities are modulated by sector hazard multiplier
             raw_sec_irreg = total_irregularities * insp_share * irreg_mult
-            sec_irregularities = max(int(round(raw_sec_irreg)), 0) if total_irregularities > 0 else 0
+            sec_irregularities = max(round(raw_sec_irreg), 0) if total_irregularities > 0 else 0
 
             # Prosecutions and convictions scaled proportionally
-            sec_prosecutions = max(int(round(total_prosecutions * insp_share * irreg_mult)), 0) if total_prosecutions > 0 else 0
-            sec_convictions = max(int(round(total_convictions * insp_share * irreg_mult)), 0) if total_convictions > 0 else 0
+            sec_prosecutions = max(round(total_prosecutions * insp_share * irreg_mult), 0) if total_prosecutions > 0 else 0
+            sec_convictions = max(round(total_convictions * insp_share * irreg_mult), 0) if total_convictions > 0 else 0
 
             # Complaints and claims preferred / awarded
-            sec_complaints = max(int(round(total_claims_preferred * complaint_share)), 0) if total_claims_preferred > 0 else 0
-            sec_claims_awarded = max(int(round(total_claims_decided * complaint_share)), 0) if total_claims_decided > 0 else 0
+            sec_complaints = max(round(total_claims_preferred * complaint_share), 0) if total_claims_preferred > 0 else 0
+            sec_claims_awarded = max(round(total_claims_decided * complaint_share), 0) if total_claims_decided > 0 else 0
 
             # Minimum wage rate from state notification
             rate_match = wage_lookup[

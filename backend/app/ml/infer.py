@@ -1,16 +1,15 @@
 """Fast inference path for the risk model, called by the API layer."""
 
-from dataclasses import dataclass, field
-import os
-from pathlib import Path
 import pickle
 import time
-from typing import Dict, List, Optional, Any
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
 import pandas as pd
 
-
 # Canonical state mapping for fast normalization without full data_pipeline imports
-STATE_NORMALIZATION_MAP: Dict[str, str] = {
+STATE_NORMALIZATION_MAP: dict[str, str] = {
     "nct of delhi": "Delhi",
     "nct delhi": "Delhi",
     "delhi": "Delhi",
@@ -60,10 +59,10 @@ class RiskResult:
     data_confidence: str
     irregularity_rate: float
     current_min_wage_rate: float
-    probabilities: Dict[str, float] = field(default_factory=dict)
+    probabilities: dict[str, float] = field(default_factory=dict)
     inference_time_ms: float = 0.0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert result to dictionary format suitable for API serialization."""
         return {
             "state": self.state,
@@ -79,10 +78,10 @@ class RiskResult:
 
 
 # Global in-memory cache for the loaded model artifact
-_MODEL_ARTIFACT: Optional[Dict[str, Any]] = None
+_MODEL_ARTIFACT: dict[str, Any] | None = None
 
 
-def get_model_artifact() -> Dict[str, Any]:
+def get_model_artifact() -> dict[str, Any]:
     """Load model artifact once from disk and cache in memory."""
     global _MODEL_ARTIFACT
     if _MODEL_ARTIFACT is None:

@@ -1,16 +1,15 @@
 """Unit tests for the state/sector wage risk data pipeline and feature engineering."""
 
 from pathlib import Path
-import pandas as pd
-import pytest
 
+import pandas as pd
 from app.ml.data_pipeline import (
-    normalize_state_name,
+    assign_risk_labels,
+    calculate_conviction_rate,
     calculate_irregularity_rate,
     calculate_prosecution_rate,
-    calculate_conviction_rate,
-    assign_risk_labels,
     evaluate_data_confidence,
+    normalize_state_name,
 )
 
 

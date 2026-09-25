@@ -1,9 +1,7 @@
 """Unit tests for the risk inference module and trained model artifact."""
 
-from pathlib import Path
-import pytest
 
-from app.ml.infer import predict_risk, get_model_artifact, RiskResult
+from app.ml.infer import RiskResult, get_model_artifact, predict_risk
 
 
 def test_model_artifact_loaded():
