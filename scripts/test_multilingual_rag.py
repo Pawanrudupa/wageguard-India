@@ -183,74 +183,92 @@ TEST_SUITE = {
 
 def run_test():
     results = {}
-    print("=" * 70)
+    print("=" * 80)
     print("TESTING RETRIEVAL QUALITY ACROSS NON-HINDI INDIAN LANGUAGES")
-    print("Embedding Function: ChromaDB Default (all-MiniLM-L6-v2)")
-    print("=" * 70)
+    print("Model: paraphrase-multilingual-MiniLM-L12-v2")
+    print("Production Threshold: similarity >= 0.40")
+    print("=" * 80)
 
     for lang, queries in TEST_SUITE.items():
         results[lang] = []
         print(f"\n--- Language: {lang} ---")
-        correct_count = 0
 
         for item in queries:
             q = item["query"]
             topic = item["topic"]
             chunks = retrieve_chunks(q, top_k=4, score_threshold=0.0)
 
-            # Check if any chunk matches expected
-            matched = False
-            top_chunk_info = "None"
-            top_similarity = 0.0
+            # Find matching relevant chunk
+            matched_chunk = None
+            for c in chunks:
+                c_act = c.get("metadata", {}).get("act_name", "").lower()
+                c_text = c.get("text", "").lower()
+                act_match = any(e.lower() in c_act for e in item["expected_act"])
+                kw_match = any(k.lower() in c_text for k in item["expected_keywords"])
+                if act_match and kw_match:
+                    matched_chunk = c
+                    break
 
-            if chunks:
-                top = chunks[0]
-                meta = top.get("metadata", {})
-                act = meta.get("act_name", "Unknown Act")
-                sec = meta.get("section_or_clause", "")
-                title = meta.get("section_title", "")
-                text = top.get("text", "")
-                top_similarity = top.get("similarity", 0.0)
-                top_chunk_info = f"{act} - {sec}: {title}"
+            top1_sim = chunks[0]["similarity"] if chunks else 0.0
+            top1_meta = chunks[0].get("metadata", {}) if chunks else {}
+            top1_info = f"{top1_meta.get('act_name')} - {top1_meta.get('section_or_clause')}" if chunks else "None"
 
-                # Match logic: check act and keywords in top chunk or in top 4
-                for c in chunks:
-                    c_act = c.get("metadata", {}).get("act_name", "").lower()
-                    c_text = c.get("text", "").lower()
-                    act_match = any(e.lower() in c_act for e in item["expected_act"])
-                    kw_match = any(k.lower() in c_text for k in item["expected_keywords"])
-                    if act_match and kw_match:
-                        matched = True
-                        break
+            matched_sim = matched_chunk["similarity"] if matched_chunk else 0.0
+            matched_meta = matched_chunk.get("metadata", {}) if matched_chunk else {}
+            matched_info = f"{matched_meta.get('act_name')} - {matched_meta.get('section_or_clause')}" if matched_chunk else "None"
 
-            if matched:
-                correct_count += 1
-                status = "PASS (Relevant Chunk in Top 4)"
-            else:
-                status = "FAIL (No Grounded Chunk Found)"
+            pass_raw = matched_chunk is not None
+            pass_025 = pass_raw and matched_sim >= 0.25
+            # Production threshold 0.40: both top-1 confidence >= 0.40 and relevant chunk >= 0.40
+            pass_040 = pass_raw and matched_sim >= 0.40
 
-            print(f"[{status}] {topic}")
+            status_str = f"PASS_0.40 (Sim: {matched_sim:.3f})" if pass_040 else (f"PASS_RAW_ONLY (Sim: {matched_sim:.3f} < 0.40)" if pass_raw else "FAIL")
+
+            print(f"[{status_str}] {topic}")
             print(f"  Query: {q}")
-            print(f"  Top-1: {top_chunk_info} (Sim: {top_similarity:.3f})")
-            if not matched and chunks:
-                print(f"  Retrieved but irrelevant Top-1 snippet: {chunks[0].get('text', '')[:120]}...")
+            print(f"  Top-1: {top1_info} (Sim: {top1_sim:.3f})")
+            if matched_chunk:
+                print(f"  Relevant Match: {matched_info} (Sim: {matched_sim:.3f})")
+            else:
+                print("  Relevant Match: NONE in top 4")
 
             results[lang].append({
                 "topic": topic,
                 "query": q,
-                "passed": matched,
-                "top_chunk": top_chunk_info,
-                "top_similarity": top_similarity,
+                "top1_info": top1_info,
+                "top1_sim": top1_sim,
+                "matched_info": matched_info,
+                "matched_sim": matched_sim,
+                "pass_raw": pass_raw,
+                "pass_025": pass_025,
+                "pass_040": pass_040,
             })
 
-        print(f"Summary for {lang}: {correct_count}/{len(queries)} passed ({correct_count / len(queries) * 100:.0f}%)")
+    # Summary Table
+    print("\n" + "=" * 80)
+    print("MULTILINGUAL RETRIEVAL PERFORMANCE SUMMARY")
+    print("=" * 80)
+    print(f"{'Language':<12} | {'Raw Match':<12} | {'Threshold 0.25':<16} | {'Production 0.40':<16}")
+    print("-" * 65)
 
-    # Overall Summary
-    total_passed = sum(sum(1 for r in res if r["passed"]) for res in results.values())
-    total_queries = sum(len(res) for res in results.values())
-    print("\n" + "=" * 70)
-    print(f"OVERALL RETRIEVAL ACCURACY: {total_passed}/{total_queries} ({total_passed / total_queries * 100:.1f}%)")
-    print("=" * 70)
+    tot_raw = 0
+    tot_025 = 0
+    tot_040 = 0
+    total_q = sum(len(qs) for qs in TEST_SUITE.values())
+
+    for lang, res_list in results.items():
+        n = len(res_list)
+        n_raw = sum(1 for r in res_list if r["pass_raw"])
+        n_025 = sum(1 for r in res_list if r["pass_025"])
+        n_040 = sum(1 for r in res_list if r["pass_040"])
+        tot_raw += n_raw
+        tot_025 += n_025
+        tot_040 += n_040
+        print(f"{lang:<12} | {n_raw}/{n} ({n_raw/n*100:>3.0f}%)   | {n_025}/{n} ({n_025/n*100:>3.0f}%)        | {n_040}/{n} ({n_040/n*100:>3.0f}%)")
+
+    print("-" * 65)
+    print(f"{'TOTAL':<12} | {tot_raw}/{total_q} ({tot_raw/total_q*100:>3.1f}%) | {tot_025}/{total_q} ({tot_025/total_q*100:>3.1f}%)      | {tot_040}/{total_q} ({tot_040/total_q*100:>3.1f}%)")
+    print("=" * 80)
 
 
 if __name__ == "__main__":
