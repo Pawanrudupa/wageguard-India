@@ -151,11 +151,11 @@ Rather than claiming algorithmic superiority, we documented this finding in [`mo
 
 ### 2. Multilingual RAG Reality Check: The Rigorous Benchmark
 To evaluate regional Indic accessibility, we re-ingested our legal corpus with `paraphrase-multilingual-MiniLM-L12-v2` and benchmarked 25 representative queries across 5 major non-Hindi languages (Tamil, Telugu, Kannada, Malayalam, Bengali):
-* **Naive Script Heuristic (Topical Adjacency)**: Yielded a **56.0% raw Top-4 match rate (14/25 queries)** and **28.0% Top-1 match rate (7/25)**.
+* **Production Threshold Pass Rate ($\ge 0.40$)**: **4.0% (1/25 queries)** under strict statutory audit (strictly grounded to Kannada Gratuity at $0.454$; excludes spurious cross-state hits where a Tamil Nadu-specific document was incorrectly credited as the relevant answer for a different state/language's query). *(Secondary methodology note: under unverified naive matching that ignores jurisdictional boundaries, the raw pass rate was 8.0% [2/25 queries]).*
 * **Audited Statutory Accuracy (Enforcing State Jurisdictions)**: Rigorous legal audit revealed that 7 of the 14 raw matches were spurious cross-state false positives (e.g. dense scheduled employment tables caused queries in Kannada, Malayalam, or Bengali to retrieve the *Tamil Nadu State Schedule*). When enforcing true statutory correctness:
   * **Audited Top-1 Match Rate**: **12.0% (3/25 queries)** (strictly universal central statutes: Payment of Gratuity Act Section 4).
   * **Audited Top-4 Match Rate**: **28.0% (7/25 queries)**.
-  * **Production Threshold Reality ($\ge 0.40$)**: Non-Hindi queries achieved only an **8.0% pass-rate (2/25 queries)** under naive matching, and **4.0% (1/25 queries)** under strict statutory audit (Kannada Gratuity at $0.454$).
+* **Naive Script Heuristic (Topical Adjacency)**: Yielded a **56.0% raw Top-4 match rate (14/25 queries)** and **28.0% raw Top-1 match rate (7/25)**.
 * **Comparison to Hindi**: Under the exact same $\ge 0.40$ cutoff, Hindi queries achieved a **92.0% pass-rate (23/25)** due to extensive bilingual token alignment in the legal corpus.
 
 Because non-Hindi queries produce lower similarity scores against central English statutory text and frequently collapse onto unprompted state schedules without explicit state metadata filtering, lowering the threshold to admit them would trigger legally hazardous hallucinations. **We refused to ship a cosmetic UI language toggle**. Instead, we documented the benchmark in [`GEMINI.md`](file:///GEMINI.md), retained the verified bilingual (EN/HI) web core, and documented that reaching non-Hindi migrant corridors requires **conversational WhatsApp voice notes and telephony IVR with state-routed metadata**, not browser-based text translation.
