@@ -264,10 +264,10 @@ def test_rights_endpoint_sse_streaming():
 
 def test_rate_limiter_enforcement():
     """Custom RateLimiter triggers 429 when threshold exceeded."""
-    from fastapi import Request
-    from backend.app.api.limiter import RateLimiter
-    from fastapi import HTTPException
     import pytest
+    from fastapi import HTTPException, Request
+
+    from backend.app.api.limiter import RateLimiter
 
     limiter = RateLimiter(times=3, seconds=10)
     mock_request = Request({"type": "http", "client": ("127.0.0.1", 12345), "headers": []})
@@ -330,5 +330,74 @@ def test_sector_normalization_and_risk_tertiles():
     assert data_dl["risk_label"] == "High"
     assert round(data_dl["irregularity_rate"], 2) == 1.99
     assert data_dl["current_min_wage_rate"] == 695.0
+
+
+def test_rate_limiter_trusted_proxies_protection():
+    """Verify RateLimiter ignores spoofed X-Forwarded-For unless from an explicit trusted proxy."""
+    import pytest
+    from fastapi import HTTPException, Request
+
+    from backend.app.api.limiter import RateLimiter
+
+    # 1. Untrusted client IP: spoofed X-Forwarded-For must be discarded
+    untrusted_limiter = RateLimiter(times=2, seconds=60, trusted_proxies=None)
+    req1 = Request({
+        "type": "http",
+        "client": ("203.0.113.50", 1234),
+        "headers": [(b"x-forwarded-for", b"1.1.1.1")],
+    })
+    req2 = Request({
+        "type": "http",
+        "client": ("203.0.113.50", 1234),
+        "headers": [(b"x-forwarded-for", b"2.2.2.2")],
+    })
+    req3 = Request({
+        "type": "http",
+        "client": ("203.0.113.50", 1234),
+        "headers": [(b"x-forwarded-for", b"3.3.3.3")],
+    })
+
+    untrusted_limiter(req1)
+    untrusted_limiter(req2)
+    # 3rd request from same connecting IP triggers 429 despite spoofed different header IPs
+    with pytest.raises(HTTPException) as exc_info:
+        untrusted_limiter(req3)
+    assert exc_info.value.status_code == 429
+
+    # 2. Trusted proxy (CIDR network 10.0.0.0/8): forwarded IPs are honored
+    trusted_limiter = RateLimiter(times=2, seconds=60, trusted_proxies="10.0.0.0/8,127.0.0.1")
+    proxy_req1 = Request({
+        "type": "http",
+        "client": ("10.0.0.1", 5000),
+        "headers": [(b"x-forwarded-for", b"198.51.100.1, 10.0.0.1")],
+    })
+    proxy_req2 = Request({
+        "type": "http",
+        "client": ("10.0.0.1", 5000),
+        "headers": [(b"x-forwarded-for", b"198.51.100.2, 10.0.0.1")],
+    })
+    # Distinct clients behind trusted proxy are evaluated independently and both pass
+    trusted_limiter(proxy_req1)
+    trusted_limiter(proxy_req2)
+
+
+def test_cors_production_safety():
+    """Verify that in production mode, unauthorized LAN origins are not accepted."""
+    # Preflight OPTIONS request from an unauthorized LAN origin
+    headers = {
+        "Origin": "http://192.168.1.100:5173",
+        "Access-Control-Request-Method": "POST",
+    }
+    response = client.options("/api/rights", headers=headers)
+    assert response.headers.get("access-control-allow-origin") != "http://192.168.1.100:5173"
+
+    # Authorized localhost origin is accepted
+    local_headers = {
+        "Origin": "http://localhost:5173",
+        "Access-Control-Request-Method": "POST",
+    }
+    local_resp = client.options("/api/rights", headers=local_headers)
+    assert local_resp.headers.get("access-control-allow-origin") == "http://localhost:5173"
+
 
 

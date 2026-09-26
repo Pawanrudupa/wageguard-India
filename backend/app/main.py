@@ -4,6 +4,7 @@ Wires together the state/sector wage risk model, the grounded legal rights
 assistant (RAG), and curated government grievance resources.
 """
 
+import os
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -32,16 +33,38 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# CORS configuration: Allow local Vite dev server, common frontend preview ports, and local LAN WiFi origins
+# CORS configuration:
+# Production defaults strictly allow localhost for dev/preview plus any configured deployed frontend origins.
+# LAN wildcard regex (192.168.*, 10.*, 172.16-31.*) is strictly gated behind ENVIRONMENT == "development".
+cors_origins: list[str] = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+frontend_url = os.getenv("FRONTEND_URL", "").strip().rstrip("/")
+if frontend_url and frontend_url not in cors_origins:
+    cors_origins.append(frontend_url)
+
+extra_origins = os.getenv("ALLOWED_ORIGINS", "").strip()
+if extra_origins:
+    for origin in extra_origins.split(","):
+        clean_origin = origin.strip().rstrip("/")
+        if clean_origin and clean_origin not in cors_origins:
+            cors_origins.append(clean_origin)
+
+environment = os.getenv("ENVIRONMENT", "production").lower().strip()
+cors_origin_regex = (
+    r"^http://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$"
+    if environment == "development"
+    else None
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
-    allow_origin_regex=r"^http://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$",
+    allow_origins=cors_origins,
+    allow_origin_regex=cors_origin_regex,
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
