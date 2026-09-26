@@ -272,7 +272,7 @@ def generate_grounded_answer(
                 f"<user_query>\n{sanitized_query}\n</user_query>"
             )
 
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_api_key}"
             payload = {
                 "system_instruction": {
                     "parts": [{"text": system_instruction_text}]
@@ -301,6 +301,11 @@ def generate_grounded_answer(
                     language=language,
                     grounded=True,
                     next_steps=_extract_next_steps(state=state, language=language),
+                )
+            else:
+                import logging
+                logging.getLogger(__name__).warning(
+                    "Gemini API returned status %d: %s", resp.status_code, resp.text[:200]
                 )
         except (httpx.HTTPError, KeyError, ValueError) as err:
             import logging
