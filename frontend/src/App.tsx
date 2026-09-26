@@ -7,6 +7,7 @@ import { RiskLookup } from "./pages/RiskLookup";
 import { AskRights } from "./pages/AskRights";
 import { Resources } from "./pages/Resources";
 import { LocalLedger } from "./pages/LocalLedger";
+import { LedgerImport } from "./pages/LedgerImport";
 
 /**
  * Main application shell wiring routing, bilingual i18n context,
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="/rights" element={<AskRights />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/ledger" element={<LocalLedger />} />
+              <Route path="/ledger/import" element={<LedgerImport />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

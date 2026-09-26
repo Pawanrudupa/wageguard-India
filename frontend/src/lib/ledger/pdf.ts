@@ -17,6 +17,22 @@ export interface PDFExportOptions {
 }
 
 /**
+ * Sanitizes strings for standard jsPDF 7-bit ASCII Helvetica rendering.
+ * Replaces non-ASCII punctuation, currency symbols, and strips unsupported Unicode.
+ */
+function toAscii(text: string | null | undefined): string {
+  if (!text) return "";
+  return text
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\u2022/g, "-")
+    .replace(/\u20B9/g, "Rs. ")
+    .replace(/[^\x20-\x7E\n]/g, "")
+    .trim();
+}
+
+/**
  * Builds the PDF document and triggers client-side download or returns doc instance.
  */
 export function generateStatementPDF(options: PDFExportOptions): jsPDF {
@@ -37,7 +53,7 @@ export function generateStatementPDF(options: PDFExportOptions): jsPDF {
   doc.setTextColor(255, 255, 255);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(13);
-  doc.text("WAGEGUARD INDIA  •  EMPIRICAL EVIDENCE RECORD", 18, y + 9);
+  doc.text("WAGEGUARD INDIA - EMPIRICAL EVIDENCE RECORD", 18, y + 9);
 
   y += 22;
 
@@ -45,7 +61,7 @@ export function generateStatementPDF(options: PDFExportOptions): jsPDF {
   doc.setTextColor(17, 17, 17);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(15);
-  doc.text(STATEMENT_TITLE, 14, y);
+  doc.text(toAscii(STATEMENT_TITLE), 14, y);
 
   y += 7;
 
@@ -67,12 +83,12 @@ export function generateStatementPDF(options: PDFExportOptions): jsPDF {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(8.5);
   doc.setTextColor(150, 80, 0);
-  doc.text("STATUTORY NOTICE / शैक्षिक दस्तावेज़:", 17, y + 4.5);
+  doc.text("STATUTORY NOTICE / EDUCATIONAL DOCUMENTATION:", 17, y + 4.5);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(30, 30, 30);
-  doc.text(STATUTORY_DISCLAIMER, 17, y + 9);
+  doc.text(toAscii(STATUTORY_DISCLAIMER), 17, y + 9);
 
   y += 18;
 
@@ -89,9 +105,9 @@ export function generateStatementPDF(options: PDFExportOptions): jsPDF {
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
-  doc.text(`State / Jurisdiction: ${claim?.state || provisions?.state || "Unspecified"}`, 18, y + 10);
-  doc.text(`Sector: ${claim?.sector || "General"}`, 18, y + 14);
-  doc.text(`Worksite / Employer Reference: ${claim?.employerOrContractor || "Informal / Contractor"}`, 18, y + 18);
+  doc.text(toAscii(`State / Jurisdiction: ${claim?.state || provisions?.state || "Unspecified"}`), 18, y + 10);
+  doc.text(toAscii(`Sector: ${claim?.sector || "General"}`), 18, y + 14);
+  doc.text(toAscii(`Worksite / Employer Reference: ${claim?.employerOrContractor || "Informal / Contractor"}`), 18, y + 18);
 
   // Right-aligned column
   doc.text(`Total Shifts Recorded: ${summary.totalShifts}`, 115, y + 10);
@@ -210,7 +226,8 @@ export function generateStatementPDF(options: PDFExportOptions): jsPDF {
     doc.text(`Rs. ${s.advanceReceived}`, 94, y + 3.8);
     doc.text(s.dailyAgreedRate ? `Rs. ${s.dailyAgreedRate}` : "Statutory", 124, y + 3.8);
 
-    const note = (s.notes || s.siteOrContractorName || "-").substring(0, 24);
+    const rawNote = s.notes || s.siteOrContractorName || "-";
+    const note = toAscii(rawNote).substring(0, 24);
     doc.text(note, 154, y + 3.8);
 
     y += 5.5;

@@ -3,7 +3,12 @@
  * Explains what data is encoded and reveals the ephemeral 4-digit PIN for verbal transfer.
  */
 import React, { useState } from "react";
-import { generateEphemeralPin, generateQRCodeDataUrl, encodeLedgerToQRPayload } from "../lib/ledger/qr";
+import {
+  generateEphemeralPin,
+  generateQRCodeDataUrl,
+  encodeLedgerToQRPayload,
+  generateImportUrl,
+} from "../lib/ledger/qr";
 import { LedgerExportPayload } from "../lib/ledger/types";
 
 interface ConsentModalProps {
@@ -15,6 +20,8 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ payload, onClose }) 
   const [consented, setConsented] = useState<boolean>(false);
   const [pin, setPin] = useState<string>("");
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [importUrlStr, setImportUrlStr] = useState<string>("");
+  const [copied, setCopied] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleConsent = async () => {
@@ -23,9 +30,12 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ payload, onClose }) 
       const generatedPin = generateEphemeralPin();
       setPin(generatedPin);
 
-      // Encode and encrypt with PIN
+      // Encode, PIN-encrypt, and wrap in client-side /ledger/import URL
       const encoded = encodeLedgerToQRPayload(payload, generatedPin);
-      const url = await generateQRCodeDataUrl(encoded);
+      const importUrl = generateImportUrl(encoded);
+      setImportUrlStr(importUrl);
+
+      const url = await generateQRCodeDataUrl(importUrl);
       setQrDataUrl(url);
       setConsented(true);
     } catch (err) {
@@ -123,20 +133,48 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ payload, onClose }) 
 
             {/* QR Code Canvas */}
             {qrDataUrl && (
-              <div className="flex justify-center p-3 border-2 border-ink bg-surface shadow-brutal-sm">
+              <div className="flex flex-col items-center p-3 border-2 border-ink bg-surface shadow-brutal-sm space-y-2">
                 <img
                   src={qrDataUrl}
                   alt="Encrypted Worker Ledger QR Code"
                   className="w-56 h-56 object-contain"
                 />
+                <div className="text-[11px] font-mono text-ink/75 text-center">
+                  Scannable via smartphone camera or in-app scanner at <span className="font-bold">/ledger/import</span>
+                </div>
               </div>
             )}
 
-            <div className="text-center pt-1">
+            {/* Cross-device / Browser-tab handoff helpers */}
+            <div className="flex flex-col gap-2 pt-1">
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (importUrlStr) {
+                      navigator.clipboard.writeText(importUrlStr);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2500);
+                    }
+                  }}
+                  className="min-h-[44px] px-2 py-2 border-2 border-ink bg-bg font-mono text-xs font-bold hover:bg-surface active:bg-accent"
+                >
+                  {copied ? "✓ Copied Link!" : "📋 Copy Caseworker Link"}
+                </button>
+                <a
+                  href={importUrlStr}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[44px] px-2 py-2 border-2 border-ink bg-surface font-mono text-xs font-bold text-center flex items-center justify-center hover:bg-bg active:bg-accent"
+                >
+                  ↗ Open in Caseworker Tab
+                </a>
+              </div>
+
               <button
                 type="button"
                 onClick={onClose}
-                className="btn-press w-full py-2.5 border-3 border-ink bg-surface font-heading font-black text-xs uppercase"
+                className="btn-press w-full min-h-[44px] py-2.5 border-3 border-ink bg-accent font-heading font-black text-xs uppercase shadow-brutal-sm"
               >
                 Done / Close Handoff
               </button>

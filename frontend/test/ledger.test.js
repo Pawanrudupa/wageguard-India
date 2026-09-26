@@ -213,6 +213,28 @@ test("QR payload decryption fails when supplied with an incorrect PIN", () => {
   );
 });
 
+function generateImportUrl(encodedPayload, origin = "http://localhost:5173") {
+  return `${origin}/ledger/import#data=${encodeURIComponent(encodedPayload)}`;
+}
+
+function extractPayloadFromScannedText(scannedText) {
+  if (!scannedText) return "";
+  const trimmed = scannedText.trim();
+  if (trimmed.includes("#data=")) {
+    const hashPart = trimmed.split("#data=")[1];
+    return decodeURIComponent(hashPart.split("&")[0]);
+  }
+  if (trimmed.includes("?data=")) {
+    const queryPart = trimmed.split("?data=")[1];
+    return decodeURIComponent(queryPart.split("&")[0]);
+  }
+  if (trimmed.startsWith("WG1:")) {
+    return trimmed;
+  }
+  const match = trimmed.match(/WG1:[0-9a-fA-F]+:[A-Za-z0-9+/=]+/);
+  return match ? match[0] : trimmed;
+}
+
 test("PDF export generates document with locked Title and Mandatory Disclaimer", () => {
   const doc = new jsPDF();
   const STATEMENT_TITLE = "Empirical Statement of Work & Statutory Wage Arrears";
@@ -226,3 +248,82 @@ test("PDF export generates document with locked Title and Mandatory Disclaimer",
   assert.ok(pdfOutput.length > 0);
   assert.ok(pdfOutput.includes(STATEMENT_TITLE));
 });
+
+test("Cross-device optical QR scan: encodes to QR image, scans pixels via optical reader, extracts URL, and decrypts with PIN", async () => {
+  const { default: jsQR } = await import("jsqr");
+  const { PNG } = await import("pngjs");
+  const QRCode = (await import("qrcode")).default;
+
+  // 1. Device 1 (Worker Handset): Create shift log and encrypt with verbal PIN
+  const workerPayload = {
+    version: "1.0",
+    exportedAt: "2026-09-26T06:40:00Z",
+    shifts: [
+      { id: "s1", date: "2026-09-10", standardHours: 8, overtimeHours: 2, advanceReceived: 300, dailyAgreedRate: 650, notes: "Concrete pour" },
+      { id: "s2", date: "2026-09-11", standardHours: 8, overtimeHours: 0, advanceReceived: 200, dailyAgreedRate: 650, notes: "Scaffolding" },
+    ],
+    summary: {
+      totalShifts: 2,
+      totalStandardHours: 16,
+      totalOvertimeHours: 2,
+      totalAdvancesReceived: 500,
+      totalAgreedPay: 1300,
+      statutoryWageFloor: 532,
+      totalStatutoryDue: 1330,
+      netArrearsOwed: 830,
+    },
+    disputeClaim: {
+      incidentDate: "2026-09-11",
+      state: "Maharashtra",
+      sector: "Construction",
+      employerOrContractor: "Metro Buildcon",
+      claimDescription: "Withheld 2 weeks wages",
+    },
+  };
+
+  const verbalPin = "7492";
+  const encryptedPayload = encodeLedgerToQRPayload(workerPayload, verbalPin);
+
+  // Wrap into /ledger/import URL (ensures hash fragment never reaches server)
+  const caseworkerUrl = generateImportUrl(encryptedPayload, "http://192.168.1.3:5173");
+  assert.ok(caseworkerUrl.includes("/ledger/import#data=WG1%3A"));
+
+  // Generate real QR PNG image buffer
+  const qrPngBuffer = await QRCode.toBuffer(caseworkerUrl, {
+    errorCorrectionLevel: "L",
+    margin: 2,
+    scale: 6,
+  });
+
+  // 2. Optical Scan (Simulating Device 2 / Caseworker Phone Camera Scanning the Screen)
+  const png = PNG.sync.read(qrPngBuffer);
+  const rgbaPixels = new Uint8ClampedArray(png.data.buffer);
+  const opticalScanResult = jsQR(rgbaPixels, png.width, png.height);
+
+  assert.ok(opticalScanResult, "Camera optical scanner must successfully detect QR code from pixel buffer");
+  assert.strictEqual(opticalScanResult.data, caseworkerUrl, "Scanned text from camera must exactly match the worker's URL");
+
+  // 3. Device 2 (Caseworker /ledger/import Page Processing)
+  const extractedPayload = extractPayloadFromScannedText(opticalScanResult.data);
+  assert.strictEqual(extractedPayload, encryptedPayload);
+
+  // Attempt decryption with wrong PIN -> must throw
+  assert.throws(() => {
+    decodeLedgerFromQRPayload(extractedPayload, "0000");
+  }, /Incorrect 4-digit PIN/);
+
+  // Decrypt with correct verbal PIN communicated by worker
+  const decryptedDocket = decodeLedgerFromQRPayload(extractedPayload, verbalPin);
+
+  assert.strictEqual(decryptedDocket.version, "1.0");
+  assert.strictEqual(decryptedDocket.shifts.length, 2);
+  assert.strictEqual(decryptedDocket.summary.netArrearsOwed, 830);
+  assert.strictEqual(decryptedDocket.disputeClaim.employerOrContractor, "Metro Buildcon");
+
+  // Verify limitation countdown calculates on caseworker device
+  const countdown = calculateLimitationCountdown(decryptedDocket.disputeClaim.incidentDate, new Date("2026-09-26"));
+  assert.strictEqual(countdown.statutoryReference, "Section 45(6), Code on Wages, 2019");
+  assert.ok(countdown.daysRemaining > 0);
+  assert.strictEqual(countdown.deadlineDateStr, "2029-09-11");
+});
+

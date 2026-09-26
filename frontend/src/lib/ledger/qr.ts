@@ -129,11 +129,57 @@ export function decodeLedgerFromQRPayload(
 }
 
 /**
- * Generates an offline Data URL image from the encoded QR payload.
+ * Wraps the encoded QR payload in a full URL pointing to /ledger/import#data=<encoded>.
+ * The URL hash fragment ensures zero network transmission during browser navigation.
  */
-export async function generateQRCodeDataUrl(encodedPayload: string): Promise<string> {
-  return QRCode.toDataURL(encodedPayload, {
-    errorCorrectionLevel: "M",
+export function generateImportUrl(encodedPayload: string, origin?: string): string {
+  const baseOrigin =
+    origin ||
+    (typeof window !== "undefined" && window.location && window.location.origin
+      ? window.location.origin
+      : "http://localhost:5173");
+  return `${baseOrigin}/ledger/import#data=${encodeURIComponent(encodedPayload)}`;
+}
+
+/**
+ * Extracts raw WG1 payload from either a full URL (hash or query) or direct text.
+ */
+export function extractPayloadFromScannedText(scannedText: string): string {
+  if (!scannedText) return "";
+  const trimmed = scannedText.trim();
+
+  // If payload is embedded in a URL hash (#data=...)
+  if (trimmed.includes("#data=")) {
+    const hashPart = trimmed.split("#data=")[1];
+    return decodeURIComponent(hashPart.split("&")[0]);
+  }
+
+  // If payload is embedded in a query parameter (?data=...)
+  if (trimmed.includes("?data=")) {
+    const queryPart = trimmed.split("?data=")[1];
+    return decodeURIComponent(queryPart.split("&")[0]);
+  }
+
+  // If directly starts with WG1:
+  if (trimmed.startsWith("WG1:")) {
+    return trimmed;
+  }
+
+  // Regex fallback to find WG1 payload inside text
+  const match = trimmed.match(/WG1:[0-9a-fA-F]+:[A-Za-z0-9+/=]+/);
+  if (match) {
+    return match[0];
+  }
+
+  return trimmed;
+}
+
+/**
+ * Generates an offline Data URL image from the encoded QR payload or URL.
+ */
+export async function generateQRCodeDataUrl(content: string): Promise<string> {
+  return QRCode.toDataURL(content, {
+    errorCorrectionLevel: "L", // Level L provides higher data density & easier camera scanning
     margin: 2,
     scale: 6,
     color: {
@@ -142,3 +188,4 @@ export async function generateQRCodeDataUrl(encodedPayload: string): Promise<str
     },
   });
 }
+
