@@ -23,7 +23,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 def smoke_test_backend(backend_url: str):
     """Smoke test all five core backend API endpoints on the live deployment."""
     print(f"\n[1/4] Running Live Backend Smoke Tests against: {backend_url}")
-    client = httpx.Client(base_url=backend_url, timeout=30.0)
+    client = httpx.Client(base_url=backend_url, timeout=60.0)
 
     # 1. Health Probe
     resp = client.get("/api/health")
@@ -155,7 +155,7 @@ def run_slow_3g_and_demo_recording(frontend_url: str, output_video_path: Path):
 
         # Scene 2: Language Toggle to Hindi (वेतन रक्षक)
         print("  Scene 2: Bilingual Toggle (Switching to Hindi)")
-        hi_btn = page.query_selector("button:has-text('HI')")
+        hi_btn = page.query_selector("button:has-text('हिन्दी')") or page.query_selector("button:has-text('HI')")
         if hi_btn:
             hi_btn.click()
             time.sleep(2)
@@ -163,23 +163,27 @@ def run_slow_3g_and_demo_recording(frontend_url: str, output_video_path: Path):
 
         # Scene 3: Navigate to Risk Lookup
         print("  Scene 3: Risk Snapshot & Sector Normalization")
-        page.click("a[href='/risk']")
-        page.wait_for_selector("text=जोखिम", timeout=10000)
+        page.evaluate("window.scrollTo({ top: 0, behavior: 'instant' })")
+        time.sleep(1)
+        page.click("nav a[href='/risk']")
+        page.wait_for_url("**/risk", timeout=15000)
+        page.wait_for_selector("main", timeout=15000)
         time.sleep(3)
-        # Select State and Sector if comboboxes are interactive
+        # Scroll to inspect risk selectors and charts
         page.evaluate("window.scrollBy({ top: 300, behavior: 'smooth' })")
-        time.sleep(3)
-        page.evaluate("window.scrollTo({ top: 0, behavior: 'smooth' })")
+        time.sleep(2)
+        page.evaluate("window.scrollTo({ top: 0, behavior: 'instant' })")
         time.sleep(1)
 
         # Scene 4: Navigate to Ask Rights
         print("  Scene 4: Grounded Legal Rights Assistant with Citations")
-        page.click("a[href='/rights']")
-        page.wait_for_selector("textarea", timeout=10000)
+        page.click("nav a[href='/rights']")
+        page.wait_for_url("**/rights", timeout=15000)
+        page.wait_for_selector("textarea", timeout=15000)
         time.sleep(2)
 
         # Type a rights query or click a suggested prompt
-        sample_pill = page.query_selector("button:has-text('वेतन')") or page.query_selector(".font-mono button")
+        sample_pill = page.query_selector("button:has-text('💬')") or page.query_selector(".font-mono button") or page.query_selector("button:has-text('वेतन')")
         if sample_pill:
             sample_pill.click()
             time.sleep(1)
@@ -192,12 +196,14 @@ def run_slow_3g_and_demo_recording(frontend_url: str, output_video_path: Path):
                 if submit_btn:
                     submit_btn.click()
 
-        # Wait for streaming or response with citations
-        time.sleep(6)
+        # Wait for grounded answer with citations
+        time.sleep(10)
         page.evaluate("window.scrollBy({ top: 400, behavior: 'smooth' })")
         time.sleep(4)
 
         # Switch back to English to show bilingual parity
+        page.evaluate("window.scrollTo({ top: 0, behavior: 'instant' })")
+        time.sleep(1)
         en_btn = page.query_selector("button:has-text('EN')")
         if en_btn:
             en_btn.click()
@@ -206,8 +212,9 @@ def run_slow_3g_and_demo_recording(frontend_url: str, output_video_path: Path):
 
         # Scene 5: Work Diary / Local Ledger & PDF & QR
         print("  Scene 5: Local-First Work Diary, PDF Export & QR Handoff")
-        page.click("a[href='/ledger']")
-        page.wait_for_selector("text=Work Diary", timeout=10000)
+        page.click("nav a[href='/ledger']")
+        page.wait_for_url("**/ledger", timeout=15000)
+        page.wait_for_selector("input[type='number']", timeout=15000)
         time.sleep(3)
 
         # Log a sample shift
@@ -216,38 +223,45 @@ def run_slow_3g_and_demo_recording(frontend_url: str, output_video_path: Path):
             hours_input.fill("10")
             time.sleep(1)
         
-        # Click Log Shift button
-        log_btn = page.query_selector("button:has-text('Log Shift Entry')")
+        # Click Record Shift button
+        log_btn = page.query_selector("form button[type='submit']")
         if log_btn:
             log_btn.click()
             time.sleep(2)
-            print("     -> Logged 10-hour shift (8h standard + 2h overtime).")
+            print("     -> Logged 10-hour shift in local work diary.")
 
         # Scroll down to inspect Net Arrears and Export Controls
         page.evaluate("window.scrollBy({ top: 400, behavior: 'smooth' })")
         time.sleep(3)
 
         # Click QR Share Modal
-        qr_btn = page.query_selector("button:has-text('QR Code Handoff')")
-        if qr_btn:
+        qr_btn = page.query_selector("button:has-text('QR')") or page.query_selector("button:has-text('क्यूआर')")
+        if qr_btn and not qr_btn.is_disabled():
             qr_btn.click()
-            time.sleep(4)
-            print("     -> Displayed Caseworker QR Code Modal.")
+            time.sleep(2)
+            print("     -> Opened Caseworker QR Consent Modal.")
+            consent_btn = page.query_selector("button:has-text('Consent')")
+            if consent_btn:
+                consent_btn.click()
+                time.sleep(4)
+                print("     -> Displayed Encrypted Caseworker QR Code and Verbal PIN.")
             # Close modal
-            close_btn = page.query_selector("button:has-text('Close')") or page.query_selector("button:has-text('बंद करें')")
+            close_btn = page.query_selector("button:has-text('Close')") or page.query_selector("button:has-text('✕')")
             if close_btn:
                 close_btn.click()
                 time.sleep(1)
 
         # Click PDF Export
-        pdf_btn = page.query_selector("button:has-text('Export Evidence PDF')")
+        pdf_btn = page.query_selector("button:has-text('PDF')") or page.query_selector("button:has-text('पीडीएफ')")
         if pdf_btn and not pdf_btn.is_disabled():
             pdf_btn.click()
             time.sleep(3)
             print("     -> Generated Statutory Demand Notice PDF.")
 
         # Final view of Home
-        page.click("a[href='/']")
+        page.evaluate("window.scrollTo({ top: 0, behavior: 'instant' })")
+        time.sleep(1)
+        page.click("nav a[href='/']")
         time.sleep(3)
 
         print("  -> Demo interaction completed. Finalizing video...")

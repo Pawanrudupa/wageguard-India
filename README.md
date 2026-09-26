@@ -18,8 +18,12 @@
 
 ## 🔗 Live Demo & Walkthrough
 
-* 🌐 **Live Application**: `[Live Demo URL — To be populated post-deployment]`
-* 📹 **Full Product Walkthrough**: `[Demo Video Walkthrough — To be populated post-deployment]`
+* 📹 **Interactive Product Walkthrough (60-90s WebM)**: [docs/demo/wageguard_demo.webm](docs/demo/wageguard_demo.webm)
+* 📸 **Application Showcase**:
+  
+  ![WageGuard India Interactive UI](docs/demo/demo_preview.png)
+
+* 🌐 **Deployment Ready**: Fully configured for one-click deployment via [Render](render.yaml) / [Railway](railway.json) (backend) and [Vercel](frontend/vercel.json) / [Netlify](netlify.toml) (frontend).
 * 📦 **Repository**: https://github.com/Pawanrudupa/wageguard-India
 
 ---

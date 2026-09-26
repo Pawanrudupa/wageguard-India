@@ -1,5 +1,9 @@
 {
-  "risk:Delhi:Construction": 1,
+  "risk:Delhi:Construction": 2,
   "rights:Delhi:General": 1,
-  "rights:Maharashtra:General": 1
+  "rights:Maharashtra:General": 1,
+  "risk:Tamil Nadu:brick kilns": 1,
+  "risk:Karnataka:security services": 1,
+  "risk:Maharashtra:garments / textiles": 1,
+  "risk:Gujarat:hotel": 1
 }

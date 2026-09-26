@@ -125,7 +125,7 @@ async def ask_rights_assistant(
             next_steps=grounded_result.next_steps,
         )
     except Exception as exc:
-        logger.error("Error generating rights response (%s): %s", type(exc).__name__, exc)
+        logger.error("Error generating rights response (%s): %s", type(exc).__name__, exc, exc_info=True)
         raise HTTPException(
             status_code=500,
             detail="Failed to generate grounded rights response.",
