@@ -23,6 +23,15 @@ Contrast-check every pairing against WCAG AA (4.5:1 body text) before shipping �
 accent turmeric gold especially needs dark text, never white text on it. Deep indigo
 (#22304A) provides a high-contrast anchor for legal citation and trust badges.
 
+## Branding & Logo
+- **The Balance Mark** (`frontend/src/components/Logo.tsx`): An abstracted neo-brutalist
+  scale representing statutory justice and fair pay.
+  - Central pillar, horizontal crossbar, and stepped pedestal in `--ink` (`#111111`).
+  - Left pan in Turmeric Gold (`--accent`, `#D9A404`) representing worker wages and earned dues.
+  - Right pan in Deep Indigo (`--trust`, `#22304A`) representing statutory legal rights.
+  - Scalable vector geometry optimized for high legibility from 16×16px (browser tab favicon)
+    to 32×32px (header brand icon) and 128×128px+ (hero display).
+
 ## Typography
 - Headings: bold grotesque sans (e.g. "Space Grotesk" or "Archivo Black"), large scale,
   tight leading.

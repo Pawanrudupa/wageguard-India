@@ -4,6 +4,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useI18n } from "../lib/i18n";
+import { Logo } from "./Logo";
 
 export const Header: React.FC = () => {
   const { lang, setLang, t } = useI18n();
@@ -25,8 +26,8 @@ export const Header: React.FC = () => {
           to="/"
           className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-accent"
         >
-          <div className="bg-accent border-2 border-ink px-2 py-0.5 font-heading font-black text-lg text-ink shadow-brutal-sm">
-            WG
+          <div className="border-2 border-ink bg-surface p-1 shadow-brutal-sm flex items-center justify-center shrink-0 group-hover:bg-bg transition-colors">
+            <Logo size={28} />
           </div>
           <div>
             <div className="font-heading font-bold text-lg leading-tight tracking-tight text-ink">

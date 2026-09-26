@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <!-- Stepped Sturdy Base -->
+  <rect x="10" y="54" width="44" height="6" fill="#111111" />
+  <rect x="18" y="49" width="28" height="5" fill="#111111" />
+
+  <!-- Central Vertical Post -->
+  <rect x="29" y="13" width="6" height="36" fill="#111111" />
+
+  <!-- Horizontal Crossbar -->
+  <rect x="6" y="13" width="52" height="5" fill="#111111" />
+
+  <!-- Fulcrum Top Apex -->
+  <polygon points="32,5 27,13 37,13" fill="#111111" />
+
+  <!-- Left Hanger -->
+  <rect x="14.5" y="18" width="3" height="12" fill="#111111" />
+
+  <!-- Left Pan: Turmeric Gold -->
+  <polygon points="6,30 26,30 23,42 9,42" fill="#D9A404" stroke="#111111" stroke-width="2.5" stroke-linejoin="miter" />
+
+  <!-- Right Hanger -->
+  <rect x="46.5" y="18" width="3" height="12" fill="#111111" />
+
+  <!-- Right Pan: Deep Indigo -->
+  <polygon points="38,30 58,30 55,42 41,42" fill="#22304A" stroke="#111111" stroke-width="2.5" stroke-linejoin="miter" />
+</svg>
