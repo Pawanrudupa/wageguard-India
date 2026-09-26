@@ -21,3 +21,8 @@ data/raw/*
 models/*.pkl
 rag_store/index/*
 !rag_store/index/.gitkeep
+
+# Test output artifacts
+frontend/test/*.pdf
+
+
