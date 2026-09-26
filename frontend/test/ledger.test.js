@@ -103,6 +103,9 @@ function encodeLedgerToQRPayload(payload, pin) {
 }
 
 function decodeLedgerFromQRPayload(qrString, pin) {
+  if (!qrString || typeof qrString !== "string") {
+    throw new Error("Invalid payload: empty or non-string input.");
+  }
   if (!qrString.startsWith("WG1:")) {
     throw new Error("Invalid payload format. Expected WG1 header.");
   }
@@ -115,8 +118,19 @@ function decodeLedgerFromQRPayload(qrString, pin) {
   }
   const saltHex = parts[1];
   const cipherB64 = parts[2];
+  if (!saltHex || saltHex.length < 8) {
+    throw new Error("Corrupted QR payload: invalid salt parameter.");
+  }
+  if (!cipherB64 || !/^[A-Za-z0-9+/=]+$/.test(cipherB64)) {
+    throw new Error("Corrupted QR payload: base64 decoding failed.");
+  }
+  let binary;
+  try {
+    binary = Buffer.from(cipherB64, "base64").toString("binary");
+  } catch {
+    throw new Error("Corrupted QR payload: base64 decoding failed.");
+  }
   const salt = new Uint8Array(saltHex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
-  const binary = Buffer.from(cipherB64, "base64").toString("binary");
   const cipher = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {
     cipher[i] = binary.charCodeAt(i);
@@ -129,8 +143,12 @@ function decodeLedgerFromQRPayload(qrString, pin) {
   try {
     const decompressed = ungzip(decompressedBytes);
     const jsonStr = new TextDecoder().decode(decompressed);
-    return JSON.parse(jsonStr);
-  } catch (err) {
+    const payload = JSON.parse(jsonStr);
+    if (!payload.shifts || !Array.isArray(payload.shifts)) {
+      throw new Error("Decoded payload missing valid shifts array.");
+    }
+    return payload;
+  } catch {
     throw new Error("Incorrect 4-digit PIN or corrupted QR payload.");
   }
 }
@@ -220,30 +238,44 @@ function generateImportUrl(encodedPayload, origin = "http://localhost:5173") {
 function extractPayloadFromScannedText(scannedText) {
   if (!scannedText) return "";
   const trimmed = scannedText.trim();
-  if (trimmed.includes("#data=")) {
-    const hashPart = trimmed.split("#data=")[1];
-    return decodeURIComponent(hashPart.split("&")[0]);
-  }
-  if (trimmed.includes("?data=")) {
-    const queryPart = trimmed.split("?data=")[1];
-    return decodeURIComponent(queryPart.split("&")[0]);
+  try {
+    if (trimmed.includes("#data=")) {
+      const hashPart = trimmed.split("#data=")[1];
+      const extracted = decodeURIComponent(hashPart.split("&")[0]);
+      if (extracted.startsWith("WG1:")) return extracted;
+    }
+    if (trimmed.includes("?data=")) {
+      const queryPart = trimmed.split("?data=")[1];
+      const extracted = decodeURIComponent(queryPart.split("&")[0]);
+      if (extracted.startsWith("WG1:")) return extracted;
+    }
+  } catch {
+    return "";
   }
   if (trimmed.startsWith("WG1:")) {
     return trimmed;
   }
   const match = trimmed.match(/WG1:[0-9a-fA-F]+:[A-Za-z0-9+/=]+/);
-  return match ? match[0] : trimmed;
+  return match ? match[0] : "";
 }
 
-test("PDF export generates document with locked Title and Mandatory Disclaimer", () => {
-  const doc = new jsPDF();
+function generateStatementPDF(options) {
+  const { shifts } = options || {};
+  if (!shifts || shifts.length === 0) {
+    throw new Error("Cannot generate evidence statement with zero shift records. Log at least one shift entry.");
+  }
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const STATEMENT_TITLE = "Empirical Statement of Work & Statutory Wage Arrears";
   const STATUTORY_DISCLAIMER =
     "Prepared by worker as educational documentation under the Code on Wages, 2019; not legal representation.";
-
   doc.text(STATEMENT_TITLE, 14, 20);
   doc.text(STATUTORY_DISCLAIMER, 14, 30);
+  return doc;
+}
 
+test("PDF export generates document with locked Title and Mandatory Disclaimer", () => {
+  const doc = generateStatementPDF({ shifts: [{ id: "1", date: "2026-03-01", standardHours: 8 }] });
+  const STATEMENT_TITLE = "Empirical Statement of Work & Statutory Wage Arrears";
   const pdfOutput = doc.output();
   assert.ok(pdfOutput.length > 0);
   assert.ok(pdfOutput.includes(STATEMENT_TITLE));
@@ -408,6 +440,91 @@ test("20-shift optical QR payload benchmark: verifies exact byte sizes, optical 
   assert.strictEqual(decrypted.shifts[19].notes, "Shuttering and reinforcement work day 20");
   assert.strictEqual(decrypted.summary.netArrearsOwed, 10236);
   assert.strictEqual(decrypted.disputeClaim.employerOrContractor, "Apex Infrastructure Private Limited");
+});
+
+test("Failure mode: Exporting PDF with zero shift entries throws descriptive validation error", () => {
+  assert.throws(
+    () => {
+      generateStatementPDF({ shifts: [], summary: {}, claim: null, provisions: null });
+    },
+    (err) => {
+      assert.ok(err instanceof Error);
+      assert.match(err.message, /zero shift records/i);
+      return true;
+    }
+  );
+
+  assert.throws(
+    () => {
+      generateStatementPDF({ shifts: null, summary: {}, claim: null, provisions: null });
+    },
+    (err) => {
+      assert.ok(err instanceof Error);
+      assert.match(err.message, /zero shift records/i);
+      return true;
+    }
+  );
+});
+
+test("Failure mode: Scanning malformed or corrupted QR payload fails safely without crash", () => {
+  // 1. Completely unrelated text/URL scanned (e.g. WiFi QR or random website URL)
+  const nonWgPayload = extractPayloadFromScannedText("https://example.com/some-random-page");
+  assert.strictEqual(nonWgPayload, "", "Non-WG1 QR scan must return empty string");
+
+  // 2. Corrupted URL encoding in hash
+  const badUrlPayload = extractPayloadFromScannedText("http://localhost:5173/ledger/import#data=%ZZinvalid");
+  assert.strictEqual(badUrlPayload, "", "Malformed URL encoding must be caught without throwing URIError");
+
+  // 3. Malformed payload structure missing parts
+  assert.throws(
+    () => decodeLedgerFromQRPayload("WG1:onlyonesection", "1234"),
+    /Malformed QR payload structure/
+  );
+
+  // 4. Corrupted salt parameter
+  assert.throws(
+    () => decodeLedgerFromQRPayload("WG1:12:YWJj", "1234"),
+    /Corrupted QR payload: invalid salt parameter/
+  );
+
+  // 5. Corrupted base64 payload
+  assert.throws(
+    () => decodeLedgerFromQRPayload("WG1:0c22384e:!!!notbase64!!!", "1234"),
+    /Corrupted QR payload: base64 decoding failed/
+  );
+});
+
+test("Failure mode: Entering incorrect PIN fails safely with clear message and no data leak", () => {
+  const samplePayload = {
+    version: "1.0",
+    shifts: [{ id: "1", date: "2026-03-01", standardHours: 8, overtimeHours: 0, advanceReceived: 0 }],
+    summary: { totalShifts: 1, netArrearsOwed: 532 },
+  };
+  const validPin = "4821";
+  const qrString = encodeLedgerToQRPayload(samplePayload, validPin);
+
+  // Attempt decryption with wrong PIN
+  const wrongPins = ["0000", "4820", "9999", "1234"];
+  for (const wrongPin of wrongPins) {
+    assert.throws(
+      () => decodeLedgerFromQRPayload(qrString, wrongPin),
+      (err) => {
+        assert.ok(err instanceof Error);
+        assert.strictEqual(err.message, "Incorrect 4-digit PIN or corrupted QR payload.");
+        return true;
+      }
+    );
+  }
+
+  // Attempt with invalid length PIN
+  assert.throws(
+    () => decodeLedgerFromQRPayload(qrString, "12"),
+    /PIN must be exactly 4 digits/
+  );
+  assert.throws(
+    () => decodeLedgerFromQRPayload(qrString, "abcd"),
+    /PIN must be exactly 4 digits/
+  );
 });
 
 

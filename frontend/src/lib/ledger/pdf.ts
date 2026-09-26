@@ -37,6 +37,9 @@ function toAscii(text: string | null | undefined): string {
  */
 export function generateStatementPDF(options: PDFExportOptions): jsPDF {
   const { shifts, summary, claim, provisions } = options;
+  if (!shifts || shifts.length === 0) {
+    throw new Error("Cannot generate evidence statement with zero shift records. Log at least one shift entry.");
+  }
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",

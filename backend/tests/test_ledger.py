@@ -5,8 +5,9 @@ limitation countdown rules under Section 45(6) Code on Wages 2019,
 and PDF export title and disclaimer assertions.
 """
 
-from pathlib import Path
 import re
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 
 from backend.app.main import app
@@ -91,9 +92,9 @@ def test_ledger_provisions_endpoint_retrieval():
     assert "sections_summary" in data
 
     sections = data["sections_summary"]
-    assert any("17" in k for k in sections.keys())
-    assert any("59" in k for k in sections.keys())
-    assert any("45" in k for k in sections.keys())
+    assert any("17" in k for k in sections)
+    assert any("59" in k for k in sections)
+    assert any("45" in k for k in sections)
 
     # Verify burden of proof on employer
     assert any("employer" in v.lower() for v in sections.values())

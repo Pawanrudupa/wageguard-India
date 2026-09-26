@@ -1,5 +1,6 @@
 """FastAPI router for real aggregate dataset and corpus statistics."""
 
+import logging
 from functools import lru_cache
 from pathlib import Path
 
@@ -7,6 +8,8 @@ import pandas as pd
 from fastapi import APIRouter
 
 from backend.app.api.schemas import StatsResponse
+
+logger = logging.getLogger("wageguard.stats")
 
 router = APIRouter(prefix="/api/stats", tags=["System Statistics"])
 
@@ -35,8 +38,8 @@ def _compute_stats() -> dict[str, int]:
             sectors_count = int(df["sector"].nunique())
             if "inspections" in df.columns:
                 inspections = int(df["inspections"].sum())
-        except Exception:
-            pass
+        except (OSError, pd.errors.EmptyDataError, pd.errors.ParserError, KeyError) as exc:
+            logger.warning("Failed to read dataset stats (%s): %s", type(exc).__name__, exc)
 
     # Read count of markdown files in corpus
     if CORPUS_PATH.exists():
@@ -44,18 +47,19 @@ def _compute_stats() -> dict[str, int]:
             md_files = [f for f in CORPUS_PATH.rglob("*.md") if f.name != ".gitkeep"]
             if md_files:
                 statutes_count = len(md_files)
-        except Exception:
-            pass
+        except OSError as exc:
+            logger.warning("Failed to count corpus statute files (%s): %s", type(exc).__name__, exc)
 
     # Read from ChromaDB or corpus files
     if CHROMA_PATH.exists():
         try:
             import chromadb
+
             client = chromadb.PersistentClient(path=str(CHROMA_PATH))
             col = client.get_collection("wageguard_legal_corpus")
             citations = col.count()
-        except Exception:
-            pass
+        except (OSError, ValueError, KeyError, RuntimeError) as exc:
+            logger.warning("Failed to query ChromaDB collection count (%s): %s", type(exc).__name__, exc)
 
     return {
         "states_count": states_count,

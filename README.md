@@ -189,7 +189,7 @@ Continuous irregularity rates (violations detected per government inspection) ar
 | **Build & Tooling** | Vite | `5.4+` | Fast module reloading, optimized production Rollup bundling. |
 | **Design System** | Tailwind CSS | `3.4+` | Custom Neo-Brutalist tokens (high-contrast, hard shadows, 0px border-radius). |
 | **Client Storage** | IndexedDB (`idb`) | `8.0+` | Zero-network local shift ledger with offline persistence. |
-| **Document Generation**| jsPDF | `2.5+` | Client-side generation of formal statutory legal demand notices. |
+| **Document Generation**| jsPDF | `4.2+` | Client-side generation of formal statutory legal demand notices (`pdf.ts`). *(Note: `html2canvas` is an internal transitive dependency bundled by jsPDF for its optional HTML-to-canvas rendering plugin, split into a dedicated vendor chunk).* |
 | **Data Compression** | pako | `2.1+` | zlib DEFLATE compression for multi-shift QR code serialization. |
 | **QR Code Engine** | qrcode.react / html5-qrcode | `3.1+ / 2.3+` | Device-to-device camera QR generation and scanning. |
 | **Speech APIs** | Web Speech API | Native | SpeechSynthesis (TTS) and webkitSpeechRecognition (STT). |

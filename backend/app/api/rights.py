@@ -81,8 +81,8 @@ async def ask_rights_assistant(
                     if event_type == "token":
                         # 12ms pacing for crisp, smooth typing rhythm
                         await asyncio.sleep(0.012)
-            except Exception as exc:
-                logger.error("SSE streaming error: %s", exc)
+            except Exception as exc:  # noqa: BLE001
+                logger.error("SSE streaming error (%s): %s", type(exc).__name__, exc)
                 error_payload = json.dumps({"event": "error", "detail": "Generation failed."})
                 yield f"event: error\ndata: {error_payload}\n\n"
 
@@ -125,7 +125,7 @@ async def ask_rights_assistant(
             next_steps=grounded_result.next_steps,
         )
     except Exception as exc:
-        logger.error("Error generating rights response: %s", exc)
+        logger.error("Error generating rights response (%s): %s", type(exc).__name__, exc)
         raise HTTPException(
             status_code=500,
             detail="Failed to generate grounded rights response.",
@@ -177,7 +177,10 @@ def get_ledger_provisions(
     try:
         risk_res = predict_risk(clean_state, "Construction")
         daily_rate = risk_res.current_min_wage_rate
-    except Exception:
+    except (ValueError, KeyError, RuntimeError) as exc:
+        logger.warning(
+            "Could not predict wage rate for %s (%s): %s", clean_state, type(exc).__name__, exc
+        )
         daily_rate = 500.0
 
     sections_summary = {

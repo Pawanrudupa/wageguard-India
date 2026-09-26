@@ -1,11 +1,14 @@
 """Ingest legal corpus markdown documents into ChromaDB vector store by logical section."""
 
+import logging
 import re
 from pathlib import Path
 from typing import Any
 
 import chromadb
 from chromadb.utils import embedding_functions
+
+logger = logging.getLogger("wageguard.ingest")
 
 # Default root directories relative to repository root
 DEFAULT_CORPUS_DIR = Path(__file__).resolve().parents[3] / "rag_store" / "corpus"
@@ -136,7 +139,8 @@ def get_embedding_function() -> Any:
                 model_name=MULTILINGUAL_MODEL_NAME,
                 local_files_only=True,
             )
-        except Exception:
+        except Exception as exc:  # noqa: BLE001
+            logger.info("Local sentence-transformer not found (%s), downloading...", exc)
             _embedding_fn_instance = embedding_functions.SentenceTransformerEmbeddingFunction(
                 model_name=MULTILINGUAL_MODEL_NAME,
             )

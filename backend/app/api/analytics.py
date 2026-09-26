@@ -23,8 +23,8 @@ def _load_counters() -> None:
         try:
             with open(ANALYTICS_FILE, "r", encoding="utf-8") as f:
                 _counters = json.load(f)
-        except Exception as exc:
-            logger.warning("Failed to load analytics counters: %s", exc)
+        except (OSError, json.JSONDecodeError) as exc:
+            logger.warning("Failed to load analytics counters (%s): %s", type(exc).__name__, exc)
             _counters = {}
 
 
@@ -36,8 +36,8 @@ def _save_counters() -> None:
         with open(temp_file, "w", encoding="utf-8") as f:
             json.dump(_counters, f, indent=2)
         temp_file.replace(ANALYTICS_FILE)
-    except Exception as exc:
-        logger.warning("Failed to save analytics counters: %s", exc)
+    except OSError as exc:
+        logger.warning("Failed to save analytics counters (%s): %s", type(exc).__name__, exc)
 
 
 # Initialize counters on module load
@@ -92,5 +92,6 @@ def reset_analytics_for_testing() -> None:
         if ANALYTICS_FILE.exists():
             try:
                 ANALYTICS_FILE.unlink()
-            except Exception:
-                pass
+            except OSError as exc:
+                logger.warning("Failed to unlink test analytics file (%s): %s", type(exc).__name__, exc)
+

@@ -3,6 +3,8 @@
  * Connects live to http://localhost:8000 (or VITE_API_URL).
  */
 
+import type { LedgerProvisionsResponse } from "./ledger/types";
+
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   (typeof window !== "undefined" &&
@@ -240,7 +242,7 @@ export async function fetchHealth(): Promise<HealthResponse> {
   return response.json();
 }
 
-export async function fetchLedgerProvisions(state?: string): Promise<any> {
+export async function fetchLedgerProvisions(state?: string): Promise<LedgerProvisionsResponse> {
   const url = state && state.trim()
     ? `${API_BASE_URL}/api/rights/provisions?state=${encodeURIComponent(state.trim())}`
     : `${API_BASE_URL}/api/rights/provisions`;
@@ -252,4 +254,7 @@ export async function fetchLedgerProvisions(state?: string): Promise<any> {
   }
   return response.json();
 }
+
+export type { LedgerProvisionsResponse };
+
 

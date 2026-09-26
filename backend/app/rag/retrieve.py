@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Any
 
 import chromadb
-from chromadb.utils import embedding_functions
 
 from backend.app.ml.data_pipeline import normalize_state_name
 

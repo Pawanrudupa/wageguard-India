@@ -82,6 +82,9 @@ export function decodeLedgerFromQRPayload(
   qrString: string,
   pin: string
 ): LedgerExportPayload {
+  if (!qrString || typeof qrString !== "string") {
+    throw new Error("Invalid payload: empty or non-string input.");
+  }
   if (!qrString.startsWith("WG1:")) {
     throw new Error("Invalid payload format. Expected WG1 header.");
   }
@@ -97,11 +100,25 @@ export function decodeLedgerFromQRPayload(
   const saltHex = parts[1];
   const cipherB64 = parts[2];
 
+  if (!saltHex || saltHex.length < 8) {
+    throw new Error("Corrupted QR payload: invalid salt parameter.");
+  }
+
+  if (!cipherB64 || !/^[A-Za-z0-9+/=]+$/.test(cipherB64)) {
+    throw new Error("Corrupted QR payload: base64 decoding failed.");
+  }
+
+  let binary: string;
+  try {
+    binary = atob(cipherB64);
+  } catch {
+    throw new Error("Corrupted QR payload: base64 decoding failed.");
+  }
+
   const salt = new Uint8Array(
     (saltHex.match(/.{1,2}/g) || []).map((byte) => parseInt(byte, 16))
   );
 
-  const binary = atob(cipherB64);
   const cipher = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {
     cipher[i] = binary.charCodeAt(i);
@@ -123,7 +140,7 @@ export function decodeLedgerFromQRPayload(
       throw new Error("Decoded payload missing valid shifts array.");
     }
     return payload;
-  } catch (err) {
+  } catch {
     throw new Error("Incorrect 4-digit PIN or corrupted QR payload.");
   }
 }
@@ -143,21 +160,32 @@ export function generateImportUrl(encodedPayload: string, origin?: string): stri
 
 /**
  * Extracts raw WG1 payload from either a full URL (hash or query) or direct text.
+ * Returns clean WG1 payload string, or empty string if malformed.
  */
 export function extractPayloadFromScannedText(scannedText: string): string {
   if (!scannedText) return "";
   const trimmed = scannedText.trim();
 
-  // If payload is embedded in a URL hash (#data=...)
-  if (trimmed.includes("#data=")) {
-    const hashPart = trimmed.split("#data=")[1];
-    return decodeURIComponent(hashPart.split("&")[0]);
-  }
+  try {
+    // If payload is embedded in a URL hash (#data=...)
+    if (trimmed.includes("#data=")) {
+      const hashPart = trimmed.split("#data=")[1];
+      const extracted = decodeURIComponent(hashPart.split("&")[0]);
+      if (extracted.startsWith("WG1:")) {
+        return extracted;
+      }
+    }
 
-  // If payload is embedded in a query parameter (?data=...)
-  if (trimmed.includes("?data=")) {
-    const queryPart = trimmed.split("?data=")[1];
-    return decodeURIComponent(queryPart.split("&")[0]);
+    // If payload is embedded in a query parameter (?data=...)
+    if (trimmed.includes("?data=")) {
+      const queryPart = trimmed.split("?data=")[1];
+      const extracted = decodeURIComponent(queryPart.split("&")[0]);
+      if (extracted.startsWith("WG1:")) {
+        return extracted;
+      }
+    }
+  } catch {
+    return "";
   }
 
   // If directly starts with WG1:
@@ -171,7 +199,7 @@ export function extractPayloadFromScannedText(scannedText: string): string {
     return match[0];
   }
 
-  return trimmed;
+  return "";
 }
 
 /**

@@ -177,6 +177,14 @@ export const LocalLedger: React.FC = () => {
 
   // Generate and download client-side evidence PDF
   const handleExportPDF = async () => {
+    if (!shifts || shifts.length === 0) {
+      alert(
+        lang === "hi"
+          ? "PDF निर्यात करने के लिए कम से कम एक कार्य प्रविष्टि (shift) जोड़ें।"
+          : "Cannot export PDF: No shifts logged. Please log at least one shift entry."
+      );
+      return;
+    }
     setPdfGenerating(true);
     setPdfSuccess(null);
     try {
@@ -199,7 +207,8 @@ export const LocalLedger: React.FC = () => {
       setPdfSuccess(lang === "hi" ? `PDF डाउनलोड हो गया: ${fileName}` : `PDF saved: ${fileName}`);
     } catch (err) {
       console.error("PDF generation failed:", err);
-      alert("Failed to create PDF. Please try again.");
+      const msg = err instanceof Error ? err.message : "Failed to create PDF. Please try again.";
+      alert(msg);
     } finally {
       setPdfGenerating(false);
     }

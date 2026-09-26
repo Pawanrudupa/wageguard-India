@@ -60,6 +60,8 @@ export interface LedgerProvisions {
   disclaimer: string;
 }
 
+export type LedgerProvisionsResponse = LedgerProvisions;
+
 export interface LedgerExportPayload {
   version: "1.0";
   exportedAt: string;
