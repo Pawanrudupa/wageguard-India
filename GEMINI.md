@@ -47,6 +47,14 @@ One-line pitch: *"Know your risk. Know your rights."*
 - No filing of actual government complaints on the user's behalf in the MVP — link out
   to the official portal instead.
 
+## Known Accessibility Limitation
+- **Linguistic and Regional Exclusion**: The current bilingual web interface (English + Hindi) structurally underserves workers in key industrial and construction launch states where Hindi is not the primary language — specifically **Tamil Nadu (Tamil)**, **Karnataka (Kannada)**, **Kerala (Malayalam)**, and **West Bengal (Bengali)**. Workers in these non-Hindi corridors cannot effectively query rights or interpret legal guidance without English proficiency.
+- **Literacy and Digital Modality Barriers**: A browser-based, text-heavy web application assumes both text literacy and comfort navigating mobile browser interfaces. Fully non-literate or digitally excluded workers who cannot read or write cannot independently use the text search or review complex statutory provisions.
+- **Channels Required for Full Reach**: Reaching the most vulnerable informal-sector and migrant workforce would require conversational voice-first interfaces, specifically:
+  1. **WhatsApp Bot / Voice Notes**: Leveraging asynchronous vernacular audio messaging on the primary communication channel workers already know and use.
+  2. **Interactive Voice Response (IVR)**: Toll-free phone tree accessible from basic feature phones (non-smartphones) with spoken prompts in local languages.
+- **Scope Status**: Both WhatsApp bot integration and telephony-based IVR systems are explicitly **out of scope for the current MVP build**, but are recognized as vital architectural evolutions for genuine last-mile worker inclusion.
+
 ## Tone / UX principles
 - Mobile-first, low-bandwidth-friendly (assume 3G, small data plans, older Android).
 - Neo-brutalist visual shell (bold borders, high contrast, no gradients/soft shadows) —
