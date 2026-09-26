@@ -2,12 +2,19 @@
  * Pure client-side IndexedDB persistence for work shifts and dispute claims.
  * ZERO NETWORK IMPORTS: All CRUD operations run strictly on the local device.
  */
-import { DisputeClaim, LedgerSummary, ShiftEntry } from "./types";
+import {
+  CaseworkerCaseRecord,
+  DisputeClaim,
+  LedgerExportPayload,
+  LedgerSummary,
+  ShiftEntry,
+} from "./types";
 
 const DB_NAME = "wageguard_ledger_db";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE_SHIFTS = "shifts";
 const STORE_META = "dispute_meta";
+const STORE_CASES = "caseworker_cases";
 
 /**
  * Initializes and upgrades the local IndexedDB schema.
@@ -30,6 +37,10 @@ export function openLedgerDatabase(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains(STORE_META)) {
         db.createObjectStore(STORE_META, { keyPath: "key" });
+      }
+      if (!db.objectStoreNames.contains(STORE_CASES)) {
+        const caseStore = db.createObjectStore(STORE_CASES, { keyPath: "caseId" });
+        caseStore.createIndex("importedAt", "importedAt", { unique: false });
       }
     };
 
@@ -240,3 +251,66 @@ export function calculateLedgerSummary(
     netArrearsOwed,
   };
 }
+
+/**
+ * Saves an imported worker docket into a dedicated, isolated caseworker store.
+ * NEVER writes to the personal shift log (STORE_SHIFTS).
+ */
+export async function saveCaseworkerCase(
+  docket: LedgerExportPayload,
+  notes?: string
+): Promise<CaseworkerCaseRecord> {
+  const db = await openLedgerDatabase();
+  const caseId = `case_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+  const record: CaseworkerCaseRecord = {
+    caseId,
+    importedAt: Date.now(),
+    workerDocket: docket,
+    notes,
+  };
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_CASES, "readwrite");
+    const store = transaction.objectStore(STORE_CASES);
+    const request = store.add(record);
+
+    request.onsuccess = () => resolve(record);
+    request.onerror = () => reject(request.error || new Error("Failed to save caseworker case."));
+  });
+}
+
+/**
+ * Retrieves all saved caseworker case records, newest first.
+ */
+export async function getAllCaseworkerCases(): Promise<CaseworkerCaseRecord[]> {
+  const db = await openLedgerDatabase();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_CASES, "readonly");
+    const store = transaction.objectStore(STORE_CASES);
+    const request = store.getAll();
+
+    request.onsuccess = () => {
+      const records: CaseworkerCaseRecord[] = request.result || [];
+      records.sort((a, b) => b.importedAt - a.importedAt);
+      resolve(records);
+    };
+
+    request.onerror = () => reject(request.error || new Error("Failed to load caseworker cases."));
+  });
+}
+
+/**
+ * Deletes a saved case file by caseId.
+ */
+export async function deleteCaseworkerCase(caseId: string): Promise<void> {
+  const db = await openLedgerDatabase();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_CASES, "readwrite");
+    const store = transaction.objectStore(STORE_CASES);
+    const request = store.delete(caseId);
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error || new Error("Failed to delete case file."));
+  });
+}
+

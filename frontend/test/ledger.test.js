@@ -327,3 +327,87 @@ test("Cross-device optical QR scan: encodes to QR image, scans pixels via optica
   assert.strictEqual(countdown.deadlineDateStr, "2029-09-11");
 });
 
+test("20-shift optical QR payload benchmark: verifies exact byte sizes, optical scan reliability, and full data integrity", async () => {
+  const { default: jsQR } = await import("jsqr");
+  const { PNG } = await import("pngjs");
+  const QRCode = (await import("qrcode")).default;
+
+  const shifts = [];
+  for (let i = 1; i <= 20; i++) {
+    const day = String(i).padStart(2, "0");
+    shifts.push({
+      id: `shift_${i}`,
+      date: `2026-08-${day}`,
+      standardHours: 8,
+      overtimeHours: i % 3 === 0 ? 2 : 0,
+      advanceReceived: i % 5 === 0 ? 500 : 0,
+      dailyAgreedRate: 600,
+      siteOrContractorName: `Metro Line 4 Pier ${(i % 5) + 1}`,
+      notes: `Shuttering and reinforcement work day ${i}`,
+      createdAt: 1788000000000 + i * 86400000,
+      updatedAt: 1788000000000 + i * 86400000,
+    });
+  }
+
+  const payload = {
+    version: "1.0",
+    exportedAt: "2026-09-26T07:15:00.000Z",
+    shifts,
+    summary: {
+      totalShifts: 20,
+      totalStandardHours: 160,
+      totalOvertimeHours: 12,
+      totalAdvancesReceived: 2000,
+      totalAgreedPay: 12000,
+      statutoryWageFloor: 532,
+      totalStatutoryDue: 12236,
+      netArrearsOwed: 10236,
+    },
+    disputeClaim: {
+      incidentDate: "2026-08-20",
+      state: "Maharashtra",
+      sector: "Construction",
+      employerOrContractor: "Apex Infrastructure Private Limited",
+      claimDescription: "Withheld statutory minimum wage and overtime for August work period",
+    },
+  };
+
+  const verbalPin = "6284";
+  const jsonStr = JSON.stringify(payload);
+  const rawBytes = Buffer.byteLength(jsonStr, "utf8");
+  const encryptedPayload = encodeLedgerToQRPayload(payload, verbalPin);
+
+  // Assert compression efficiency
+  assert.ok(rawBytes > 5000, `Raw JSON should be ~5.7KB, got ${rawBytes}`);
+  assert.ok(encryptedPayload.length < 1500, `Encrypted QR string should be <1500 chars, got ${encryptedPayload.length}`);
+
+  // Wrap in URL
+  const caseworkerUrl = generateImportUrl(encryptedPayload, "http://192.168.1.3:5173");
+  assert.ok(caseworkerUrl.length < 1600, `Full URL should be <1600 chars, got ${caseworkerUrl.length}`);
+
+  // Generate real QR code PNG image
+  const qrPngBuffer = await QRCode.toBuffer(caseworkerUrl, {
+    errorCorrectionLevel: "L",
+    margin: 2,
+    scale: 6,
+  });
+
+  // Optical scan simulation with jsQR
+  const png = PNG.sync.read(qrPngBuffer);
+  const rgbaPixels = new Uint8ClampedArray(png.data.buffer);
+  const opticalScanResult = jsQR(rgbaPixels, png.width, png.height);
+
+  assert.ok(opticalScanResult, "Camera optical scanner must successfully decode 20-shift QR image");
+  assert.strictEqual(opticalScanResult.data, caseworkerUrl, "Optical text must match caseworker URL exactly");
+
+  // Decrypt and verify
+  const extracted = extractPayloadFromScannedText(opticalScanResult.data);
+  const decrypted = decodeLedgerFromQRPayload(extracted, verbalPin);
+
+  assert.strictEqual(decrypted.shifts.length, 20);
+  assert.strictEqual(decrypted.shifts[19].notes, "Shuttering and reinforcement work day 20");
+  assert.strictEqual(decrypted.summary.netArrearsOwed, 10236);
+  assert.strictEqual(decrypted.disputeClaim.employerOrContractor, "Apex Infrastructure Private Limited");
+});
+
+

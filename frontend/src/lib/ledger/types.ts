@@ -67,3 +67,11 @@ export interface LedgerExportPayload {
   disputeClaim: DisputeClaim | null;
   summary: LedgerSummary;
 }
+
+export interface CaseworkerCaseRecord {
+  caseId: string;
+  importedAt: number;
+  workerDocket: LedgerExportPayload;
+  notes?: string;
+}
+

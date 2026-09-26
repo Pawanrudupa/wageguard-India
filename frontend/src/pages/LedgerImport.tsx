@@ -10,10 +10,14 @@ import {
   decodeLedgerFromQRPayload,
   extractPayloadFromScannedText,
 } from "../lib/ledger/qr";
-import { LedgerExportPayload } from "../lib/ledger/types";
+import { CaseworkerCaseRecord, LedgerExportPayload } from "../lib/ledger/types";
 import { calculateLimitationCountdown } from "../lib/ledger/countdown";
 import { generateStatementPDF } from "../lib/ledger/pdf";
-import { addShift, saveDisputeClaim } from "../lib/ledger/db";
+import {
+  saveCaseworkerCase,
+  getAllCaseworkerCases,
+  deleteCaseworkerCase,
+} from "../lib/ledger/db";
 
 export const LedgerImport: React.FC = () => {
   const location = useLocation();
@@ -27,9 +31,23 @@ export const LedgerImport: React.FC = () => {
   const [decryptError, setDecryptError] = useState<string | null>(null);
   const [importSuccess, setImportSuccess] = useState<string | null>(null);
   const [pdfGenerating, setPdfGenerating] = useState<boolean>(false);
+  const [savedCases, setSavedCases] = useState<CaseworkerCaseRecord[]>([]);
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const loadSavedCases = async () => {
+    try {
+      const cases = await getAllCaseworkerCases();
+      setSavedCases(cases);
+    } catch (err) {
+      console.error("Failed to load saved cases:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadSavedCases();
+  }, []);
 
   // Parse URL hash or query on mount
   useEffect(() => {
@@ -175,29 +193,29 @@ export const LedgerImport: React.FC = () => {
     }
   };
 
-  const handleSaveToLocalLedger = async () => {
+  const handleSaveAsCaseFile = async () => {
     if (!decodedData) return;
     try {
-      for (const shift of decodedData.shifts) {
-        await addShift({
-          date: shift.date,
-          standardHours: shift.standardHours,
-          overtimeHours: shift.overtimeHours,
-          advanceReceived: shift.advanceReceived,
-          dailyAgreedRate: shift.dailyAgreedRate,
-          siteOrContractorName: shift.siteOrContractorName,
-          notes: shift.notes ? `[Imported] ${shift.notes}` : "[Imported via QR]",
-        });
-      }
-      if (decodedData.disputeClaim) {
-        await saveDisputeClaim(decodedData.disputeClaim);
-      }
-      setImportSuccess(
-        `Successfully imported ${decodedData.shifts.length} shifts into this device's Work Diary.`
+      const employer = decodedData.disputeClaim?.employerOrContractor || "Unknown Employer";
+      const incidentDate = decodedData.disputeClaim?.incidentDate || "No date";
+      const saved = await saveCaseworkerCase(
+        decodedData,
+        `Case: ${employer} (Incident: ${incidentDate})`
       );
+      setImportSuccess(
+        `Saved as Case File #${saved.caseId.substring(5, 11)} in isolated caseworker storage.`
+      );
+      await loadSavedCases();
     } catch (err) {
-      console.error("Failed to save shifts locally:", err);
-      alert("Failed to save shifts into local IndexedDB storage.");
+      console.error("Failed to save case file:", err);
+      alert("Failed to save case file to local storage.");
+    }
+  };
+
+  const handleDeleteCase = async (caseId: string) => {
+    if (window.confirm("Are you sure you want to delete this saved caseworker case file?")) {
+      await deleteCaseworkerCase(caseId);
+      await loadSavedCases();
     }
   };
 
@@ -423,10 +441,10 @@ export const LedgerImport: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={handleSaveToLocalLedger}
+              onClick={handleSaveAsCaseFile}
               className="btn-press min-h-[48px] py-3 px-4 bg-accent text-ink font-heading font-black text-sm border-3 border-ink shadow-brutal flex items-center justify-center gap-2"
             >
-              💾 Save Docket to My Work Diary
+              📁 Save as Case File (Caseworker Only)
             </button>
           </div>
 
@@ -503,6 +521,57 @@ export const LedgerImport: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Saved Caseworker Case Files Section */}
+      {savedCases.length > 0 && (
+        <div className="border-3 border-ink bg-surface p-4 sm:p-5 shadow-brutal space-y-3">
+          <div className="flex items-center justify-between border-b-2 border-ink pb-2">
+            <h3 className="font-heading font-black text-lg text-ink">
+              📁 Saved Case Files ({savedCases.length})
+            </h3>
+            <span className="font-mono text-xs text-ink/70">
+              Isolated Caseworker Storage
+            </span>
+          </div>
+
+          <div className="space-y-2">
+            {savedCases.map((c) => (
+              <div
+                key={c.caseId}
+                className="border-2 border-ink bg-bg p-3 flex flex-wrap items-center justify-between gap-2 text-xs font-mono"
+              >
+                <div>
+                  <div className="font-bold text-ink text-sm">
+                    {c.workerDocket.disputeClaim?.employerOrContractor || "Informal Contractor"}
+                  </div>
+                  <div className="text-ink/75">
+                    {c.workerDocket.shifts.length} shifts | ₹{c.workerDocket.summary.netArrearsOwed.toLocaleString("en-IN")} arrears | Saved: {new Date(c.importedAt).toLocaleDateString()}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDecodedData(c.workerDocket);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className="px-2.5 py-1.5 border border-ink bg-accent font-bold hover:bg-accent/80"
+                  >
+                    View Docket
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteCase(c.caseId)}
+                    className="px-2.5 py-1.5 border border-ink bg-surface text-risk-high font-bold hover:bg-risk-high/15"
+                  >
+                    Delete ✕
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
