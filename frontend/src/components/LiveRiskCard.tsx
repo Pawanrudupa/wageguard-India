@@ -11,62 +11,83 @@ import { useI18n } from "../lib/i18n";
 interface TargetPair {
   state: string;
   sector: string;
+  displaySector: string;
 }
 
 const SNAPSHOT_TARGETS: TargetPair[] = [
-  { state: "Delhi", sector: "Construction" },
-  { state: "Maharashtra", sector: "Garments / Textiles" },
-  { state: "Karnataka", sector: "Security Services" },
-  { state: "Tamil Nadu", sector: "Brick Kilns" },
-  { state: "Gujarat", sector: "Hospitality / Restaurants" },
+  {
+    state: "Delhi",
+    sector: "Construction",
+    displaySector: "Construction",
+  },
+  {
+    state: "Maharashtra",
+    sector: "Manufacturing & Factories",
+    displaySector: "Manufacturing & Factories (Garments / Textiles)",
+  },
+  {
+    state: "Karnataka",
+    sector: "Security & Facility",
+    displaySector: "Security & Facility (Security Services)",
+  },
+  {
+    state: "Tamil Nadu",
+    sector: "Manufacturing & Factories",
+    displaySector: "Manufacturing & Factories (Brick Kilns)",
+  },
+  {
+    state: "Gujarat",
+    sector: "Hospitality & Food Services",
+    displaySector: "Hospitality & Food Services (Hotels & Dining)",
+  },
 ];
 
-// High-fidelity fallback data in case network or server is briefly unreachable
+// High-fidelity empirical fallback data directly matching state_sector_risk.csv
 const FALLBACK_CACHE: RiskResponse[] = [
   {
     state: "Delhi",
     sector: "Construction",
     risk_label: "High",
-    explanation: "High inspection-to-irregularity ratio observed in central territory construction sites.",
+    explanation: "Wage-law irregularities in the Construction sector in Delhi are elevated (High Risk) relative to other sectors and states, with approximately 1.99 violations detected per inspection in published government records.",
     data_confidence: "High",
-    irregularity_rate: 0.284,
-    current_min_wage_rate: 749,
+    irregularity_rate: 1.9876,
+    current_min_wage_rate: 695.0,
   },
   {
     state: "Maharashtra",
-    sector: "Garments / Textiles",
-    risk_label: "Medium",
-    explanation: "Frequent overtime disputes and delayed wage settlements reported in powerloom clusters.",
+    sector: "Manufacturing & Factories",
+    risk_label: "Low",
+    explanation: "The Manufacturing & Factories sector in Maharashtra shows a relatively low rate of wage-law irregularities (Low Risk), averaging 0.75 violations per inspection.",
     data_confidence: "High",
-    irregularity_rate: 0.162,
-    current_min_wage_rate: 540,
+    irregularity_rate: 0.7504,
+    current_min_wage_rate: 522.0,
   },
   {
     state: "Karnataka",
-    sector: "Security Services",
-    risk_label: "Medium",
-    explanation: "Statutory deductions compliance requires close monitoring in contract security staffing.",
+    sector: "Security & Facility",
+    risk_label: "High",
+    explanation: "Wage-law irregularities in the Security & Facility sector in Karnataka are elevated (High Risk) relative to other sectors and states, with approximately 1.92 violations detected per inspection in published government records.",
     data_confidence: "High",
-    irregularity_rate: 0.185,
-    current_min_wage_rate: 567,
+    irregularity_rate: 1.9197,
+    current_min_wage_rate: 635.0,
   },
   {
     state: "Tamil Nadu",
-    sector: "Brick Kilns",
+    sector: "Manufacturing & Factories",
     risk_label: "Low",
-    explanation: "Periodic tripartite wage revisions and active district task force enforcement recorded.",
+    explanation: "The Manufacturing & Factories sector in Tamil Nadu shows a relatively low rate of wage-law irregularities (Low Risk), averaging 0.57 violations per inspection.",
     data_confidence: "High",
-    irregularity_rate: 0.091,
-    current_min_wage_rate: 462,
+    irregularity_rate: 0.5708,
+    current_min_wage_rate: 500.0,
   },
   {
     state: "Gujarat",
-    sector: "Hospitality / Restaurants",
+    sector: "Hospitality & Food Services",
     risk_label: "Medium",
-    explanation: "Spreadover and overtime calculation variance observed across commercial establishments.",
-    data_confidence: "High",
-    irregularity_rate: 0.147,
-    current_min_wage_rate: 485,
+    explanation: "Wage-law compliance in the Hospitality & Food Services sector in Gujarat shows moderate irregularity rates (Medium Risk), with approximately 1.02 violations detected per inspection.",
+    data_confidence: "Medium",
+    irregularity_rate: 1.0217,
+    current_min_wage_rate: 430.0,
   },
 ];
 
@@ -136,6 +157,7 @@ export const LiveRiskCard: React.FC = () => {
   }, [isPaused, handleNext]);
 
   const currentItem = dataList[currentIndex] || dataList[0];
+  const activeTarget = SNAPSHOT_TARGETS[currentIndex] || SNAPSHOT_TARGETS[0];
 
   const getRiskBadgeColor = (risk: string) => {
     switch (risk.toLowerCase()) {
@@ -202,7 +224,7 @@ export const LiveRiskCard: React.FC = () => {
               {currentItem.state}
             </h2>
             <div className="font-body font-bold text-sm text-ink/80 mt-0.5">
-              {currentItem.sector}
+              {activeTarget.displaySector}
             </div>
           </div>
           <div
@@ -231,9 +253,15 @@ export const LiveRiskCard: React.FC = () => {
               {t.home.irregularityRate}
             </div>
             <div className="font-mono font-black text-lg text-ink">
-              {currentItem.irregularity_rate
-                ? `${(currentItem.irregularity_rate * 100).toFixed(1)}%`
-                : "18.5%"}
+              {currentItem.irregularity_rate !== undefined
+                ? currentItem.irregularity_rate.toFixed(2)
+                : "1.21"}
+              <span className="text-[11px] font-mono font-normal text-ink/70 ml-1">
+                {t.risk.irregularityRateUnit}
+              </span>
+            </div>
+            <div className="text-[10px] font-mono text-ink/60 mt-0.5 leading-tight">
+              {t.home.irregularitySubtitle}
             </div>
           </div>
         </div>

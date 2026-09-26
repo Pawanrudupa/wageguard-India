@@ -74,6 +74,7 @@ export interface TranslationStrings {
     pausedBadge: string;
     dailyMinWage: string;
     irregularityRate: string;
+    irregularitySubtitle: string;
     viewFullRiskAnalysis: string;
     keyProvisionsTicker: string;
   };
@@ -264,6 +265,7 @@ export const translations: Record<Language, TranslationStrings> = {
       pausedBadge: "PAUSED",
       dailyMinWage: "Daily Min Wage",
       irregularityRate: "Historical Irregularity",
+      irregularitySubtitle: "Violations detected per govt inspection (national median: 1.21)",
       viewFullRiskAnalysis: "Calculate Full Risk",
       keyProvisionsTicker: "Statutory Precedents & Provisions",
     },
@@ -452,6 +454,7 @@ export const translations: Record<Language, TranslationStrings> = {
       pausedBadge: "रोका गया",
       dailyMinWage: "दैनिक न्यूनतम मजदूरी",
       irregularityRate: "ऐतिहासिक अनियमितता दर",
+      irregularitySubtitle: "प्रति सरकारी निरीक्षण में दर्ज उल्लंघन (राष्ट्रीय माध्यिका: 1.21)",
       viewFullRiskAnalysis: "पूर्ण जोखिम जांचें",
       keyProvisionsTicker: "प्रमुख कानूनी धाराएं एवं प्रावधान",
     },

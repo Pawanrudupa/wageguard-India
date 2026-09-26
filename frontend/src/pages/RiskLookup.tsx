@@ -1,8 +1,8 @@
 /**
  * State and sector wage-irregularity risk lookup page wired to GET /api/risk.
  */
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useI18n } from "../lib/i18n";
 import { fetchRisk, RiskResponse } from "../lib/api";
 import { Combobox } from "../components/Combobox";
@@ -38,17 +38,33 @@ const SECTORS = [
   "Domestic Work",
   "Transport & Logistics",
   "Agriculture & Allied",
-  "Hotel & Restaurants",
+  "Hospitality & Food Services",
 ];
 
 export const RiskLookup: React.FC = () => {
   const { t } = useI18n();
+  const [searchParams] = useSearchParams();
 
-  const [state, setState] = useState<string>("Maharashtra");
-  const [sector, setSector] = useState<string>("Construction");
+  const [state, setState] = useState<string>(() => searchParams.get("state") || "Maharashtra");
+  const [sector, setSector] = useState<string>(() => searchParams.get("sector") || "Construction");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<RiskResponse | null>(null);
+
+  useEffect(() => {
+    const qState = searchParams.get("state");
+    const qSector = searchParams.get("sector");
+    if (qState && qSector) {
+      setState(qState);
+      setSector(qSector);
+      setLoading(true);
+      setError(null);
+      fetchRisk(qState, qSector)
+        .then(setResult)
+        .catch((err) => setError(err instanceof Error ? err.message : "Failed to load risk prediction"))
+        .finally(() => setLoading(false));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

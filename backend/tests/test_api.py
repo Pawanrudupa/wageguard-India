@@ -283,3 +283,52 @@ def test_rate_limiter_enforcement():
     assert exc_info.value.status_code == 429
     assert "Rate limit exceeded" in exc_info.value.detail
 
+
+def test_sector_normalization_and_risk_tertiles():
+    """Verify informal sector aliases normalize to empirical data and evaluate true risk tertiles."""
+    # 1. Tamil Nadu / Brick Kilns -> Manufacturing & Factories (Low Risk: 0.57 <= 0.95)
+    resp_tn = client.get("/api/risk?state=Tamil Nadu&sector=brick kilns")
+    assert resp_tn.status_code == 200
+    data_tn = resp_tn.json()
+    assert data_tn["sector"] == "Manufacturing & Factories"
+    assert data_tn["risk_label"] == "Low"
+    assert round(data_tn["irregularity_rate"], 2) == 0.57
+    assert data_tn["current_min_wage_rate"] == 500.0
+
+    # 2. Karnataka / Security Services -> Security & Facility (High Risk: 1.92 > 1.60)
+    resp_ka = client.get("/api/risk?state=Karnataka&sector=security services")
+    assert resp_ka.status_code == 200
+    data_ka = resp_ka.json()
+    assert data_ka["sector"] == "Security & Facility"
+    assert data_ka["risk_label"] == "High"
+    assert round(data_ka["irregularity_rate"], 2) == 1.92
+    assert data_ka["current_min_wage_rate"] == 635.0
+
+    # 3. Maharashtra / Garments -> Manufacturing & Factories (Low Risk: 0.75 <= 0.95)
+    resp_mh = client.get("/api/risk?state=Maharashtra&sector=garments / textiles")
+    assert resp_mh.status_code == 200
+    data_mh = resp_mh.json()
+    assert data_mh["sector"] == "Manufacturing & Factories"
+    assert data_mh["risk_label"] == "Low"
+    assert round(data_mh["irregularity_rate"], 2) == 0.75
+    assert data_mh["current_min_wage_rate"] == 522.0
+
+    # 4. Gujarat / Hospitality & Restaurants -> Hospitality & Food Services (Medium Risk: 0.95 < 1.02 <= 1.60)
+    resp_gj = client.get("/api/risk?state=Gujarat&sector=hotel & restaurants")
+    assert resp_gj.status_code == 200
+    data_gj = resp_gj.json()
+    assert data_gj["sector"] == "Hospitality & Food Services"
+    assert data_gj["risk_label"] == "Medium"
+    assert round(data_gj["irregularity_rate"], 2) == 1.02
+    assert data_gj["current_min_wage_rate"] == 430.0
+
+    # 5. Delhi / Construction -> High Risk (1.99 > 1.60)
+    resp_dl = client.get("/api/risk?state=Delhi&sector=Construction")
+    assert resp_dl.status_code == 200
+    data_dl = resp_dl.json()
+    assert data_dl["sector"] == "Construction"
+    assert data_dl["risk_label"] == "High"
+    assert round(data_dl["irregularity_rate"], 2) == 1.99
+    assert data_dl["current_min_wage_rate"] == 695.0
+
+

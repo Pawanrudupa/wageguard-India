@@ -47,6 +47,103 @@ STATE_NORMALIZATION_MAP: dict[str, str] = {
     "cirm": "Central Sphere",
 }
 
+# Canonical sector mapping for informal and colloquial industry aliases
+SECTOR_NORMALIZATION_MAP: dict[str, str] = {
+    # Manufacturing & Factories (including Brick Kilns, Garments, Textiles, Tiles)
+    "manufacturing & factories": "Manufacturing & Factories",
+    "manufacturing and factories": "Manufacturing & Factories",
+    "manufacturing": "Manufacturing & Factories",
+    "factories": "Manufacturing & Factories",
+    "factory": "Manufacturing & Factories",
+    "brick kilns": "Manufacturing & Factories",
+    "brick kiln": "Manufacturing & Factories",
+    "brick-kilns": "Manufacturing & Factories",
+    "brickkiln": "Manufacturing & Factories",
+    "brickkilns": "Manufacturing & Factories",
+    "garments": "Manufacturing & Factories",
+    "garment": "Manufacturing & Factories",
+    "garments / textiles": "Manufacturing & Factories",
+    "garments and textiles": "Manufacturing & Factories",
+    "textiles": "Manufacturing & Factories",
+    "textile": "Manufacturing & Factories",
+    "apparel": "Manufacturing & Factories",
+    "powerloom": "Manufacturing & Factories",
+
+    # Security & Facility
+    "security & facility": "Security & Facility",
+    "security and facility": "Security & Facility",
+    "security services": "Security & Facility",
+    "security service": "Security & Facility",
+    "security": "Security & Facility",
+    "security guard": "Security & Facility",
+    "security guards": "Security & Facility",
+    "facility management": "Security & Facility",
+    "facility": "Security & Facility",
+
+    # Hospitality & Food Services
+    "hospitality & food services": "Hospitality & Food Services",
+    "hospitality and food services": "Hospitality & Food Services",
+    "hospitality": "Hospitality & Food Services",
+    "hospitality & restaurants": "Hospitality & Food Services",
+    "hospitality and restaurants": "Hospitality & Food Services",
+    "hotel & restaurants": "Hospitality & Food Services",
+    "hotels & restaurants": "Hospitality & Food Services",
+    "hotel and restaurants": "Hospitality & Food Services",
+    "hotels and restaurants": "Hospitality & Food Services",
+    "restaurants": "Hospitality & Food Services",
+    "restaurant": "Hospitality & Food Services",
+    "food services": "Hospitality & Food Services",
+    "food service": "Hospitality & Food Services",
+    "hotel": "Hospitality & Food Services",
+    "hotels": "Hospitality & Food Services",
+    "catering": "Hospitality & Food Services",
+
+    # Construction
+    "construction": "Construction",
+    "building": "Construction",
+    "civil construction": "Construction",
+    "construction worker": "Construction",
+    "construction workers": "Construction",
+
+    # Retail & Commercial
+    "retail & commercial": "Retail & Commercial",
+    "retail and commercial": "Retail & Commercial",
+    "retail": "Retail & Commercial",
+    "commercial": "Retail & Commercial",
+    "shops & establishments": "Retail & Commercial",
+    "shops and establishments": "Retail & Commercial",
+    "shop": "Retail & Commercial",
+    "shops": "Retail & Commercial",
+    "store": "Retail & Commercial",
+
+    # Domestic Work
+    "domestic work": "Domestic Work",
+    "domestic worker": "Domestic Work",
+    "domestic workers": "Domestic Work",
+    "domestic": "Domestic Work",
+    "maid": "Domestic Work",
+    "househelp": "Domestic Work",
+    "maid / domestic": "Domestic Work",
+    "household work": "Domestic Work",
+
+    # Agriculture & Allied
+    "agriculture & allied": "Agriculture & Allied",
+    "agriculture and allied": "Agriculture & Allied",
+    "agriculture": "Agriculture & Allied",
+    "agricultural": "Agriculture & Allied",
+    "farming": "Agriculture & Allied",
+    "plantation": "Agriculture & Allied",
+
+    # Transport & Logistics
+    "transport & logistics": "Transport & Logistics",
+    "transport and logistics": "Transport & Logistics",
+    "transport": "Transport & Logistics",
+    "logistics": "Transport & Logistics",
+    "warehousing": "Transport & Logistics",
+    "driver": "Transport & Logistics",
+    "drivers": "Transport & Logistics",
+}
+
 
 @dataclass
 class RiskResult:
@@ -101,6 +198,12 @@ def _normalize_state(raw_state: str) -> str:
     """Normalize input state string."""
     clean = raw_state.strip().lower()
     return STATE_NORMALIZATION_MAP.get(clean, raw_state.strip().title())
+
+
+def _normalize_sector(raw_sector: str) -> str:
+    """Normalize input sector or informal alias to its canonical classification."""
+    clean = raw_sector.strip().lower()
+    return SECTOR_NORMALIZATION_MAP.get(clean, raw_sector.strip())
 
 
 def _build_explanation(
@@ -162,7 +265,7 @@ def predict_risk(state: str, sector: str) -> RiskResult:
     start_time = time.perf_counter()
 
     canonical_state = _normalize_state(state)
-    canonical_sector = sector.strip()
+    canonical_sector = _normalize_sector(sector)
 
     lookup = artifact.get("lookup", {})
     pipeline = artifact.get("pipeline")
