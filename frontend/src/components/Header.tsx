@@ -14,6 +14,7 @@ export const Header: React.FC = () => {
     { path: "/risk", label: t.nav.risk },
     { path: "/rights", label: t.nav.rights },
     { path: "/resources", label: t.nav.resources },
+    { path: "/ledger", label: t.nav.ledger },
   ];
 
   return (

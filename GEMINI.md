@@ -75,9 +75,13 @@ One-line pitch: *"Know your risk. Know your rights."*
 - **Shram Suvidha Portal** — central govt portal for labour law compliance/complaints.
 - **eShram** — national database/registration portal for unorganised-sector workers.
 - **NALSA** — National Legal Services Authority (free legal aid).
-- **Code on Wages, 2019** — one of the four new Labour Codes consolidating wage laws
-  (implementation/rollout status varies — verify current status before citing as "in
-  force" in any given state).
+- **Code on Wages, 2019** — enacted 2019, officially notified into force on **21 November 2025**. Consolidates Minimum Wages Act 1948, Payment of Wages Act 1936, Payment of Bonus Act 1965, and Equal Remuneration Act 1976. Key substantive sections: Section 17 (payment timeline and 2-day final settlement for termination AND resignation), Section 45(6) (unified 3-year limitation period for claims), Section 59 (burden of proof on employer for wage payments/deductions).
+
+## Mandatory Rule: Pre- vs. Post-21-Nov-2025 Legal Verification
+**CRITICAL**: Any legal research, prompt generation, statutory citation, or corpus documentation in this project MUST explicitly check whether a claim reflects pre- or post-21-November-2025 law.
+- **Prior to 21 Nov 2025**: Legacy Acts governed wages with fragmented 6-month (Payment of Wages Act 1936 s.15(2), Minimum Wages Act 1948 s.20(2)) to 12-month limitation periods and judicial burden of proof on workers.
+- **Since 21 Nov 2025**: The Code on Wages, 2019 is in force nationwide via Official Gazette notification. It unifies the claim limitation period to **3 years** (Section 45(6)), explicitly **shifts the burden of proof to the employer** to prove payment and lawful deductions (Section 59), and mandates **2-working-day final settlement** for both resignation and termination (Section 17(2)). Procedural state rules are in transitional rollout; always distinguish substantive statutory law from transitional state procedural rules.
+- Under no circumstances state outdated pre-Code rules as settled current law.
 
 ## Data reality check (read this before building the ML pipeline)
 There is no clean single CSV or API for this. Sources are Ministry of Labour annual

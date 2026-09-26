@@ -231,3 +231,17 @@ export async function fetchHealth(): Promise<HealthResponse> {
   }
   return response.json();
 }
+
+export async function fetchLedgerProvisions(state?: string): Promise<any> {
+  const url = state && state.trim()
+    ? `${API_BASE_URL}/api/rights/provisions?state=${encodeURIComponent(state.trim())}`
+    : `${API_BASE_URL}/api/rights/provisions`;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || `Provisions lookup failed with status ${response.status}`);
+  }
+  return response.json();
+}
+

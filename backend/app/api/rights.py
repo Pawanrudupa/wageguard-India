@@ -5,13 +5,20 @@ import json
 import logging
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 
 from backend.app.api.analytics import record_rights_call
 from backend.app.api.limiter import RateLimiter
-from backend.app.api.schemas import CitationSchema, RightsRequest, RightsResponse
+from backend.app.api.schemas import (
+    CitationSchema,
+    LedgerProvisionsResponse,
+    RightsRequest,
+    RightsResponse,
+)
+from backend.app.ml.infer import predict_risk
 from backend.app.rag.generate import generate_grounded_answer, stream_grounded_answer
+from backend.app.rag.retrieve import retrieve_chunks
 
 logger = logging.getLogger("wageguard.rights")
 router = APIRouter(prefix="/api/rights", tags=["Rights Assistant"])
@@ -123,3 +130,66 @@ async def ask_rights_assistant(
             status_code=500,
             detail="Failed to generate grounded rights response.",
         ) from exc
+
+
+@router.get(
+    "/provisions",
+    response_model=LedgerProvisionsResponse,
+    dependencies=[Depends(rights_limiter)],
+    summary="Get Statutory Provisions & Citations for Ledger Evidence Export",
+)
+def get_ledger_provisions(
+    state: str = Query(
+        "Maharashtra",
+        description="Target State or UT name",
+        examples=["Maharashtra"],
+    ),
+) -> LedgerProvisionsResponse:
+    """Retrieve grounded legal sections and minimum wage floor for auto-populating evidence PDF.
+
+    Reuses retrieve_chunks to query Section 17(2), Section 59, and Section 45
+    without duplicating corpus data into the client-side ledger module.
+    Zero worker personal information is accepted or logged by this endpoint.
+    """
+    clean_state = state.strip()
+
+    # Retrieve Section 17, 59, 45 from the central acts corpus
+    chunks = retrieve_chunks(
+        query="Code on Wages 2019 Section 17 time limit Section 59 burden of proof Section 45 claims limitation",
+        state=clean_state,
+        top_k=4,
+    )
+
+    citations = [
+        CitationSchema(
+            source_file=c["metadata"]["source_file"],
+            act_name=c["metadata"]["act_name"],
+            section_or_clause=c["metadata"]["section_or_clause"],
+            section_title=c["metadata"].get("section_title"),
+            state=c["metadata"].get("state", ""),
+            valid_as_of_date=c["metadata"].get("valid_as_of_date"),
+        )
+        for c in chunks
+    ]
+
+    # Retrieve state daily rate if available via predict_risk or default
+    daily_rate = None
+    try:
+        risk_res = predict_risk(clean_state, "Construction")
+        daily_rate = risk_res.current_min_wage_rate
+    except Exception:
+        daily_rate = 500.0
+
+    sections_summary = {
+        "Section 17(2)": "Mandatory final settlement of earned wages within 2 working days of resignation or dismissal.",
+        "Section 59": "Statutory burden of proof placed on the employer to prove payment of dues and authorized deductions.",
+        "Section 45(6)": "Unified 3-year limitation period from the date claim arises to file before the adjudicating authority.",
+    }
+
+    return LedgerProvisionsResponse(
+        state=clean_state,
+        citations=citations,
+        daily_min_wage_rate=daily_rate,
+        sections_summary=sections_summary,
+        disclaimer="Prepared by worker as educational documentation under the Code on Wages, 2019; not legal representation.",
+    )

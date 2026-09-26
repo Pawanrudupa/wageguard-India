@@ -15,6 +15,35 @@ export interface TranslationStrings {
     risk: string;
     rights: string;
     resources: string;
+    ledger: string;
+  };
+  ledger: {
+    title: string;
+    subtitle: string;
+    logShiftTitle: string;
+    dateLabel: string;
+    stdHoursLabel: string;
+    otHoursLabel: string;
+    advanceLabel: string;
+    rateLabel: string;
+    contractorLabel: string;
+    notesLabel: string;
+    submitShift: string;
+    discreetModeBtn: string;
+    exportPdfBtn: string;
+    qrShareBtn: string;
+    clearLedgerBtn: string;
+    noShifts: string;
+    totalShifts: string;
+    totalHours: string;
+    totalAdvances: string;
+    totalArrears: string;
+    disputeTitle: string;
+    disputeDateLabel: string;
+    limitationDaysRemaining: string;
+    limitationAdvisory: string;
+    statutoryNoticeTitle: string;
+    statutoryNoticeDesc: string;
   };
   home: {
     badge: string;
@@ -160,6 +189,35 @@ export const translations: Record<Language, TranslationStrings> = {
       risk: "Check Risk",
       rights: "Ask Rights",
       resources: "Grievance Channels",
+      ledger: "Work Diary",
+    },
+    ledger: {
+      title: "Local Work & Dispute Diary",
+      subtitle: "100% private, offline work and wage ledger stored exclusively on your device. Zero cloud uploads.",
+      logShiftTitle: "Log Daily Shift",
+      dateLabel: "Shift Date",
+      stdHoursLabel: "Standard Hours (8h standard)",
+      otHoursLabel: "Overtime Hours",
+      advanceLabel: "Advance / Payment Received (₹)",
+      rateLabel: "Agreed Daily Wage (₹)",
+      contractorLabel: "Contractor / Site Name (Private)",
+      notesLabel: "Notes / Tasks Done",
+      submitShift: "Record Shift in Diary",
+      discreetModeBtn: "Discreet Mode 🛡️",
+      exportPdfBtn: "Export Evidence PDF 📄",
+      qrShareBtn: "Caseworker QR Handoff 📲",
+      clearLedgerBtn: "Clear Diary Data",
+      noShifts: "No shifts recorded yet. Tap above to log your first work day.",
+      totalShifts: "Total Shifts",
+      totalHours: "Total Work Hours",
+      totalAdvances: "Advances Received",
+      totalArrears: "Estimated Arrears Owed",
+      disputeTitle: "Dispute & Claim Limitation Timeline",
+      disputeDateLabel: "Incident / Last Working Date",
+      limitationDaysRemaining: "Days Remaining to File Claim",
+      limitationAdvisory: "Statutory limit is 3 years, but acting sooner improves recovery chances before contractors relocate or dissolve.",
+      statutoryNoticeTitle: "Section 45(6) Code on Wages 2019",
+      statutoryNoticeDesc: "Under unified 3-year statutory limitation, you may file for recovery of unpaid wages before the appointed Labour Authority.",
     },
     home: {
       badge: "Labour Rights Navigator • India",
@@ -303,6 +361,35 @@ export const translations: Record<Language, TranslationStrings> = {
       risk: "जोखिम जांचें",
       rights: "अधिकार पूछें",
       resources: "शिकायत चैनल",
+      ledger: "कार्य डायरी",
+    },
+    ledger: {
+      title: "स्थानीय कार्य एवं विवाद डायरी",
+      subtitle: "100% निजी, ऑफलाइन कार्य और वेतन खाता जो केवल आपके उपकरण में सहेजा जाता है। शून्य क्लाउड अपलोड।",
+      logShiftTitle: "दैनिक पाली (शिफ्ट) दर्ज करें",
+      dateLabel: "कार्य तिथि",
+      stdHoursLabel: "सामान्य कार्य घंटे (मानक 8 घंटे)",
+      otHoursLabel: "ओवरटाइम घंटे",
+      advanceLabel: "अग्रिम / प्राप्त भुगतान (₹)",
+      rateLabel: "तय दैनिक मजदूरी (₹)",
+      contractorLabel: "ठेकेदार / साइट का नाम (निजी)",
+      notesLabel: "विवरण / किए गए कार्य",
+      submitShift: "डायरी में पाली दर्ज करें",
+      discreetModeBtn: "गोपनीय मोड 🛡️",
+      exportPdfBtn: "साक्ष्य PDF डाउनलोड करें 📄",
+      qrShareBtn: "केसवर्कर QR साझा 📲",
+      clearLedgerBtn: "डायरी डेटा हटाएं",
+      noShifts: "कोई पाली दर्ज नहीं है। अपना पहला कार्य दिवस दर्ज करने के लिए ऊपर टैप करें।",
+      totalShifts: "कुल कार्य दिवस",
+      totalHours: "कुल कार्य घंटे",
+      totalAdvances: "प्राप्त कुल अग्रिम",
+      totalArrears: "अनुमानित बकाया मजदूरी",
+      disputeTitle: "विवाद एवं दावा परिसीमा समयसीमा",
+      disputeDateLabel: "विवाद / अंतिम कार्य दिवस",
+      limitationDaysRemaining: "दावा दायर करने हेतु शेष दिन",
+      limitationAdvisory: "वैधानिक परिसीमा 3 वर्ष है, परंतु ठेकेदार के हटने या भागने से पहले शीघ्र कार्रवाई करने से वसूली की संभावना बेहतर होती है।",
+      statutoryNoticeTitle: "धारा 45(6) वेतन संहिता 2019",
+      statutoryNoticeDesc: "एकीकृत 3-वर्षीय वैधानिक परिसीमा के तहत, आप बकाया वेतन की वसूली के लिए सक्षम श्रम प्राधिकारी के समक्ष दावा दायर कर सकते हैं।",
     },
     home: {
       badge: "श्रम अधिकार मार्गदर्शक • भारत",

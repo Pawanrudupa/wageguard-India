@@ -48,6 +48,7 @@ project is and WHY.
   indicate..." and route to the official grievance channel for actual determination.
 - Every rights-related response requires the visible disclaimer: "This is educational
   information, not legal advice."
+- **Local-first ledger isolation**: The core ledger CRUD and storage modules (`frontend/src/lib/ledger/db.ts`, `types.ts`, `countdown.ts`, `qr.ts`) must have ZERO imports of networking libraries (`fetch`, `axios`, `XMLHttpRequest`, or API client modules). All shift entries, wages, advances, and notes must remain strictly client-side in the user's browser IndexedDB. Zero worker shift records or dispute logs may ever cross the network to the server. Enforce this via automated test assertions.
 
 ## Testing
 - New ML feature-engineering functions get a unit test with a small synthetic dataframe.

@@ -123,6 +123,44 @@ class RightsResponse(BaseModel):
     next_steps: str | None = Field(None, description="Official grievance filing recommendations")
 
 
+class LedgerProvisionsResponse(BaseModel):
+    """Statutory provisions and notified rates from RAG corpus for auto-populating evidence PDF."""
+
+    model_config: ClassVar[ConfigDict] = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "state": "Maharashtra",
+                "citations": [
+                    {
+                        "source_file": "rag_store/corpus/central_acts/code_on_wages_2019_notes.md",
+                        "act_name": "Code on Wages, 2019",
+                        "section_or_clause": "Section 17",
+                        "section_title": "Time Limit for Payment of Wages",
+                        "state": "",
+                        "valid_as_of_date": "2026-01-01",
+                    }
+                ],
+                "daily_min_wage_rate": 532.0,
+                "sections_summary": {
+                    "Section 17(2)": "Mandatory settlement of wages within 2 working days of resignation or dismissal.",
+                    "Section 59": "Statutory burden of proof placed squarely on employer to prove payment of dues and lawful deductions.",
+                    "Section 45(6)": "Unified 3-year limitation period to file claim before the adjudicating authority.",
+                },
+                "disclaimer": "Prepared by worker as educational documentation under the Code on Wages, 2019; not legal representation.",
+            }
+        }
+    )
+
+    state: str = Field(..., description="Target jurisdiction state name", examples=["Maharashtra"])
+    citations: list[CitationSchema] = Field(default_factory=list, description="Traceable statutory references")
+    daily_min_wage_rate: float | None = Field(None, description="Current daily minimum wage floor in INR", examples=[532.0])
+    sections_summary: dict[str, str] = Field(default_factory=dict, description="Summary of governing legal sections")
+    disclaimer: str = Field(
+        "Prepared by worker as educational documentation under the Code on Wages, 2019; not legal representation.",
+        description="Non-legal representation statutory disclaimer",
+    )
+
+
 class CentralPortalItem(BaseModel):
     """Contact and filing details for a central government grievance mechanism."""
 

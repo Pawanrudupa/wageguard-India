@@ -133,6 +133,20 @@ def test_rights_endpoint_adversarial_prompt_injection():
         assert any("delhi" in c["source_file"].lower() or "delhi" in (c["state"] or "").lower() for c in data_2["citations"])
 
 
+def test_ledger_provisions_endpoint_happy_path():
+    """GET /api/rights/provisions?state=Maharashtra returns citations for s.17, s.59, s.45 and rate."""
+    response = client.get("/api/rights/provisions?state=Maharashtra")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["state"] == "Maharashtra"
+    assert "Section 17(2)" in data["sections_summary"]
+    assert "Section 59" in data["sections_summary"]
+    assert "Section 45(6)" in data["sections_summary"]
+    assert "Prepared by worker as educational documentation" in data["disclaimer"]
+    assert len(data["citations"]) > 0
+    assert data["daily_min_wage_rate"] is not None
+
+
 def test_resources_endpoint_happy_path():
     """Happy path: GET /api/resources?state=Maharashtra returns central portals + state contacts."""
     response = client.get("/api/resources?state=Maharashtra")
