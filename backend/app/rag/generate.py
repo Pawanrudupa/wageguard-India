@@ -197,7 +197,7 @@ def generate_grounded_answer(
     retrieved_chunks: list[dict[str, Any]] | None = None,
     state: str | None = None,
     language: str = "en",
-    similarity_threshold: float = 0.35,
+    similarity_threshold: float = 0.40,
 ) -> GroundedAnswer:
     """Generate a strictly grounded answer citing retrieved legal sources.
 

@@ -123,9 +123,24 @@ def chunk_document_by_section(
     return chunks
 
 
+MULTILINGUAL_MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
+_embedding_fn_instance = None
+
+
 def get_embedding_function() -> Any:
-    """Return default embedding function for ChromaDB."""
-    return embedding_functions.DefaultEmbeddingFunction()
+    """Return cached multilingual sentence-transformers embedding function for ChromaDB."""
+    global _embedding_fn_instance
+    if _embedding_fn_instance is None:
+        try:
+            _embedding_fn_instance = embedding_functions.SentenceTransformerEmbeddingFunction(
+                model_name=MULTILINGUAL_MODEL_NAME,
+                local_files_only=True,
+            )
+        except Exception:
+            _embedding_fn_instance = embedding_functions.SentenceTransformerEmbeddingFunction(
+                model_name=MULTILINGUAL_MODEL_NAME,
+            )
+    return _embedding_fn_instance
 
 
 def ingest_corpus(

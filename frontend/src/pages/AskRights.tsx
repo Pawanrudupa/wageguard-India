@@ -7,6 +7,13 @@ import { useI18n } from "../lib/i18n";
 import { streamRights, RightsResponse, CitationSchema } from "../lib/api";
 import { Combobox } from "../components/Combobox";
 import { ScrollReveal } from "../components/ScrollReveal";
+import {
+  isSpeechRecognitionSupported,
+  isSpeechSynthesisSupported,
+  startVoiceRecognition,
+  extractSpokenSummary,
+  speakSpokenSummary,
+} from "../lib/speech";
 
 const STATES = [
   "Delhi",
@@ -47,6 +54,16 @@ export const AskRights: React.FC = () => {
   const [tickerIndex, setTickerIndex] = useState<number>(0);
   const [scannerStep, setScannerStep] = useState<number>(0);
 
+  // Voice Input (STT) and Audio Synthesis (TTS) State
+  const [isListening, setIsListening] = useState<boolean>(false);
+  const [voiceNotice, setVoiceNotice] = useState<string | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [spokenSummary, setSpokenSummary] = useState<string>("");
+  const [ttsError, setTtsError] = useState<string | null>(null);
+
+  const stopVoiceRef = React.useRef<(() => void) | null>(null);
+  const stopTtsRef = React.useRef<(() => void) | null>(null);
+
   // Dynamic query ticker interval
   useEffect(() => {
     const timer = setInterval(() => {
@@ -67,15 +84,40 @@ export const AskRights: React.FC = () => {
     }
   }, [searchParams]);
 
+  // Cleanup speech recognition and audio playback on unmount
+  useEffect(() => {
+    return () => {
+      if (stopVoiceRef.current) {
+        stopVoiceRef.current();
+      }
+      if (stopTtsRef.current) {
+        stopTtsRef.current();
+      }
+    };
+  }, []);
+
   const handleAsk = async (queryText?: string) => {
     const textToSubmit = queryText !== undefined ? queryText : query;
     if (!textToSubmit.trim() || textToSubmit.trim().length < 3) return;
+
+    // Stop active audio or mic when new question begins
+    if (stopVoiceRef.current) {
+      stopVoiceRef.current();
+      stopVoiceRef.current = null;
+      setIsListening(false);
+    }
+    if (stopTtsRef.current) {
+      stopTtsRef.current();
+      stopTtsRef.current = null;
+      setIsSpeaking(false);
+    }
 
     setLoading(true);
     setIsStreaming(true);
     setStreamingAnswer("");
     setError(null);
     setResult(null);
+    setSpokenSummary("");
     setExpandedCitationIndex(null);
     setScannerStep(0);
 
@@ -108,6 +150,92 @@ export const AskRights: React.FC = () => {
       setIsStreaming(false);
       setLoading(false);
     }
+  };
+
+  const handleVoiceToggle = () => {
+    setVoiceNotice(null);
+
+    if (isListening) {
+      if (stopVoiceRef.current) {
+        stopVoiceRef.current();
+        stopVoiceRef.current = null;
+      }
+      setIsListening(false);
+      return;
+    }
+
+    if (!isSpeechRecognitionSupported()) {
+      setVoiceNotice(t.rights.voiceUnsupportedNotice);
+      return;
+    }
+
+    setIsListening(true);
+    const stopFn = startVoiceRecognition(lang, {
+      onInterim: (interimText) => {
+        setQuery(interimText);
+      },
+      onFinal: (finalText) => {
+        setQuery(finalText);
+      },
+      onError: (errMsg) => {
+        if (errMsg === "unsupported") {
+          setVoiceNotice(t.rights.voiceUnsupportedNotice);
+        } else if (errMsg === "not-allowed") {
+          setVoiceNotice("Microphone permission was denied. Please allow microphone access in your browser settings.");
+        } else {
+          setVoiceNotice(`Voice input notice: ${errMsg}`);
+        }
+        setIsListening(false);
+        stopVoiceRef.current = null;
+      },
+      onEnd: () => {
+        setIsListening(false);
+        stopVoiceRef.current = null;
+      },
+    });
+
+    stopVoiceRef.current = stopFn;
+  };
+
+  const handleTtsToggle = () => {
+    setTtsError(null);
+
+    if (isSpeaking) {
+      if (stopTtsRef.current) {
+        stopTtsRef.current();
+        stopTtsRef.current = null;
+      }
+      setIsSpeaking(false);
+      return;
+    }
+
+    if (!result?.answer) return;
+
+    if (!isSpeechSynthesisSupported()) {
+      setTtsError(t.rights.ttsUnsupportedNotice);
+      return;
+    }
+
+    const summary = extractSpokenSummary(result.answer);
+    setSpokenSummary(summary);
+    setIsSpeaking(true);
+
+    const stopFn = speakSpokenSummary(
+      summary,
+      lang,
+      () => setIsSpeaking(true),
+      () => {
+        setIsSpeaking(false);
+        stopTtsRef.current = null;
+      },
+      (err) => {
+        setTtsError(err);
+        setIsSpeaking(false);
+        stopTtsRef.current = null;
+      }
+    );
+
+    stopTtsRef.current = stopFn;
   };
 
   const handleSampleClick = (sampleText: string) => {
@@ -172,12 +300,29 @@ export const AskRights: React.FC = () => {
 
         {/* Text input area */}
         <div className="space-y-2 pt-2">
-          <label
-            htmlFor="rights-query"
-            className="block font-heading font-bold text-sm text-ink"
-          >
-            {t.rights.inputLabel}
-          </label>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <label
+              htmlFor="rights-query"
+              className="block font-heading font-bold text-sm text-ink"
+            >
+              {t.rights.inputLabel}
+            </label>
+            <button
+              type="button"
+              onClick={handleVoiceToggle}
+              aria-label={isListening ? t.rights.voiceInputStop : t.rights.voiceInputStart}
+              title={isListening ? t.rights.voiceInputStop : t.rights.voiceInputStart}
+              className={`min-h-[44px] px-3.5 py-1.5 border-2 border-ink font-heading font-bold text-xs flex items-center gap-2 shadow-brutal-sm cursor-pointer transition-colors ${
+                isListening
+                  ? "bg-risk-high text-surface animate-pulse"
+                  : "bg-surface hover:bg-accent/30 text-ink"
+              }`}
+            >
+              <span>{isListening ? "🔴" : "🎤"}</span>
+              <span>{isListening ? t.rights.voiceInputListening : t.rights.voiceInputStart}</span>
+            </button>
+          </div>
+
           <textarea
             id="rights-query"
             rows={3}
@@ -187,6 +332,25 @@ export const AskRights: React.FC = () => {
             placeholder={t.rights.inputPlaceholder}
             className="w-full min-h-[96px] p-3 bg-bg border-3 border-ink font-body text-base text-ink placeholder:text-ink/50 focus:outline-none focus:ring-2 focus:ring-accent leading-relaxed"
           />
+
+          {/* Voice Fallback / Permission Notice */}
+          {voiceNotice && (
+            <div className="border-2 border-risk-high bg-risk-high/10 p-3 shadow-brutal-sm flex items-start justify-between gap-2 text-xs font-mono text-ink">
+              <div className="flex items-center gap-2">
+                <span>⚠️</span>
+                <span>{voiceNotice}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setVoiceNotice(null)}
+                className="font-bold text-ink hover:underline p-1 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                aria-label="Dismiss notice"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           <div className="text-[11px] font-mono text-ink/60 text-right">
             {query.length} / 500 {t.rights.charCountSuffix}
           </div>
@@ -294,15 +458,58 @@ export const AskRights: React.FC = () => {
       {result && !isStreaming && (
         <ScrollReveal>
           <section className="border-3 border-ink bg-surface p-6 shadow-brutal space-y-6">
-            {/* Answer Header with Deep Indigo Trust Identity */}
-            <div className="border-b-2 border-ink/20 pb-3 flex items-center justify-between">
+            {/* Answer Header with Deep Indigo Trust Identity and TTS Audio Listen */}
+            <div className="border-b-2 border-ink/20 pb-3 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-heading font-black text-xl text-ink">
                 {t.rights.answerTitle}
               </h2>
-              <div className="text-xs font-mono px-2.5 py-1 border-2 border-ink bg-trust text-surface font-bold shadow-brutal-sm">
-                {result.grounded ? t.rights.groundedBadge : t.rights.ungroundedBadge}
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleTtsToggle}
+                  className={`btn-press-sm min-h-[44px] px-3.5 py-1.5 border-2 border-ink font-heading font-bold text-xs flex items-center gap-2 shadow-brutal-sm cursor-pointer transition-colors ${
+                    isSpeaking
+                      ? "bg-accent text-ink animate-pulse"
+                      : "bg-surface hover:bg-bg text-ink"
+                  }`}
+                  aria-label={isSpeaking ? t.rights.stopListeningBtn : t.rights.listenAnswerBtn}
+                  title={isSpeaking ? t.rights.stopListeningBtn : t.rights.listenAnswerBtn}
+                >
+                  <span>{isSpeaking ? "⏹" : "🔊"}</span>
+                  <span>{isSpeaking ? t.rights.stopListeningBtn : t.rights.listenAnswerBtn}</span>
+                </button>
+                <div className="text-xs font-mono px-2.5 py-1 border-2 border-ink bg-trust text-surface font-bold shadow-brutal-sm">
+                  {result.grounded ? t.rights.groundedBadge : t.rights.ungroundedBadge}
+                </div>
               </div>
             </div>
+
+            {/* Concise Spoken Summary Callout (concise 1-2 sentence audio summary) */}
+            {spokenSummary && (isSpeaking || !ttsError) && (
+              <div className="border-2 border-trust bg-trust/10 p-3.5 shadow-brutal-sm space-y-1">
+                <div className="font-mono text-xs font-bold uppercase tracking-wider text-trust flex items-center gap-2">
+                  {isSpeaking && <span className="w-2 h-2 bg-trust rounded-none animate-ping" />}
+                  <span>{t.rights.spokenSummaryHeader}</span>
+                </div>
+                <p className="font-body text-sm font-semibold text-ink leading-relaxed">
+                  "{spokenSummary}"
+                </p>
+              </div>
+            )}
+
+            {/* TTS Error notice if unsupported */}
+            {ttsError && (
+              <div className="border-2 border-risk-high bg-risk-high/10 p-2.5 text-xs font-mono text-ink flex items-center justify-between">
+                <span>⚠️ {ttsError}</span>
+                <button
+                  type="button"
+                  onClick={() => setTtsError(null)}
+                  className="font-bold text-ink p-1 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
 
             {/* Answer Body: High legibility typography, clean spacing */}
             <div className="font-body text-base text-ink leading-relaxed space-y-3 whitespace-pre-line">

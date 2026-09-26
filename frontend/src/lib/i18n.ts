@@ -146,6 +146,14 @@ export interface TranslationStrings {
     scannerStep2: string;
     scannerStep3: string;
     scannerComplete: string;
+    voiceInputStart: string;
+    voiceInputListening: string;
+    voiceInputStop: string;
+    voiceUnsupportedNotice: string;
+    listenAnswerBtn: string;
+    stopListeningBtn: string;
+    ttsUnsupportedNotice: string;
+    spokenSummaryHeader: string;
   };
   resources: {
     title: string;
@@ -320,6 +328,14 @@ export const translations: Record<Language, TranslationStrings> = {
       scannerStep2: "Analyzing State Gazette Wage Notifications...",
       scannerStep3: "Verifying Grievance Redressal & Legal Aid Procedures...",
       scannerComplete: "Statutory Sources Grounded & Verified",
+      voiceInputStart: "Speak your question (Voice Input)",
+      voiceInputListening: "Listening... speak now",
+      voiceInputStop: "Stop listening",
+      voiceUnsupportedNotice: "Voice input is not supported on this browser. Please type your query.",
+      listenAnswerBtn: "🔊 Listen to Summary",
+      stopListeningBtn: "⏹ Stop Audio",
+      ttsUnsupportedNotice: "Text-to-speech is not supported on this browser.",
+      spokenSummaryHeader: "Spoken Summary",
     },
     resources: {
       title: "Government Grievance Channels & Legal Aid",
@@ -492,6 +508,14 @@ export const translations: Record<Language, TranslationStrings> = {
       scannerStep2: "राज्य राजपत्र अधिसूचनाओं एवं दरों का मिलान हो रहा है...",
       scannerStep3: "नालसा एवं आधिकारिक शिकायत प्रक्रियाओं का सत्यापन जारी है...",
       scannerComplete: "कानूनी स्रोत सत्यापित एवं पुष्ट",
+      voiceInputStart: "बोलकर प्रश्न पूछें (वॉइस इनपुट)",
+      voiceInputListening: "सुन रहे हैं... कृपया बोलें",
+      voiceInputStop: "बोलना समाप्त करें",
+      voiceUnsupportedNotice: "इस ब्राउज़र में वॉइस इनपुट समर्थित नहीं है। कृपया लिखकर प्रश्न पूछें।",
+      listenAnswerBtn: "🔊 संक्षिप्त सारांश सुनें",
+      stopListeningBtn: "⏹ ऑडियो रोकें",
+      ttsUnsupportedNotice: "इस ब्राउज़र में टेक्स्ट-टू-स्पीच समर्थित नहीं है।",
+      spokenSummaryHeader: "संक्षिप्त सारांश",
     },
     resources: {
       title: "सरकारी शिकायत निवारण और कानूनी सहायता",

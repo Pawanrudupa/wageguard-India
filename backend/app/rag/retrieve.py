@@ -48,13 +48,16 @@ def enhance_query_multilingual(query: str) -> str:
     return " ".join(dict.fromkeys(expanded_terms))
 
 
+from backend.app.rag.ingest import get_embedding_function
+
+
 def get_retrieval_collection(index_dir: Path | None = None) -> Any:
     """Connect to the persistent ChromaDB collection."""
     if index_dir is None:
         index_dir = DEFAULT_INDEX_DIR
 
     client = chromadb.PersistentClient(path=str(index_dir))
-    embedding_fn = embedding_functions.DefaultEmbeddingFunction()
+    embedding_fn = get_embedding_function()
     return client.get_collection(name=COLLECTION_NAME, embedding_function=embedding_fn)
 
 
