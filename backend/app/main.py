@@ -5,6 +5,13 @@ assistant (RAG), and curated government grievance resources.
 """
 
 import os
+
+# Constrain PyTorch / OpenBLAS thread allocation for memory isolation in 512MB containers
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+
 from pathlib import Path
 
 from fastapi import FastAPI

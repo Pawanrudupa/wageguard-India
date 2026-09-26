@@ -225,8 +225,8 @@ def generate_grounded_answer(
             next_steps=_extract_next_steps(state=state, language=language),
         )
 
-    # Check if Gemini API key or external LLM is configured
-    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    # Check if Gemini API key or external LLM is configured (support LLM_API_KEY with GEMINI_API_KEY fallback)
+    gemini_api_key = os.getenv("LLM_API_KEY") or os.getenv("GEMINI_API_KEY")
     if gemini_api_key:
         try:
             import httpx
@@ -286,7 +286,8 @@ def generate_grounded_answer(
                 ],
             }
 
-            resp = httpx.post(url, json=payload, timeout=15.0)
+            timeout_config = httpx.Timeout(15.0, connect=5.0, read=15.0, write=5.0)
+            resp = httpx.post(url, json=payload, timeout=timeout_config)
             if resp.status_code == 200:
                 data = resp.json()
                 generated_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()

@@ -131,19 +131,52 @@ _embedding_fn_instance = None
 
 
 def get_embedding_function() -> Any:
-    """Return cached multilingual sentence-transformers embedding function for ChromaDB."""
+    """Return cached memory-optimized multilingual sentence-transformers embedding function for ChromaDB."""
     global _embedding_fn_instance
     if _embedding_fn_instance is None:
+        import os
+
+        # Strictly limit thread concurrency to avoid memory and CPU starvation in 512MB containers
+        os.environ["OMP_NUM_THREADS"] = "1"
+        os.environ["MKL_NUM_THREADS"] = "1"
+        os.environ["OPENBLAS_NUM_THREADS"] = "1"
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
         try:
-            _embedding_fn_instance = embedding_functions.SentenceTransformerEmbeddingFunction(
+            import torch
+
+            torch.set_num_threads(1)
+            torch.set_num_interop_threads(1)
+            torch.set_grad_enabled(False)
+        except ImportError:
+            pass
+
+        try:
+            fn = embedding_functions.SentenceTransformerEmbeddingFunction(
                 model_name=MULTILINGUAL_MODEL_NAME,
+                device="cpu",
                 local_files_only=True,
             )
         except Exception as exc:  # noqa: BLE001
             logger.info("Local sentence-transformer not found (%s), downloading...", exc)
-            _embedding_fn_instance = embedding_functions.SentenceTransformerEmbeddingFunction(
+            fn = embedding_functions.SentenceTransformerEmbeddingFunction(
                 model_name=MULTILINGUAL_MODEL_NAME,
+                device="cpu",
             )
+
+        # Apply dynamic int8 quantization on Linear layers to cut memory from ~450MB to ~115MB
+        try:
+            import torch
+
+            if hasattr(fn, "_model"):
+                fn._model.eval()
+                fn._model = torch.quantization.quantize_dynamic(
+                    fn._model, {torch.nn.Linear}, dtype=torch.qint8
+                )
+        except Exception as q_err:  # noqa: BLE001
+            logger.debug("Dynamic quantization fallback to float32: %s", q_err)
+
+        _embedding_fn_instance = fn
     return _embedding_fn_instance
 
 
