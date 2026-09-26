@@ -253,6 +253,7 @@ class StatsResponse(BaseModel):
 
     states_count: int = Field(..., description="Number of Indian States and UTs covered in empirical risk model", examples=[18])
     sectors_count: int = Field(..., description="Number of vulnerable economic sectors analyzed", examples=[8])
+    statutes_count: int = Field(13, description="Number of statutory acts and official state schedules indexed in RAG corpus", examples=[13])
     citations_count: int = Field(..., description="Total verified statutory clauses and chunks in RAG corpus", examples=[61])
     inspections_analyzed: int = Field(..., description="Cumulative historical labour inspections evaluated", examples=[105600])
 

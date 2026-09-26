@@ -121,4 +121,55 @@
   .btn-press-sm:active {
     transform: none !important;
   }
+  .citation-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .live-dot-pulse {
+    animation: none !important;
+  }
+}
+
+/* Pure CSS subtle dot-grid blueprint background texture for hero container */
+.hero-dot-pattern {
+  background-color: var(--surface, #FFFFFF);
+  background-image: radial-gradient(rgba(17, 17, 17, 0.08) 1.25px, transparent 1.25px);
+  background-size: 18px 18px;
+}
+
+/* Pure CSS continuous citation ticker strip */
+@keyframes citationMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.citation-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: citationMarquee 34s linear infinite;
+}
+
+.citation-marquee-container:hover .citation-marquee-track,
+.citation-marquee-container:focus-within .citation-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Pulsing dot for live data badge */
+@keyframes pulseLive {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+.live-dot-pulse {
+  animation: pulseLive 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

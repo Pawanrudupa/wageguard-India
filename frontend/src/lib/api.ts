@@ -76,6 +76,7 @@ export interface HealthResponse {
 export interface StatsResponse {
   states_count: number;
   sectors_count: number;
+  statutes_count?: number;
   citations_count: number;
   inspections_analyzed: number;
 }

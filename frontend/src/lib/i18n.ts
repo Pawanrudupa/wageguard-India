@@ -55,6 +55,7 @@ export interface TranslationStrings {
     viewResourcesCta: string;
     statStates: string;
     statSectors: string;
+    statStatutes: string;
     statCitations: string;
     statInspections: string;
     howItWorksTitle: string;
@@ -68,6 +69,13 @@ export interface TranslationStrings {
     trustTitle: string;
     trustDesc: string;
     privacyNotice: string;
+    liveDataBadge: string;
+    riskSnapshotTitle: string;
+    pausedBadge: string;
+    dailyMinWage: string;
+    irregularityRate: string;
+    viewFullRiskAnalysis: string;
+    keyProvisionsTicker: string;
   };
   risk: {
     title: string;
@@ -237,6 +245,7 @@ export const translations: Record<Language, TranslationStrings> = {
       viewResourcesCta: "Find Helpline Contacts",
       statStates: "States & UTs Covered",
       statSectors: "Informal Sectors",
+      statStatutes: "Statutes & Schedules",
       statCitations: "Verified Legal Clauses",
       statInspections: "Inspections Evaluated",
       howItWorksTitle: "How WageGuard India Protects You",
@@ -250,6 +259,13 @@ export const translations: Record<Language, TranslationStrings> = {
       trustTitle: "Defensible, Honest Data",
       trustDesc: "India does not maintain central employer-level wage violation records. WageGuard models sector and state risk honestly without inventing data.",
       privacyNotice: "Privacy Guaranteed: We never store your complaint text, name, or employer name on our servers.",
+      liveDataBadge: "LIVE DATA",
+      riskSnapshotTitle: "Live Sector Risk Snapshot",
+      pausedBadge: "PAUSED",
+      dailyMinWage: "Daily Min Wage",
+      irregularityRate: "Historical Irregularity",
+      viewFullRiskAnalysis: "Calculate Full Risk",
+      keyProvisionsTicker: "Statutory Precedents & Provisions",
     },
     risk: {
       title: "Wage Irregularity Risk Context",
@@ -417,6 +433,7 @@ export const translations: Record<Language, TranslationStrings> = {
       viewResourcesCta: "हेल्पलाइन नंबर देखें",
       statStates: "राज्य एवं केंद्र शासित प्रदेश",
       statSectors: "असंगठित उद्योग क्षेत्र",
+      statStatutes: "अनुक्रमित अधिनियम व अनुसूचियां",
       statCitations: "सत्यापित कानूनी धाराएं",
       statInspections: "विश्लेषित सरकारी निरीक्षण",
       howItWorksTitle: "वेतन रक्षक आपकी सुरक्षा कैसे करता है",
@@ -430,6 +447,13 @@ export const translations: Record<Language, TranslationStrings> = {
       trustTitle: "तथ्यपरक और ईमानदार डेटा",
       trustDesc: "भारत में व्यक्तिगत नियोक्ताओं का कोई केंद्रीय रिकॉर्ड नहीं है। वेतन रक्षक बिना किसी मनगढ़ंत आंकड़े के राज्य और क्षेत्र स्तर पर सटीक डेटा प्रस्तुत करता है।",
       privacyNotice: "गोपनीयता की गारंटी: हम आपकी शिकायत, नाम या नियोक्ता का नाम अपने सर्वर पर कभी संग्रहीत नहीं करते।",
+      liveDataBadge: "सजीव डेटा",
+      riskSnapshotTitle: "सक्रिय क्षेत्रीय जोखिम अवलोकन",
+      pausedBadge: "रोका गया",
+      dailyMinWage: "दैनिक न्यूनतम मजदूरी",
+      irregularityRate: "ऐतिहासिक अनियमितता दर",
+      viewFullRiskAnalysis: "पूर्ण जोखिम जांचें",
+      keyProvisionsTicker: "प्रमुख कानूनी धाराएं एवं प्रावधान",
     },
     risk: {
       title: "वेतन अनियमितता जोखिम संदर्भ",

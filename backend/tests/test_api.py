@@ -215,6 +215,7 @@ def test_stats_endpoint():
     data = response.json()
     assert data["states_count"] >= 12
     assert data["sectors_count"] >= 8
+    assert data["statutes_count"] >= 10
     assert data["citations_count"] >= 50
     assert data["inspections_analyzed"] > 0
 
