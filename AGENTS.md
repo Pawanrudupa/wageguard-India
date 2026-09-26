@@ -9,6 +9,8 @@ project is and WHY.
 - Never invent a data value, statistic, or legal citation. If a number isn't in
   `data/processed/` or a source in `docs/DATA_SOURCES.md`, mark it `# TODO: source needed`
   instead of filling in a plausible-looking placeholder and leaving it unmarked.
+- Whenever asked to commit changes, ALWAYS push immediately to GitHub (`git push origin <branch>`). Do not leave committed changes unpushed.
+
 
 ## Python / backend
 - Python 3.11+, type hints on all function signatures, PEP8 (use `ruff` for lint/format).
