@@ -4,6 +4,8 @@ Wires together the state/sector wage risk model, the grounded legal rights
 assistant (RAG), and curated government grievance resources.
 """
 
+import asyncio
+import logging
 import os
 
 # Constrain PyTorch / OpenBLAS thread allocation for memory isolation in 512MB containers
@@ -12,6 +14,7 @@ os.environ.setdefault("MKL_NUM_THREADS", "1")
 os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -23,6 +26,40 @@ from backend.app.api.rights import router as rights_router
 from backend.app.api.risk import router as risk_router
 from backend.app.api.schemas import AnalyticsResponse, HealthResponse
 from backend.app.api.stats import router as stats_router
+
+startup_logger = logging.getLogger("wageguard.startup")
+
+# Module-level flag: set True only after embedding model is fully loaded and quantized
+_embedding_model_ready = False
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Eagerly load the sentence-transformer embedding model during startup.
+
+    Absorbs the 15-25s CPU-bound model-load + int8-quantization cost during
+    Render's deploy boot sequence, before uvicorn begins accepting traffic.
+    This prevents the first /api/rights request from saturating the 0.15 vCPU
+    and starving health check probes.
+    """
+    global _embedding_model_ready
+    startup_logger.info("Eagerly loading and quantizing embedding model at startup...")
+    try:
+        from backend.app.rag.ingest import get_embedding_function
+
+        # Run in thread executor — model load is CPU-bound and should not
+        # block the asyncio event loop (even though no requests are in flight yet,
+        # this is correct practice for sync-heavy work in an async context).
+        await asyncio.to_thread(get_embedding_function)
+        _embedding_model_ready = True
+        startup_logger.info("Embedding model loaded and quantized — ready to serve.")
+    except Exception as exc:
+        startup_logger.error(
+            "Failed to load embedding model at startup: %s", exc, exc_info=True
+        )
+        _embedding_model_ready = False
+    yield
+
 
 app = FastAPI(
     title="WageGuard India API (वेतन रक्षक)",
@@ -38,6 +75,7 @@ app = FastAPI(
     version="0.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 # CORS configuration:
@@ -86,12 +124,18 @@ app.include_router(stats_router)
 
 @app.get("/api/health", response_model=HealthResponse, tags=["Health & Status"], summary="Service Liveness Probe")
 def health_check() -> HealthResponse:
-    """Verify backend service health, ML model availability, and vector index readiness."""
+    """Verify backend service health, ML model availability, and vector index readiness.
+
+    model_loaded reflects whether the sentence-transformer embedding model has
+    been eagerly loaded and quantized during the lifespan startup — not just
+    whether a file exists on disk.
+    """
     repo_root = Path(__file__).resolve().parents[2]
     model_path = repo_root / "models" / "risk_model.pkl"
     chroma_path = repo_root / "rag_store" / "index" / "chroma.sqlite3"
 
-    model_ready = model_path.exists()
+    # Both the risk model artifact AND the in-memory embedding model must be ready
+    model_ready = model_path.exists() and _embedding_model_ready
     index_ready = chroma_path.exists()
 
     return HealthResponse(

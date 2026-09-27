@@ -1,13 +1,19 @@
 """Unit and integration tests for FastAPI backend endpoints."""
 
+import pytest
 from fastapi.testclient import TestClient
 
 from backend.app.main import app
 
-client = TestClient(app)
+
+@pytest.fixture(scope="module")
+def client():
+    """Yield a TestClient with lifespan events (eager model loading) triggered."""
+    with TestClient(app) as c:
+        yield c
 
 
-def test_health_endpoint():
+def test_health_endpoint(client):
     """Happy path: GET /api/health returns 200 with service liveness status."""
     response = client.get("/api/health")
     assert response.status_code == 200
@@ -18,7 +24,7 @@ def test_health_endpoint():
     assert data["vector_store_ready"] is True
 
 
-def test_risk_endpoint_happy_path():
+def test_risk_endpoint_happy_path(client):
     """Happy path: GET /api/risk returns grounded risk prediction and data confidence."""
     response = client.get("/api/risk?state=Maharashtra&sector=Construction")
     assert response.status_code == 200
@@ -33,7 +39,7 @@ def test_risk_endpoint_happy_path():
     assert "probabilities" in data
 
 
-def test_risk_endpoint_sparse_state_confidence():
+def test_risk_endpoint_sparse_state_confidence(client):
     """Ensure sparse state returns 'Low' data confidence as documented in Model Card."""
     response = client.get("/api/risk?state=Bihar&sector=Agriculture+%26+Allied")
     assert response.status_code == 200
@@ -42,7 +48,7 @@ def test_risk_endpoint_sparse_state_confidence():
     assert "reporting gaps" in data["explanation"].lower() or "unsubmitted" in data["explanation"].lower()
 
 
-def test_risk_endpoint_validation():
+def test_risk_endpoint_validation(client):
     """Missing or empty query params must return validation error."""
     # Missing sector
     res1 = client.get("/api/risk?state=Maharashtra")
@@ -53,7 +59,7 @@ def test_risk_endpoint_validation():
     assert res2.status_code in [400, 422]
 
 
-def test_rights_endpoint_happy_path():
+def test_rights_endpoint_happy_path(client):
     """Happy path: POST /api/rights returns grounded legal answer with citations & disclaimer."""
     payload = {
         "query": "can my employer delay my final salary after I resign?",
@@ -71,7 +77,7 @@ def test_rights_endpoint_happy_path():
     assert "15100" in data["next_steps"] or "shramsuvidha" in data["next_steps"]
 
 
-def test_rights_endpoint_unrelated_query_fallback():
+def test_rights_endpoint_unrelated_query_fallback(client):
     """Out-of-scope query must return explicit fallback and no fabricated citations."""
     payload = {
         "query": "what is the recipe for baking banana bread in the microwave?",
@@ -86,20 +92,20 @@ def test_rights_endpoint_unrelated_query_fallback():
     assert "I don't have a grounded answer for this" in data["answer"]
 
 
-def test_rights_endpoint_validation():
+def test_rights_endpoint_validation(client):
     """Short or empty queries must fail validation."""
     response = client.post("/api/rights", json={"query": "hi"})
     assert response.status_code == 422
 
 
-def test_rights_endpoint_query_max_length_constraint():
+def test_rights_endpoint_query_max_length_constraint(client):
     """Queries exceeding the 500-character constraint must be rejected with 422."""
     long_query = "Can my employer delay my salary? " * 30  # > 900 chars
     response = client.post("/api/rights", json={"query": long_query})
     assert response.status_code == 422
 
 
-def test_rights_endpoint_adversarial_prompt_injection():
+def test_rights_endpoint_adversarial_prompt_injection(client):
     """POST /api/rights must withstand prompt injection: disclaimer cannot be omitted."""
     # Variant 1: Pure adversarial instruction without state
     payload_1 = {
@@ -133,7 +139,7 @@ def test_rights_endpoint_adversarial_prompt_injection():
         assert any("delhi" in c["source_file"].lower() or "delhi" in (c["state"] or "").lower() for c in data_2["citations"])
 
 
-def test_ledger_provisions_endpoint_happy_path():
+def test_ledger_provisions_endpoint_happy_path(client):
     """GET /api/rights/provisions?state=Maharashtra returns citations for s.17, s.59, s.45 and rate."""
     response = client.get("/api/rights/provisions?state=Maharashtra")
     assert response.status_code == 200
@@ -147,7 +153,7 @@ def test_ledger_provisions_endpoint_happy_path():
     assert data["daily_min_wage_rate"] is not None
 
 
-def test_resources_endpoint_happy_path():
+def test_resources_endpoint_happy_path(client):
     """Happy path: GET /api/resources?state=Maharashtra returns central portals + state contacts."""
     response = client.get("/api/resources?state=Maharashtra")
     assert response.status_code == 200
@@ -169,7 +175,7 @@ def test_resources_endpoint_happy_path():
     assert "1800-889-2816" in data["state_channel"]["helpline"]
 
 
-def test_resources_endpoint_universal_without_state():
+def test_resources_endpoint_universal_without_state(client):
     """GET /api/resources without state parameter returns universal portals and supported state list."""
     response = client.get("/api/resources")
     assert response.status_code == 200
@@ -182,7 +188,7 @@ def test_resources_endpoint_universal_without_state():
     assert "Maharashtra" in data["supported_states"]
 
 
-def test_openapi_docs_render_all_four_endpoints():
+def test_openapi_docs_render_all_four_endpoints(client):
     """Assert OpenAPI schema at /openapi.json contains all four required routes and /docs is 200."""
     # Check HTML docs page
     docs_resp = client.get("/docs")
@@ -208,7 +214,7 @@ def test_openapi_docs_render_all_four_endpoints():
     assert "get" in paths["/api/analytics"]
 
 
-def test_stats_endpoint():
+def test_stats_endpoint(client):
     """Happy path: GET /api/stats returns real counts from dataset and corpus."""
     response = client.get("/api/stats")
     assert response.status_code == 200
@@ -220,7 +226,7 @@ def test_stats_endpoint():
     assert data["inspections_analyzed"] > 0
 
 
-def test_analytics_counter_privacy_compliance():
+def test_analytics_counter_privacy_compliance(client):
     """Verify aggregate-only analytics increments and contains strictly combination counts."""
     # Reset for test isolation
     from backend.app.api.analytics import reset_analytics_for_testing
@@ -244,7 +250,7 @@ def test_analytics_counter_privacy_compliance():
     assert "query" not in data["aggregate_counters"]
 
 
-def test_rights_endpoint_sse_streaming():
+def test_rights_endpoint_sse_streaming(client):
     """POST /api/rights with stream=True or Accept: text/event-stream returns SSE stream."""
     payload = {
         "query": "can my employer delay my wages?",
@@ -284,7 +290,7 @@ def test_rate_limiter_enforcement():
     assert "Rate limit exceeded" in exc_info.value.detail
 
 
-def test_sector_normalization_and_risk_tertiles():
+def test_sector_normalization_and_risk_tertiles(client):
     """Verify informal sector aliases normalize to empirical data and evaluate true risk tertiles."""
     # 1. Tamil Nadu / Brick Kilns -> Manufacturing & Factories (Low Risk: 0.57 <= 0.95)
     resp_tn = client.get("/api/risk?state=Tamil Nadu&sector=brick kilns")
@@ -381,7 +387,7 @@ def test_rate_limiter_trusted_proxies_protection():
     trusted_limiter(proxy_req2)
 
 
-def test_cors_production_safety():
+def test_cors_production_safety(client):
     """Verify that in production mode, unauthorized LAN origins are not accepted."""
     # Preflight OPTIONS request from an unauthorized LAN origin
     headers = {
