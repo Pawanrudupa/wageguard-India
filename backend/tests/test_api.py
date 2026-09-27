@@ -8,8 +8,17 @@ from backend.app.main import app
 
 @pytest.fixture(scope="module")
 def client():
-    """Yield a TestClient with lifespan events (eager model loading) triggered."""
+    """Yield a TestClient with lifespan events triggered and model warmup complete."""
+    import time
+
+    import backend.app.main as main_module
+
     with TestClient(app) as c:
+        # Wait for background warmup thread to finish (fast on real CPU, ~3s)
+        for _ in range(60):
+            if main_module._embedding_model_ready:
+                break
+            time.sleep(0.5)
         yield c
 
 

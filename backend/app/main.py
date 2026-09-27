@@ -35,29 +35,42 @@ _embedding_model_ready = False
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Eagerly load the sentence-transformer embedding model during startup.
+    """Start embedding model warmup in background, yield immediately for port binding.
 
-    Absorbs the 15-25s CPU-bound model-load + int8-quantization cost during
-    Render's deploy boot sequence, before uvicorn begins accepting traffic.
-    This prevents the first /api/rights request from saturating the 0.15 vCPU
-    and starving health check probes.
+    On Render free tier (0.15 vCPU), model load + int8 quantization can take
+    several minutes — longer than Render's 5-minute port scan timeout. If we
+    block here, uvicorn never binds and the deploy fails with
+    "Port scan timeout reached, no open ports detected."
+
+    Strategy: fire off model loading in a daemon thread so uvicorn binds the
+    port within seconds. Health checks return 200 immediately (model_loaded=False
+    until warmup completes, then True). The first /api/rights request after
+    warmup finishes will be fast since the model is already cached.
     """
-    global _embedding_model_ready
-    startup_logger.info("Eagerly loading and quantizing embedding model at startup...")
-    try:
-        from backend.app.rag.ingest import get_embedding_function
+    import threading
 
-        # Run in thread executor — model load is CPU-bound and should not
-        # block the asyncio event loop (even though no requests are in flight yet,
-        # this is correct practice for sync-heavy work in an async context).
-        await asyncio.to_thread(get_embedding_function)
-        _embedding_model_ready = True
-        startup_logger.info("Embedding model loaded and quantized — ready to serve.")
-    except Exception as exc:
-        startup_logger.error(
-            "Failed to load embedding model at startup: %s", exc, exc_info=True
-        )
-        _embedding_model_ready = False
+    def _warmup_model() -> None:
+        """Load and quantize the embedding model in a background thread."""
+        global _embedding_model_ready
+        try:
+            startup_logger.info("Background model warmup: loading and quantizing...")
+            from backend.app.rag.ingest import get_embedding_function
+
+            get_embedding_function()
+            _embedding_model_ready = True
+            startup_logger.info(
+                "Background model warmup complete — embedding model ready to serve."
+            )
+        except Exception as exc:
+            startup_logger.error(
+                "Background model warmup failed: %s", exc, exc_info=True
+            )
+            _embedding_model_ready = False
+
+    warmup_thread = threading.Thread(target=_warmup_model, daemon=True, name="model-warmup")
+    warmup_thread.start()
+    startup_logger.info("Model warmup thread started — uvicorn proceeding to bind port.")
+
     yield
 
 
