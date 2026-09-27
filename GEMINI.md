@@ -97,3 +97,9 @@ reports, Lok Sabha/Rajya Sabha unstarred-question replies (PDF, via eparlib.nic.
 and aggregator sites like indiastat. Expect to manually compile a
 state × sector × year table from PDFs. This data-wrangling difficulty is itself part
 of the project's value — document it, don't hide it.
+
+## Recurring Maintenance: Gemini Model Availability & Deprecation
+Google periodically deprecates and cycles Gemini model identifiers (e.g., `gemini-1.5-flash` was deprecated, followed by `gemini-2.5-flash` returning HTTP 404 for new users, superseded by `gemini-3.8-flash`).
+- **Recurring Audit**: Periodically run `python scripts/verify_gemini_models.py` against the active API key to inspect which model IDs are active and support `generateContent`. Do not assume a model ID is usable without verifying against the live `ListModels` API response.
+- **Dynamic Configuration**: The model identifier is dynamically configurable via the `GEMINI_MODEL` environment variable (e.g. `gemini-3.8-flash`) and resolved in `backend/app/rag/generate.py`. If Google shifts model tags again, update `GEMINI_MODEL` in `.env` and `render.yaml` without needing code rewrites.
+

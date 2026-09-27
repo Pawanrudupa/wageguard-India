@@ -273,7 +273,10 @@ def generate_grounded_answer(
                 f"<user_query>\n{sanitized_query}\n</user_query>"
             )
 
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_api_key}"
+            gemini_model = os.getenv("GEMINI_MODEL", "gemini-3.8-flash").strip()
+            if gemini_model.startswith("models/"):
+                gemini_model = gemini_model[len("models/"):]
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{gemini_model}:generateContent?key={gemini_api_key}"
             payload = {
                 "system_instruction": {
                     "parts": [{"text": system_instruction_text}]
